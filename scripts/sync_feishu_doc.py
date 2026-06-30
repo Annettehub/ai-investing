@@ -1,14 +1,17 @@
 #!/usr/bin/env python3
 """
-飞书云文档 → GitHub 03-raw/ 自动同步
-用户只需在云文档里按格式粘贴，脚本自动解析、去重、生成 Markdown
+飞书新版 docx → GitHub 03-raw/ 自动同步
+使用飞书官方 lark-oapi SDK，自动处理认证和 blocks 遍历
 """
 import os
 import re
 import json
 import hashlib
-import requests
 from datetime import datetime
+
+# 飞书官方 Python SDK：pip install lark-oapi
+from lark_oapi import Client
+from lark_oapi.api.docx.v1 import *
 
 # ========== 配置 ==========
 FEISHU_APP_ID = os.environ.get("FEISHU_APP_ID")
@@ -18,41 +21,12 @@ DOC_TOKEN = os.environ.get("FEISHU_DOC_TOKEN")
 RAW_DIR = "03-raw"
 HASH_FILE = "03-raw/.synced_hashes.json"
 
-# ========== 飞书 API 工具 ==========
-def get_tenant_access_token():
-    url = "https://open.feishu.cn/open-apis/auth/v3/tenant_access_token/internal"
-    resp = requests.post(url, json={"app_id": FEISHU_APP_ID, "app_secret": FEISHU_APP_SECRET})
-    data = resp.json()
-    if data.get("code") != 0:
-        print(f"获取token失败: {data}")
-        return None
-    return data.get("tenant_access_token")
-
-def get_doc_content(token):
-    """
-    读取飞书云文档内容。
-    优先尝试新版 docx API，失败则回退旧版 doc API。
-    """
-    headers = {"Authorization": f"Bearer {token}"}
-    
-    # 尝试新版 docx API
-    url = f"https://open.feishu.cn/open-apis/docx/v1/documents/{DOC_TOKEN}/raw_content"
-    resp = requests.get(url, headers=headers)
-    data = resp.json()
-    if data.get("code") == 0:
-        content = data.get("data", {}).get("content", "")
-        if content:
-            return content
-    
-    # 回退旧版 doc API（纯文本）
-    url = f"https://open.feishu.cn/open-apis/doc/v2/{DOC_TOKEN}/content?format=text"
-    resp = requests.get(url, headers=headers)
-    data = resp.json()
-    if data.get("code") == 0:
-        return data.get("data", {}).get("content", "")
-    
-    print(f"读取文档失败: {data}")
-    return ""
+# ========== 初始化飞书客户端 ==========
+# lark-oapi 自动处理 tenant_access_token 的获取和刷新
+client = Client.builder() \
+    .app_id(FEISHU_APP_ID) \
+    .app_secret(FEISHU_APP_SECRET) \
+    .build()
 
 # ========== 去重机制 ==========
 def load_synced_hashes():
@@ -69,17 +43,99 @@ def save_synced_hashes(hashes):
 def get_content_hash(content):
     return hashlib.md5(content.encode('utf-8')).hexdigest()[:16]
 
-# ========== 文档解析 ==========
+# ========== 文档读取（lark-oapi 封装版）==========
+def extract_text_from_block(block):
+    """从单个 block 中提取纯文本"""
+    block_type = block.block_type
+    text_elements = []
+    
+    # 根据 block 类型获取文本元素
+    if block_type == 2 and block.text:           # 文本
+        text_elements = block.text.elements
+    elif block_type == 3:                         # 标题
+        if block.heading1:
+            text_elements = block.heading1.elements
+        elif block.heading2:
+            text_elements = block.heading2.elements
+        elif block.heading3:
+            text_elements = block.heading3.elements
+    elif block_type == 4 and block.quote:        # 引用
+        text_elements = block.quote.elements
+    elif block_type == 5 and block.bullet:       # 无序列表
+        text_elements = block.bullet.elements
+    elif block_type == 6 and block.ordered:       # 有序列表
+        text_elements = block.ordered.elements
+    elif block_type == 14 and block.code:         # 代码块
+        text_elements = block.code.elements
+    
+    # 提取文本内容
+    texts = []
+    for elem in text_elements:
+        if elem.text_run and elem.text_run.content:
+            texts.append(elem.text_run.content)
+    
+    return "".join(texts)
+
+def get_all_doc_text(doc_token):
+    """递归获取文档所有文本内容"""
+    all_lines = []
+    
+    # 1. 获取文档根 blocks（分页处理）
+    page_token = None
+    root_blocks = []
+    
+    while True:
+        req = ListDocumentBlockRequest.builder() \
+            .document_id(doc_token) \
+            .page_token(page_token) \
+            .page_size(500) \
+            .build()
+        resp = client.docx.v1.document_block.list(req)
+        
+        if not resp.success():
+            print(f"获取文档 blocks 失败: {resp.code} {resp.msg}")
+            return ""
+        
+        items = resp.data.items
+        root_blocks.extend(items)
+        
+        if not resp.data.has_more:
+            break
+        page_token = resp.data.page_token
+    
+    # 2. 递归处理 blocks 及其子 blocks
+    def process_blocks(blocks):
+        for block in blocks:
+            text = extract_text_from_block(block)
+            if text:
+                all_lines.append(text)
+            
+            # 递归处理子 blocks
+            if block.children:
+                for child_id in block.children:
+                    child_page_token = None
+                    while True:
+                        child_req = ListDocumentBlockChildrenRequest.builder() \
+                            .document_id(doc_token) \
+                            .block_id(child_id) \
+                            .page_token(child_page_token) \
+                            .page_size(500) \
+                            .build()
+                        child_resp = client.docx.v1.document_block_children.list(child_req)
+                        
+                        if child_resp.success() and child_resp.data.items:
+                            process_blocks(child_resp.data.items)
+                        
+                        if not child_resp.data.has_more:
+                            break
+                        child_page_token = child_resp.data.page_token
+    
+    process_blocks(root_blocks)
+    return "\n".join(all_lines)
+
+# ========== 文档解析（按日期分割记录）==========
 def parse_doc_records(text):
-    """
-    解析文档内容，按日期/分隔符分割成多条记录。
-    支持格式：
-      2026-06-30 | 来源 | 标的
-      内容...
-      
-      2026-06-30 | 来源 | 标的
-      内容...
-    """
+    """解析文档内容，按日期分割成多条记录"""
     text = text.strip()
     if not text:
         return []
@@ -87,24 +143,21 @@ def parse_doc_records(text):
     records = []
     
     # 策略1：按日期行分割（YYYY-MM-DD 开头）
-    # 匹配行首的日期，前面可能有空行或空格
     date_pattern = r'(?:^|\n)\s*(?:【)?(\d{4}-\d{2}-\d{2})(?:】)?\s*'
     parts = re.split(date_pattern, text)
     
     if len(parts) > 1:
-        # parts[0] 是文档开头说明（忽略）
         for i in range(1, len(parts), 2):
             if i + 1 > len(parts) - 1:
                 continue
             
             date_str = parts[i].strip()
             block = parts[i + 1].strip()
-            
             lines = block.split('\n')
             meta_line = lines[0] if lines else ""
             content = '\n'.join(lines[1:]).strip() if len(lines) > 1 else ""
             
-            # 解析元数据行：来源 | 标的
+            # 解析元数据行
             source = "未知"
             tags = "未分类"
             
@@ -124,7 +177,7 @@ def parse_doc_records(text):
                 elif meta_parts:
                     source = meta_parts[0]
             
-            # 如果内容为空，可能用户只写了一行，把 meta_line 当内容
+            # 如果内容为空，退化为把 meta_line 当内容
             if not content and meta_line:
                 content = meta_line
                 source = "未知"
@@ -147,7 +200,6 @@ def parse_doc_records(text):
             first_line = lines[0].strip()
             content = '\n'.join(lines[1:]).strip() if len(lines) > 1 else ""
             
-            # 尝试从第一行提取日期
             d_match = re.search(r'(\d{4}-\d{2}-\d{2})', first_line)
             date_str = d_match.group(1) if d_match else datetime.now().strftime("%Y-%m-%d")
             
@@ -170,7 +222,7 @@ def record_to_markdown(record, index):
     content = record['content']
     raw_text = record['raw']
     
-    # 文件名
+    # 清理文件名
     safe_source = re.sub(r'[^\w\s-]', '', source).strip()[:20]
     safe_source = re.sub(r'[\s]+', '_', safe_source)
     safe_tags = re.sub(r'[^\w\s-]', '', tags).strip()[:20]
@@ -207,21 +259,15 @@ status: raw
 def main():
     os.makedirs(RAW_DIR, exist_ok=True)
     
-    print("Getting Feishu access token...")
-    token = get_tenant_access_token()
-    if not token:
-        print("Failed to get token")
-        return
+    print("Fetching document content via lark-oapi...")
+    doc_text = get_all_doc_text(DOC_TOKEN)
     
-    print("Fetching document content...")
-    doc_text = get_doc_content(token)
     if not doc_text:
         print("Document is empty or failed to read")
         return
     
     print(f"Document length: {len(doc_text)} chars")
     
-    # 解析记录
     records = parse_doc_records(doc_text)
     print(f"Parsed {len(records)} records from document")
     
@@ -229,7 +275,6 @@ def main():
         print("No records found")
         return
     
-    # 加载已同步哈希
     synced_hashes = load_synced_hashes()
     print(f"Previously synced hashes: {len(synced_hashes)}")
     
@@ -263,7 +308,6 @@ def main():
         new_count += 1
         print(f"Synced: {filename}")
     
-    # 保存哈希
     save_synced_hashes(synced_hashes)
     
     print(f"\n{'='*50}")
