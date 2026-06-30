@@ -16,6 +16,9 @@ jobs:
         with:
           python-version: '3.11'
 
+      - name: Install dependencies
+        run: pip install requests
+
       - name: Run sync script
         env:
           FEISHU_APP_ID: ${{ secrets.FEISHU_APP_ID }}
