@@ -33,7 +33,6 @@ def call_api(api_name: str, **params):
     if data.get("errcode", 0) != 0:
         print(f"  API Error [{api_name}]: {data.get('errmsg', 'unknown')}")
         return None
-    # Check for upgrade
     if "upgrade_info" in data:
         print(f"  ⚠️  Skill 版本更新: {data['upgrade_info'].get('message', '')}")
     return data
@@ -121,20 +120,13 @@ def save_book_notes(book: dict, highlights: list, reviews: list) -> str:
     # 关联想法到章节
     for r in reviews:
         review_data = r.get("review", {})
-        ch_name = review_data.get("chapterName", "")
-        # 尝试通过章节名匹配
         matched = False
-        for ch_uid, ch_data in chapters.items():
-            for h in ch_data["highlights"]:
-                # 想法关联到对应章节（粗略匹配）
-                if not ch_name or ch_name:
-                    break
+        for ch_data in chapters.values():
             if not matched:
                 ch_data["reviews"].append(r)
                 matched = True
                 break
         if not matched:
-            # 无章节关联的想法放最后
             if "misc" not in chapters:
                 chapters["misc"] = {"highlights": [], "reviews": []}
             chapters["misc"]["reviews"].append(r)
@@ -142,14 +134,8 @@ def save_book_notes(book: dict, highlights: list, reviews: list) -> str:
     # 输出
     for ch_uid, ch_data in chapters.items():
         if ch_data["highlights"]:
-            # 取第一条划线的章节名
-            first_hl = ch_data["highlights"][0]
-            ch_title = ""
-            for h in highlights[:1]:
-                pass
             lines.append(f"## 第{ch_uid}章")
             lines.append(f"")
-
             for hl in ch_data["highlights"]:
                 lines.append(f"> {hl.get('markText', '').strip()}")
                 lines.append(f"")
@@ -184,7 +170,6 @@ def main():
     print(f"   版本: {SKILL_VERSION}")
     print()
 
-    # 1. 获取笔记本列表
     print("📋 获取笔记本列表...")
     notebooks = get_all_notebooks()
     if not notebooks:
@@ -198,7 +183,6 @@ def main():
     print(f"   找到 {len(notebooks)} 本有笔记的书，共 {total_notes} 条笔记")
     print()
 
-    # 2. 逐本拉取内容
     synced = 0
     for i, book in enumerate(notebooks, 1):
         book_info = book.get("book", {})

@@ -2,7 +2,7 @@ name: Sync WeRead Notes
 
 on:
   schedule:
-    - cron: '0 8 * * *'  # 每天早上 8 点（北京时间 16 点）
+    - cron: '0 8 * * *'
   workflow_dispatch:
 
 permissions:
