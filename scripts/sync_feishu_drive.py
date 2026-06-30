@@ -4,8 +4,6 @@
 直接下载 .md 文件，无需转换
 """
 import os
-import re
-import json
 import hashlib
 import requests
 from datetime import datetime
@@ -42,11 +40,18 @@ def list_files(token):
             break
         
         items = data.get("data", {}).get("files", [])
+        print(f"API 返回 {len(items)} 个 items")
+        
         for item in items:
-            if item.get("type") == "file":  # 只取文件，跳过子文件夹
+            file_type = item.get("type")
+            file_name = item.get("name", "")
+            print(f"  文件: {file_name} | type: {file_type}")
+            
+            # 跳过文件夹(type=1)，其他全部保留
+            if file_type != "1" and file_type != 1:
                 files.append({
                     "token": item.get("token"),
-                    "name": item.get("name"),
+                    "name": file_name,
                     "size": item.get("size", 0)
                 })
         
@@ -90,7 +95,7 @@ def main():
     
     print("Listing files...")
     files = list_files(token)
-    print(f"Found {len(files)} files")
+    print(f"Found {len(files)} files total")
     
     # 只处理 .md 文件
     md_files = [f for f in files if f["name"].endswith(".md")]
@@ -117,7 +122,7 @@ def main():
             # 用内容哈希去重
             content_hash = hashlib.md5(content).hexdigest()[:16]
             if content_hash in synced_hashes:
-                print(f"  ⏭️  Already synced")
+                print(f"  Already synced")
                 continue
             
             # 保存文件
@@ -134,10 +139,10 @@ def main():
             
             synced_hashes.add(content_hash)
             new_count += 1
-            print(f"  ✅ Saved: {os.path.basename(filepath)}")
+            print(f"  Saved: {os.path.basename(filepath)}")
             
         except Exception as e:
-            print(f"  ❌ Error: {e}")
+            print(f"  Error: {e}")
             continue
     
     save_hashes(synced_hashes)
