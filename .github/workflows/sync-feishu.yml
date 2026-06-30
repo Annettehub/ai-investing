@@ -1,4 +1,4 @@
-name: Sync Feishu Docs
+name: Sync Feishu Drive Files
 
 on:
   schedule:
@@ -11,23 +11,21 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Install feishu2md
-        run: |
-          curl -sL https://github.com/Wsine/feishu2md/releases/latest/download/feishu2md-linux-amd64 -o feishu2md
-          chmod +x feishu2md
-          ./feishu2md --version
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
 
-      - name: Export Feishu folder
+      - name: Run sync script
         env:
           FEISHU_APP_ID: ${{ secrets.FEISHU_APP_ID }}
           FEISHU_APP_SECRET: ${{ secrets.FEISHU_APP_SECRET }}
-        run: |
-          ./feishu2md config --appId $FEISHU_APP_ID --appSecret $FEISHU_APP_SECRET
-          ./feishu2md dl --batch -o 03-raw/feishu/ "https://open.feishu.cn/drive/folder/${{ secrets.FEISHU_FOLDER_TOKEN }}"
+          FEISHU_FOLDER_TOKEN: ${{ secrets.FEISHU_FOLDER_TOKEN }}
+        run: python scripts/sync_feishu_drive.py
 
       - name: Commit and push
         run: |
           git config user.name "github-actions"
           git config user.email "actions@github.com"
           git add 03-raw/
-          git diff --cached --quiet || (git commit -m "Sync feishu docs: $(date +%Y-%m-%d-%H:%M)" && git push)
+          git diff --cached --quiet || (git commit -m "Sync feishu drive: $(date +%Y-%m-%d-%H:%M)" && git push)
