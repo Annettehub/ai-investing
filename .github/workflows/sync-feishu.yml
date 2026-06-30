@@ -1,9 +1,9 @@
-name: Sync Feishu to 03-raw
+name: Sync Feishu Doc to 03-raw
 
 on:
   schedule:
-    - cron: '*/30 * * * *'  # 每30分钟
-  workflow_dispatch:  # 手动触发
+    - cron: '*/30 * * * *'
+  workflow_dispatch:
 
 jobs:
   sync:
@@ -24,13 +24,12 @@ jobs:
         env:
           FEISHU_APP_ID: ${{ secrets.FEISHU_APP_ID }}
           FEISHU_APP_SECRET: ${{ secrets.FEISHU_APP_SECRET }}
-          FEISHU_BASE_TOKEN: ${{ secrets.FEISHU_BASE_TOKEN }}
-          FEISHU_TABLE_ID: ${{ secrets.FEISHU_TABLE_ID }}
-        run: python scripts/sync_feishu.py
+          FEISHU_DOC_TOKEN: ${{ secrets.FEISHU_DOC_TOKEN }}
+        run: python scripts/sync_feishu_doc.py
 
       - name: Commit and push
         run: |
           git config user.name "github-actions"
           git config user.email "actions@github.com"
-          git add 03-raw/
-          git diff --cached --quiet || (git commit -m "Auto-sync from Feishu: $(date +%Y-%m-%d-%H:%M)" && git push)
+          git add 03-raw/ .github/
+          git diff --cached --quiet || (git commit -m "Auto-sync from Feishu Doc: $(date +%Y-%m-%d-%H:%M)" && git push)
