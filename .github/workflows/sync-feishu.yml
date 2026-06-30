@@ -1,35 +1,34 @@
-name: Sync Feishu Doc to 03-raw
+name: Sync Feishu Docs
 
 on:
   schedule:
-    - cron: '*/30 * * * *'
-  workflow_dispatch:
+    - cron: '0 */6 * * *'  # 每6小时跑一次
+  workflow_dispatch:  # 手动触发
 
 jobs:
   sync:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout repo
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
-      - name: Set up Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: '3.11'
+      - name: Install feishu2md
+        run: |
+          # 下载最新版 feishu2md（Linux 64位）
+          curl -sL https://github.com/Wsine/feishu2md/releases/latest/download/feishu2md_Linux_x86_64.tar.gz -o feishu2md.tar.gz
+          tar -xzf feishu2md.tar.gz
+          chmod +x feishu2md
 
-      - name: Install dependencies
-        run: pip install requests
-
-      - name: Run sync script
+      - name: Export Feishu folder
         env:
           FEISHU_APP_ID: ${{ secrets.FEISHU_APP_ID }}
           FEISHU_APP_SECRET: ${{ secrets.FEISHU_APP_SECRET }}
-          FEISHU_DOC_TOKEN: ${{ secrets.FEISHU_DOC_TOKEN }}
-        run: python scripts/sync_feishu_doc.py
+        run: |
+          ./feishu2md config --appId $FEISHU_APP_ID --appSecret $FEISHU_APP_SECRET
+          ./feishu2md dl --folder ${{ secrets.FEISHU_FOLDER_TOKEN }} -o 03-raw/feishu/
 
       - name: Commit and push
         run: |
           git config user.name "github-actions"
           git config user.email "actions@github.com"
-          git add 03-raw/ .github/
-          git diff --cached --quiet || (git commit -m "Auto-sync from Feishu Doc: $(date +%Y-%m-%d-%H:%M)" && git push)
+          git add 03-raw/
+          git diff --cached --quiet || (git commit -m "Sync feishu docs: $(date +%Y-%m-%d-%H:%M)" && git push)
