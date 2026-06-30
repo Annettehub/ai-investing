@@ -2,8 +2,8 @@ name: Sync Feishu Docs
 
 on:
   schedule:
-    - cron: '0 */6 * * *'  # 每6小时跑一次
-  workflow_dispatch:  # 手动触发
+    - cron: '0 */6 * * *'
+  workflow_dispatch:
 
 jobs:
   sync:
@@ -13,10 +13,9 @@ jobs:
 
       - name: Install feishu2md
         run: |
-          # 下载最新版 feishu2md（Linux 64位）
-          curl -sL https://github.com/Wsine/feishu2md/releases/latest/download/feishu2md_Linux_x86_64.tar.gz -o feishu2md.tar.gz
-          tar -xzf feishu2md.tar.gz
+          curl -sL https://github.com/Wsine/feishu2md/releases/latest/download/feishu2md-linux-amd64 -o feishu2md
           chmod +x feishu2md
+          ./feishu2md --version
 
       - name: Export Feishu folder
         env:
@@ -24,7 +23,7 @@ jobs:
           FEISHU_APP_SECRET: ${{ secrets.FEISHU_APP_SECRET }}
         run: |
           ./feishu2md config --appId $FEISHU_APP_ID --appSecret $FEISHU_APP_SECRET
-          ./feishu2md dl --folder ${{ secrets.FEISHU_FOLDER_TOKEN }} -o 03-raw/feishu/
+          ./feishu2md dl --batch -o 03-raw/feishu/ "https://open.feishu.cn/drive/folder/${{ secrets.FEISHU_FOLDER_TOKEN }}"
 
       - name: Commit and push
         run: |
