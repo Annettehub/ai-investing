@@ -15,7 +15,8 @@
 
 - [x] 飞书：App ID/Secret + Folder Token + PAT → GitHub Secrets → 同步成功（28个文件 ✅）
 - [ ] Gmail Industry-Intel 过滤器建立
-- [x] 微信读书 API 管道：sync_weread.py + GitHub Actions 创建完毕，待用户填 WEREAD_API_KEY
+- [x] 微信读书 API 管道：sync_weread.py + GitHub Actions 创建完毕，已首次同步 79 本书/4900 条笔记 ✅
+- [x] 微信读书 /ingest 入库：78 个文件 → 6 大类 → 10 个详细摘要 → 交叉框架概念 ✅
 - [ ] W1 光刻胶断供每日跟踪
 - [x] 首次 /ingest 处理 03-raw/feishu/ 中 28 个原始材料
 - [ ] W2 28nm折旧预警跟踪：下季度财报折旧科目
@@ -36,7 +37,9 @@
 
 ## 最近完成
 
+- 2026-06-30: 微信读书管道首次同步成功 → 79本书/4900条笔记 → /ingest 入库（10个详细摘要 + 交叉框架）
 - 2026-06-30: 首次完整 /today 流程 → 04-output/today-2026-06-30.md（H2-5%,H3-5%,W2预警）
+- **2026-06-30: 知识星球139篇专家库入库 → 6个核心来源摘要(SMIC/Lithography/TSMC/Sanctions/DomesticChip/GPU-ASIC) + 4个新概念**
 - 2026-06-30: 三环境使用指南 ENV-GUIDE.md 创建
 - 2026-06-30: /ingest、/today 命令适配 WorkBuddy（不再依赖 Kimi）
 - 2026-06-30: 飞书管道详细配置步骤写入 connectors.md

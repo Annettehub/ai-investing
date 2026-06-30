@@ -12,6 +12,11 @@
 
 ## 执行步骤
 
+**Step 0: 自动行情快照**
+- 运行 `python scripts/fetch_market_data.py --watchlist` 拉取股票池最新价
+- 运行 `python scripts/fetch_macro_data.py` 拉取宏观指标（VIX/SPY/QQQ/原油/黄金/BTC）
+- 把异动检测（movers ≥ ±3%）作为 Step 2 的输入
+
 **Step 1: 读取上下文**
 - `active-context.md` — 当前焦点
 - `02-kb/snapshot.md` — 活跃假设和城墙列表

@@ -70,10 +70,25 @@ L1 电力: 电网/发电/能源（不碰）
 | GitHub | ✅ | Star/Watch → WebFetch | 03-raw/github/ |
 | 飞书云盘 | ⚡ | sync_feishu_drive.py → GitHub Actions | 03-raw/feishu/ |
 | Gmail | 🔜 | 过滤器+标签 → connector | 03-raw/gmail/ |
-| 微信读书 | 🔜 | 笔记导出 → 手动拖入 | 02-kb/concepts/ |
+| 微信读书 | ✅ | API自动同步 → GitHub Actions | 03-raw/weread/ |
+| 知识星球 | ✅ | 手动导入 → 03-raw/zsxq/ | 03-raw/zsxq/ |
+| 行情数据 | 🔑 | fetch_market_data.py → watchlist | Step 0 of /today |
 | WebSearch | ✅ | 内置浏览器搜索 | 直接进入研究 |
 
 详见 `00-system/connectors.md`
+
+---
+### 六点五、Python 工具脚本
+
+| 脚本 | 用途 | 前置条件 |
+|------|------|---------|
+| `scripts/fetch_market_data.py --watchlist` | 拉取股票池行情（多源兜底） | .env 配好 FMP_API_KEY 或 TUSHARE_TOKEN |
+| `scripts/fetch_macro_data.py` | 拉取 VIX/SPY/QQQ/原油/黄金/BTC | FMP_API_KEY |
+| `scripts/check_setup.py` | 环境诊断 | — |
+| `scripts/sync_feishu_drive.py` | 飞书云盘同步 | ACTION=download |
+| `scripts/sync_weread.py` | 微信读书笔记同步 | WEREAD_API_KEY |
+
+详见 `config/.env.example` → 复制为 `config/.env` 配好 key。
 
 ---
 
