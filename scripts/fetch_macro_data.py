@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-小苔花投研 — 宏观数据拉取器
+Annette投研系统投研 — 宏观数据拉取器
 改编自 Daily Watchlist (Benboerba620/daily-watchlist)
 
 拉取 VIX 恐慌指数 + 美股三大指数 ETF (SPY/QQQ/IWM) + 大宗商品 + 比特币
@@ -94,7 +94,7 @@ def vix_status(v: float | None) -> str:
 
 def main():
     configure_stdio()
-    parser = argparse.ArgumentParser(description="小苔花投研 — 宏观数据拉取")
+    parser = argparse.ArgumentParser(description="Annette投研系统投研 — 宏观数据拉取")
     parser.add_argument("-o", "--output", help="输出 JSON 文件路径（默认 stdout）")
     args = parser.parse_args()
 

@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-"""小苔花投研 — 环境检查脚本"""
+"""Annette投研系统投研 — 环境检查脚本"""
 from __future__ import annotations
 
 import sys

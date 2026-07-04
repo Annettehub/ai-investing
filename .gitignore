@@ -1,3 +1,17 @@
+# 知识星球图片资源（体积大，不入库）
 03-raw/zsxq/images/
 03-raw/zsxq/*.png
 03-raw/zsxq/*.jpg
+
+# Obsidian 设备特定配置（不同电脑窗口布局不同）
+.obsidian/workspace.json
+.obsidian/workspaces.json
+
+# WorkBuddy 本地工作记忆
+.workbuddy/
+
+# 临时文件
+*.tmp
+*.log
+.DS_Store
+Thumbs.db

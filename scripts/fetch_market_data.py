@@ -1,14 +1,18 @@
 #!/usr/bin/env python3
 """
-小苔花投研 — 行情数据拉取器
-改编自 Daily Watchlist (Benboerba620/daily-watchlist)
+Annette投研系统投研 — 行情数据拉取器 v2.0
 
-多源兜底链: FMP → Tushare(A股/港股) → Stooq → Finnhub → EOD → yfinance
+数据源策略:
+  主源: yfinance (免费, 全球市场, HK/US/CN 全覆盖)
+  增强: FMP /stable/quote-short (免费版仅支持美股, 更快更可靠)
+
 输出 JSON 到 stdout，日志到 stderr。
 
 用法:
     python fetch_market_data.py --tickers 00981.HK,TSM,0700.HK
-    python fetch_market_data.py --watchlist          # 从 config/watchlist.md 读取
+    python fetch_market_data.py --from-watchlist      # 从 config/watchlist.md 读取全部
+    python fetch_market_data.py --core                # 只拉🔴核心标的
+    python fetch_market_data.py                       # 默认拉全部 watchlist
 """
 from __future__ import annotations
 
@@ -18,8 +22,7 @@ import os
 import re
 import sys
 from concurrent.futures import ThreadPoolExecutor, as_completed
-from datetime import date, timedelta
-from io import StringIO
+from datetime import date
 from pathlib import Path
 from typing import Any
 
@@ -27,13 +30,11 @@ import requests
 from dotenv import dotenv_values
 
 # ── Constants ──
-FMP_BASE_URL = "https://financialmodelingprep.com/api/v3"
-DEFAULT_TIMEOUT = 20
+FMP_STABLE_URL = "https://financialmodelingprep.com/stable"
+DEFAULT_TIMEOUT = 15
 CN_SUFFIXES = (".SH", ".SZ")
 HK_SUFFIX = ".HK"
 TS_SUFFIXES = CN_SUFFIXES + (HK_SUFFIX,)
-STOOQ_MARKET_SUFFIX = {"US": "us", "JP": "jp", "DE": "de", "UK": "uk"}
-EOD_MARKET_SUFFIX = {"HK": "HK", "KR": "KO", "FI": "HE"}
 
 
 # ── Helpers ──
@@ -62,22 +63,15 @@ def parse_float(value: Any) -> float | None:
         return None
 
 
-def request_json(url: str) -> Any:
-    resp = requests.get(url, timeout=DEFAULT_TIMEOUT)
-    resp.raise_for_status()
-    return resp.json()
-
-
 # ── Env / Config ──
 def find_project_root() -> Path:
-    """向上查找包含 AGENTS.md 或 config/ 的目录作为项目根"""
     current = Path(__file__).resolve().parent
     for candidate in (current, *current.parents):
         if (candidate / "AGENTS.md").is_file():
             return candidate
         if (candidate / "config").is_dir():
             return candidate
-    return current.parent  # fallback
+    return current.parent
 
 
 def load_env(project_root: Path) -> dict[str, str]:
@@ -93,7 +87,7 @@ def load_env(project_root: Path) -> dict[str, str]:
 
     if env_path:
         raw = env_path.read_text(encoding="utf-8-sig")
-        for k, v in dotenv_values(stream=StringIO(raw)).items():
+        for k, v in dotenv_values(stream=sys.modules.get("io", __import__("io")).StringIO(raw)).items():
             if v is not None and k not in os.environ:
                 os.environ[k] = v
         log(f"[env] loaded from {env_path}")
@@ -102,219 +96,127 @@ def load_env(project_root: Path) -> dict[str, str]:
 
     return {
         "FMP_API_KEY": os.environ.get("FMP_API_KEY", "").strip(),
-        "TUSHARE_TOKEN": os.environ.get("TUSHARE_TOKEN", "").strip(),
-        "FINNHUB_API_KEY": os.environ.get("FINNHUB_API_KEY", "").strip(),
-        "EOD_API_KEY": os.environ.get("EOD_API_KEY", "").strip(),
-        "ENABLE_YFINANCE": os.environ.get("ENABLE_YFINANCE", "").strip(),
     }
 
 
-# ── FMP ──
-def fetch_fmp_quote_batch(tickers: list[str], api_key: str) -> list[dict[str, Any]]:
-    joined = ",".join(tickers)
-    url = f"{FMP_BASE_URL}/quote/{joined}?apikey={api_key}"
-    payload = request_json(url)
-    return payload if isinstance(payload, list) else []
+# ── FMP (US stocks only, free plan) ──
+def fetch_fmp_us(tickers: list[str], api_key: str) -> dict[str, dict[str, Any]]:
+    """逐只拉 FMP quote-short（免费版不支持 batch）"""
+    results: dict[str, dict[str, Any]] = {}
+    if not api_key:
+        return results
 
+    def _one(sym: str) -> tuple[str, dict[str, Any] | None]:
+        try:
+            url = f"{FMP_STABLE_URL}/quote-short?symbol={sym}&apikey={api_key}"
+            resp = requests.get(url, timeout=DEFAULT_TIMEOUT)
+            resp.raise_for_status()
+            data = resp.json()
+            if isinstance(data, list) and len(data) > 0:
+                item = data[0]
+                return sym, {
+                    "price": parse_float(item.get("price")),
+                    "change": parse_float(item.get("change")),
+                    "volume": parse_float(item.get("volume")),
+                    "source": "fmp",
+                }
+        except Exception:
+            pass
+        return sym, None
 
-def fetch_fmp_quotes(tickers: list[str], api_key: str, max_workers: int = 4) -> list[dict[str, Any]]:
-    if not tickers or not api_key:
-        return []
-    quotes: list[dict[str, Any]] = []
-    batches = [tickers[i : i + 50] for i in range(0, len(tickers), 50)]
-    with ThreadPoolExecutor(max_workers=min(max_workers, len(batches))) as ex:
-        futures = {ex.submit(fetch_fmp_quote_batch, b, api_key): b for b in batches}
+    with ThreadPoolExecutor(max_workers=min(5, len(tickers))) as ex:
+        futures = {ex.submit(_one, t): t for t in tickers}
         for future in as_completed(futures):
-            try:
-                quotes.extend(future.result())
-            except Exception as e:
-                log(f"[warn] FMP batch failed: {e}")
-    return quotes
+            sym, data = future.result()
+            if data:
+                results[sym] = data
+
+    return results
 
 
-# ── Tushare (A 股 / 港股) ──
-def load_tushare(token: str) -> Any | None:
-    if not token:
-        return None
+# ── Yahoo Finance ticker 格式转换 ──
+# yfinance 的 HK 股去前导零 (00981.HK → 0981.HK)，A 股上交所用 .SS
+def _to_yf_ticker(ticker: str) -> str:
+    """将标准 ticker 转为 Yahoo Finance 格式"""
+    if ticker.endswith(".HK"):
+        code = ticker[:-3]
+        # 去前导零: 00981 → 0981, 06181 → 6181, 09992 → 9992
+        stripped = code.lstrip("0") or "0"
+        return f"{stripped}.HK"
+    if ticker.endswith(".SH"):
+        return ticker[:-3] + ".SS"
+    return ticker
+
+
+# ── yfinance (global markets, free) ──
+def _has_yfinance() -> bool:
     try:
-        import tushare as ts
+        import yfinance  # noqa: F401
+        return True
     except ImportError:
-        log("[warn] tushare not installed, skipping CN/HK quotes")
-        return None
+        return False
+
+
+def fetch_yfinance_one(ticker: str) -> dict[str, Any] | None:
+    """拉一只股票的 yfinance 数据"""
+    import yfinance as yf
+
+    # 避免沙盒拦截 AppData 缓存
+    cache_dir = os.environ.get("YF_CACHE_DIR", "")
+    if not cache_dir:
+        cache_dir = str(Path(__file__).resolve().parent.parent / ".yfcache")
+        os.environ["YF_CACHE_DIR"] = cache_dir
+
+    yf_ticker = _to_yf_ticker(ticker)
     try:
-        return ts.pro_api(token)
-    except Exception as e:
-        log(f"[warn] tushare init failed: {e}")
-        return None
-
-
-def fetch_tushare_quote(client: Any, ticker: str) -> dict[str, Any] | None:
-    end = date.today()
-    start = end - timedelta(days=10)
-    try:
-        if ticker.endswith(CN_SUFFIXES):
-            df = client.daily(ts_code=ticker, start_date=start.strftime("%Y%m%d"), end_date=end.strftime("%Y%m%d"))
-        elif ticker.endswith(HK_SUFFIX):
-            df = client.hk_daily(ts_code=ticker, start_date=start.strftime("%Y%m%d"), end_date=end.strftime("%Y%m%d"))
-        else:
-            return None
-    except Exception as e:
-        log(f"[warn] tushare request failed for {ticker}: {e}")
-        return None
-
-    if df is None or df.empty:
-        return None
-
-    latest = df.sort_values("trade_date", ascending=False).iloc[0]
-    return {
-        "symbol": ticker,
-        "price": parse_float(latest.get("close")),
-        "change": parse_float(latest.get("change")),
-        "changesPercentage": parse_float(latest.get("pct_chg")),
-        "previousClose": parse_float(latest.get("pre_close")),
-        "open": parse_float(latest.get("open")),
-        "dayHigh": parse_float(latest.get("high")),
-        "dayLow": parse_float(latest.get("low")),
-        "volume": parse_float(latest.get("vol")),
-        "tradeDate": str(latest.get("trade_date", "")),
-        "source": "tushare",
-    }
-
-
-def fetch_tushare_quotes(tickers: list[str], token: str, max_workers: int = 4) -> list[dict[str, Any]]:
-    if not tickers or not token:
-        return []
-    client = load_tushare(token)
-    if not client:
-        return []
-    quotes: list[dict[str, Any]] = []
-    with ThreadPoolExecutor(max_workers=min(max_workers, len(tickers))) as ex:
-        futures = {ex.submit(fetch_tushare_quote, client, t): t for t in tickers}
-        for future in as_completed(futures):
-            try:
-                r = future.result()
-                if r:
-                    quotes.append(r)
-            except Exception as e:
-                log(f"[warn] tushare thread failed: {e}")
-    return quotes
-
-
-# ── Fallback chain ──
-def fetch_stooq(ticker: str, market: str) -> dict[str, Any] | None:
-    suffix = STOOQ_MARKET_SUFFIX.get(market.strip().upper())
-    if not suffix:
-        return None
-    symbol = ticker.split(".")[0].lower()
-    url = f"https://stooq.com/q/l/?s={symbol}.{suffix}&f=sd2t2ohlcvp&h&e=csv"
-    try:
-        resp = requests.get(url, timeout=DEFAULT_TIMEOUT)
-        resp.raise_for_status()
-        lines = resp.text.strip().splitlines()
-        if len(lines) < 2:
-            return None
-        headers = [h.strip().lower() for h in lines[0].split(",")]
-        values = [v.strip() for v in lines[1].split(",")]
-        if len(headers) != len(values):
-            return None
-        row = dict(zip(headers, values))
-        if row.get("close", "").upper() in ("", "N/D"):
-            return None
-        close = parse_float(row.get("close"))
-        prev = parse_float(row.get("prev"))
-        change = (close - prev) if close is not None and prev is not None else None
-        change_pct = (change / prev * 100) if change is not None and prev else None
-        return {
-            "symbol": ticker, "price": close, "change": change,
-            "changesPercentage": change_pct, "previousClose": prev,
-            "open": parse_float(row.get("open")), "dayHigh": parse_float(row.get("high")),
-            "dayLow": parse_float(row.get("low")), "volume": parse_float(row.get("volume")),
-            "tradeDate": row.get("date", ""), "source": "stooq",
-        }
-    except Exception as e:
-        log(f"[warn] stooq fallback failed for {ticker}: {e}")
-        return None
-
-
-def fetch_yfinance(ticker: str) -> dict[str, Any] | None:
-    try:
-        import yfinance as yf
-    except ImportError:
-        return None
-    try:
-        hist = yf.Ticker(ticker).history(period="5d", auto_adjust=False)
+        t = yf.Ticker(yf_ticker)
+        hist = t.history(period="5d", auto_adjust=False)
         if hist is None or hist.empty:
             return None
         latest = hist.iloc[-1]
-        prev_close = float(hist.iloc[-2]["Close"]) if len(hist) >= 2 else None
         close = float(latest["Close"])
-        change = (close - prev_close) if prev_close is not None else None
-        change_pct = (change / prev_close * 100) if change is not None and prev_close else None
+        prev = float(hist.iloc[-2]["Close"]) if len(hist) >= 2 else None
+        change = (close - prev) if prev is not None else None
+        change_pct = (change / prev * 100) if change is not None and prev else None
         return {
-            "symbol": ticker, "price": close, "change": change,
-            "changesPercentage": change_pct, "previousClose": prev_close,
-            "open": float(latest["Open"]), "dayHigh": float(latest["High"]),
-            "dayLow": float(latest["Low"]), "volume": float(latest["Volume"]),
-            "tradeDate": str(latest.name.date()), "source": "yfinance",
+            "price": close,
+            "change": round(change, 4) if change is not None else None,
+            "changesPercentage": round(change_pct, 2) if change_pct is not None else None,
+            "previousClose": prev,
+            "open": float(latest.get("Open", float("nan"))),
+            "dayHigh": float(latest.get("High", float("nan"))),
+            "dayLow": float(latest.get("Low", float("nan"))),
+            "volume": int(latest.get("Volume", 0)),
+            "tradeDate": str(latest.name.date()) if hasattr(latest, "name") else "",
+            "source": "yfinance",
         }
     except Exception as e:
-        log(f"[warn] yfinance fallback failed for {ticker}: {e}")
+        log(f"[warn] yfinance failed for {ticker}: {e}")
         return None
 
 
-def fetch_fallback(ticker: str, market: str, env: dict[str, str]) -> dict[str, Any] | None:
-    """逐个尝试兜底源，返回第一个成功的结果"""
-    market_upper = market.strip().upper()
+def fetch_yfinance_batch(tickers: list[str]) -> dict[str, dict[str, Any]]:
+    """并行拉多只 yfinance"""
+    results: dict[str, dict[str, Any]] = {}
+    if not tickers:
+        return results
 
-    q = fetch_stooq(ticker, market)
-    if q:
-        return q
-
-    finnhub_key = env.get("FINNHUB_API_KEY", "")
-    if finnhub_key and market_upper == "US":
-        try:
-            p = request_json(f"https://finnhub.io/api/v1/quote?symbol={ticker}&token={finnhub_key}")
-            if isinstance(p, dict) and p.get("c") not in (0, 0.0, None):
-                q = {
-                    "symbol": ticker, "price": parse_float(p.get("c")),
-                    "change": parse_float(p.get("d")), "changesPercentage": parse_float(p.get("dp")),
-                    "previousClose": parse_float(p.get("pc")), "open": parse_float(p.get("o")),
-                    "dayHigh": parse_float(p.get("h")), "dayLow": parse_float(p.get("l")),
-                    "volume": None, "tradeDate": str(p.get("t", "")), "source": "finnhub",
-                }
-                return q
-        except Exception:
-            pass
-
-    eod_key = env.get("EOD_API_KEY", "")
-    if eod_key and market_upper in EOD_MARKET_SUFFIX:
-        suffix = EOD_MARKET_SUFFIX[market_upper]
-        try:
-            p = request_json(f"https://eodhd.com/api/real-time/{ticker.split('.')[0]}.{suffix}?api_token={eod_key}&fmt=json")
-            if isinstance(p, dict) and str(p.get("code", "")).upper() != "NA":
-                q = {
-                    "symbol": ticker, "price": parse_float(p.get("close")),
-                    "change": parse_float(p.get("change")), "changesPercentage": parse_float(p.get("change_p")),
-                    "previousClose": parse_float(p.get("previousClose")), "open": parse_float(p.get("open")),
-                    "dayHigh": parse_float(p.get("high")), "dayLow": parse_float(p.get("low")),
-                    "volume": parse_float(p.get("volume")), "tradeDate": str(p.get("timestamp", "")),
-                    "source": "eod",
-                }
-                return q
-        except Exception:
-            pass
-
-    if env.get("ENABLE_YFINANCE", "").lower() in ("1", "true", "yes", "on"):
-        q = fetch_yfinance(ticker)
-        if q:
-            return q
-
-    return None
+    with ThreadPoolExecutor(max_workers=min(8, len(tickers))) as ex:
+        futures = {ex.submit(fetch_yfinance_one, t): t for t in tickers}
+        for future in as_completed(futures):
+            t = futures[future]
+            try:
+                r = future.result()
+                if r:
+                    results[t] = r
+            except Exception:
+                pass
+    return results
 
 
-# ── Watchlist parser (Markdown table) ──
-def parse_watchlist_md(path: Path) -> list[dict[str, str]]:
-    """解析 config/watchlist.md 中的 Markdown 表格"""
+# ── Watchlist parser ──
+def parse_watchlist_md(path: Path, core_only: bool = False) -> list[dict[str, str]]:
+    """解析 config/watchlist.md Markdown 表格"""
     if not path.is_file():
         raise FileNotFoundError(f"Watchlist not found: {path}")
 
@@ -332,7 +234,6 @@ def parse_watchlist_md(path: Path) -> list[dict[str, str]]:
             cells = [c.strip() for c in line.strip("|").split("|")]
             normalized = [c.strip().lower() for c in cells]
 
-            # 跳过表头分隔行
             if all(re.fullmatch(r":?-{3,}:?", c) for c in normalized):
                 continue
 
@@ -343,8 +244,21 @@ def parse_watchlist_md(path: Path) -> list[dict[str, str]]:
 
             if headers and len(cells) == len(headers):
                 row = dict(zip(headers, cells))
+                ticker_raw = row.get("ticker", "").strip()
+
+                # 跳过多余行
+                if ticker_raw.startswith("^") or ticker_raw.upper() in ("DXY", "BTC-USD"):
+                    continue
+                if not ticker_raw or ticker_raw in ("---", "(待添加)", "TBD") or ticker_raw.startswith("*"):
+                    continue
+
+                if core_only:
+                    tier_val = (row.get("tier", "") or "").strip()
+                    if "核心" not in tier_val and "🔴" not in tier_val:
+                        continue
+
                 entries.append({
-                    "ticker": row["ticker"].strip().upper(),
+                    "ticker": ticker_raw.upper(),
                     "name": row.get("name", "").strip(),
                     "market": row.get("market", "").strip(),
                 })
@@ -355,18 +269,18 @@ def parse_watchlist_md(path: Path) -> list[dict[str, str]]:
 # ── Main ──
 def main():
     configure_stdio()
-    parser = argparse.ArgumentParser(description="小苔花投研 — 行情拉取器")
-    parser.add_argument("--tickers", help="逗号分隔的股票代码，如 00981.HK,TSM,0700.HK")
-    parser.add_argument("--watchlist", action="store_true", help="从 config/watchlist.md 读取股票池")
+    parser = argparse.ArgumentParser(description="Annette投研系统投研 — 行情拉取器 v2.0")
+    parser.add_argument("--tickers", help="逗号分隔的股票代码")
+    parser.add_argument("--watchlist", "--from-watchlist", action="store_true",
+                        help="从 config/watchlist.md 读取全部股票池")
+    parser.add_argument("--core", action="store_true",
+                        help="只拉取🔴核心标的")
     parser.add_argument("--output", "-o", help="输出 JSON 文件路径（默认 stdout）")
     args = parser.parse_args()
 
     project_root = find_project_root()
     log(f"[init] project root: {project_root}")
     env = load_env(project_root)
-
-    api_key = env["FMP_API_KEY"]
-    tushare_token = env["TUSHARE_TOKEN"]
 
     # 收集 tickers
     statements: list[dict[str, str]] = []
@@ -375,7 +289,6 @@ def main():
         for t in re.split(r"[\s,]+", args.tickers):
             t = t.strip().upper()
             if t:
-                # 猜测市场
                 if t.endswith(CN_SUFFIXES):
                     market = "CN"
                 elif t.endswith(HK_SUFFIX):
@@ -385,24 +298,24 @@ def main():
                 statements.append({"ticker": t, "name": t, "market": market})
 
     if args.watchlist:
-        wl_paths = [
-            project_root / "config" / "watchlist.md",
-            project_root / "config" / "daily-watchlist-watchlist.md",
-        ]
-        for wp in wl_paths:
-            if wp.is_file():
-                statements.extend(parse_watchlist_md(wp))
-                break
+        wl_path = project_root / "config" / "watchlist.md"
+        if wl_path.is_file():
+            statements.extend(parse_watchlist_md(wl_path, core_only=args.core))
         else:
             log("[warn] no watchlist.md found")
 
+    if args.core and not args.watchlist:
+        wl_path = project_root / "config" / "watchlist.md"
+        if wl_path.is_file():
+            statements = parse_watchlist_md(wl_path, core_only=True)
+            log("[core] filtering 🔴核心标的 only")
+
     if not statements:
-        # 没有指定 tickers，尝试默认从 watchlist.md 读取
-        default_wl = project_root / "config" / "watchlist.md"
-        if default_wl.is_file():
-            statements = parse_watchlist_md(default_wl)
+        wl_path = project_root / "config" / "watchlist.md"
+        if wl_path.is_file():
+            statements = parse_watchlist_md(wl_path)
         else:
-            log("[error] no tickers specified (use --tickers or --watchlist)")
+            log("[error] no tickers specified")
             json.dump({"error": "no tickers"}, sys.stdout)
             return 1
 
@@ -417,85 +330,67 @@ def main():
 
     log(f"[fetch] {len(statements)} tickers: {', '.join(s['ticker'] for s in statements)}")
 
-    # 分拆 FMP / Tushare
-    fmp_items = [s for s in statements if not s["ticker"].endswith(TS_SUFFIXES)]
-    ts_items = [s for s in statements if s["ticker"].endswith(TS_SUFFIXES)]
+    # 数据拉取
+    all_data: dict[str, dict[str, Any]] = {}
 
-    quotes: list[dict[str, Any]] = []
-    fetched: set[str] = set()
+    # 第一优先级: yfinance (全球市场)
+    if _has_yfinance():
+        all_tickers = [s["ticker"] for s in statements]
+        log("[yfinance] fetching all tickers...")
+        yf_results = fetch_yfinance_batch(all_tickers)
+        for sym, data in yf_results.items():
+            all_data[sym] = data
+        log(f"[yfinance] got {len(yf_results)}/{len(all_tickers)}")
+    else:
+        log("[warn] yfinance not installed — run: pip install yfinance")
 
-    # FMP
-    if fmp_items:
-        fmp_tickers = [s["ticker"] for s in fmp_items]
-        for raw in fetch_fmp_quotes(fmp_tickers, api_key):
-            sym = str(raw.get("symbol", "")).strip().upper()
-            fetched.add(sym)
-            quotes.append({
-                "ticker": sym, "name": raw.get("name", ""), "market": "US",
-                "price": parse_float(raw.get("price")),
-                "change": parse_float(raw.get("change")),
-                "changesPercentage": parse_float(raw.get("changesPercentage")),
-                "previousClose": parse_float(raw.get("previousClose")),
-                "open": parse_float(raw.get("open")),
-                "dayHigh": parse_float(raw.get("dayHigh")),
-                "dayLow": parse_float(raw.get("dayLow")),
-                "volume": parse_float(raw.get("volume")),
-                "tradeDate": raw.get("timestamp", ""),
-                "source": "fmp",
-            })
-
-    # Tushare
-    if ts_items:
-        for raw in fetch_tushare_quotes([s["ticker"] for s in ts_items], tushare_token):
-            sym = str(raw.get("symbol", "")).strip().upper()
-            fetched.add(sym)
-            quotes.append({
-                "ticker": sym, "name": sym, "market": "HK" if sym.endswith(HK_SUFFIX) else "CN",
-                "price": raw.get("price"),
-                "change": raw.get("change"),
-                "changesPercentage": raw.get("changesPercentage"),
-                "previousClose": raw.get("previousClose"),
-                "open": raw.get("open"), "dayHigh": raw.get("dayHigh"),
-                "dayLow": raw.get("dayLow"), "volume": raw.get("volume"),
-                "tradeDate": raw.get("tradeDate"),
-                "source": "tushare",
-            })
-
-    # 兜底
-    missing = [s for s in statements if s["ticker"] not in fetched]
-    if missing:
-        available_sources = "stooq"
-        if env.get("FINNHUB_API_KEY"):
-            available_sources += " > finnhub"
-        if env.get("EOD_API_KEY"):
-            available_sources += " > eod"
-        if env.get("ENABLE_YFINANCE", "").lower() in ("1", "true", "yes", "on"):
-            available_sources += " > yfinance"
-        log(f"[fallback] {len(missing)} missing tickers → trying {available_sources}")
-        for s in missing:
-            r = fetch_fallback(s["ticker"], s["market"], env)
-            if r:
-                quotes.append({
-                    "ticker": s["ticker"], "name": s["name"], "market": s["market"],
-                    "price": r.get("price"), "change": r.get("change"),
-                    "changesPercentage": r.get("changesPercentage"),
-                    "previousClose": r.get("previousClose"),
-                    "open": r.get("open"), "dayHigh": r.get("dayHigh"),
-                    "dayLow": r.get("dayLow"), "volume": r.get("volume"),
-                    "tradeDate": r.get("tradeDate"), "source": r.get("source"),
-                })
+    # 第二优先级: FMP 增强美股数据 (覆盖 yfinance 的 US 结果)
+    api_key = env["FMP_API_KEY"]
+    us_tickers = [s["ticker"] for s in statements if not s["ticker"].endswith(TS_SUFFIXES)]
+    if us_tickers and api_key:
+        log(f"[fmp] enhancing {len(us_tickers)} US tickers...")
+        fmp_results = fetch_fmp_us(us_tickers, api_key)
+        for sym, data in fmp_results.items():
+            # FMP 覆盖 yfinance（保留 yfinance 的 changesPercentage 等字段）
+            if sym in all_data:
+                all_data[sym].update(data)
             else:
-                log(f"[warn] no data for {s['ticker']} (all sources failed)")
-                quotes.append({
-                    "ticker": s["ticker"], "name": s["name"], "market": s["market"],
-                    "error": "no_data",
-                })
+                all_data[sym] = data
+        log(f"[fmp] enhanced {len(fmp_results)} US tickers")
 
-    # 异动检测
+    # 组装输出
+    quotes: list[dict[str, Any]] = []
+    for s in statements:
+        sym = s["ticker"]
+        if sym in all_data:
+            d = all_data[sym]
+            quotes.append({
+                "ticker": sym,
+                "name": s["name"],
+                "market": s["market"],
+                "price": d.get("price"),
+                "change": d.get("change"),
+                "changesPercentage": d.get("changesPercentage"),
+                "previousClose": d.get("previousClose"),
+                "open": d.get("open"),
+                "dayHigh": d.get("dayHigh"),
+                "dayLow": d.get("dayLow"),
+                "volume": d.get("volume"),
+                "tradeDate": d.get("tradeDate", ""),
+                "source": d.get("source", "unknown"),
+            })
+        else:
+            log(f"[warn] no data for {sym}")
+            quotes.append({
+                "ticker": sym, "name": s["name"], "market": s["market"],
+                "error": "no_data",
+            })
+
+    # 异动检测 (≥5%)
     movers = []
     for q in quotes:
         pct = q.get("changesPercentage")
-        if pct is not None and abs(pct) >= 3:
+        if pct is not None and abs(pct) >= 5:
             movers.append({"ticker": q["ticker"], "name": q.get("name", ""), "change_pct": round(pct, 2)})
     movers.sort(key=lambda m: abs(m["change_pct"]), reverse=True)
 

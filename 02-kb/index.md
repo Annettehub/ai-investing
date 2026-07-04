@@ -1,74 +1,130 @@
-# 知识库索引
+# Annette投研系统知识库总索引
 
-## 活跃研究领域
-- [AI硬件]（2026-06-29启动）
-- [半导体制造]（2026-06-29启动）
+> 所有 entities、concepts、sources、hypotheses、walls 的入口地图。
+> 每次新增/修改知识库核心文件后，同步更新本索引。
 
-## 公司档案（entities）
-| 代码 | 名称 | 五层定位 | 最后更新 | 活跃假设 |
-|-----|------|---------|---------|---------|
-| 00981 | 中芯国际 | L2 | 2026-06-30 | H1,H2,H3,H4,H5,H6 |
+---
 
-## 活跃假设（hypotheses）
-| 编号 | 假设 | certainty% | 证伪条件 | 相关标的 |
-|-----|------|-----------|---------|---------|
-| H1 | 2026年7nm产能达30k | 40% | 2Q26 qoq<12%或全年营收<105亿 | 00981 |
-| H2 | 28nm新厂不转固 | 60% | 在建工程放缓+固定资产跳升>20% | 00981 |
-| H3 | 光刻胶断供可控 | 5% | 2Q26 qoq<12%或3Q26稼动率<85% | 00981 |
-| H4 | 7nm无价格战 | 55% | 7nm ASP降至8k以下 | 00981 |
-| H5 | 华为手机5600万颗 | 50% | 华为出货量<5000万或Mate 90推迟 | 00981 |
-| H6 | 估值反映叙事溢价 | 75% | A/H溢价收窄至1.5倍或PE低于行业平均 | 00981 |
+## 一、Entities（公司/标的档案）
 
-## 城墙（walls）
-| 编号 | 风险 | 状态 | 相关假设 |
-|-----|------|------|---------|
-| W1 | 光刻胶断供/MATCH收紧 | **激活** | H1,H3 |
-| W2 | 28nm折旧风暴 | **预警** | H2 |
-| W3 | 7nm价格战 | 休眠 | H1,H4 |
-| W4 | 华为需求坍塌 | 休眠 | H1,H5 |
+| 代码/名称 | 文件 | 行业 | 状态 |
+|----------|------|------|------|
+| YMTC 长江存储 | [[entities/YMTC.md]] | 半导体-存储 | 活跃 |
+| TSM 台积电 | [[entities/TSM-台积电.md]] | 半导体-晶圆制造 | 活跃 |
+| SK Hynix 海力士 | [[entities/SK-Hynix-海力士.md]] | 半导体-存储 | 活跃 |
+| 00981 中芯国际 | [[entities/00981-中芯国际.md]] | 半导体-晶圆制造 | 活跃 |
+| 688372 伟测科技 | [[entities/688372-伟测科技.md]] | 半导体-测试 | 活跃 |
+| 0700 腾讯控股 | [[entities/0700-腾讯控股.md]] | AI应用+云 | 活跃 |
+| 兆易创新 | [[entities/兆易创新.md]] | 半导体-存储/MCU | 活跃 |
+| 风华高科 | [[entities/风华高科.md]] | MLCC | 新增 |
+| 三环集团 | [[entities/三环集团.md]] | MLCC | 新增 |
+| 村田 | [[entities/村田.md]] | MLCC | 新增 |
 
-## 核心概念（concepts）
-| 概念 | 定义 | 相关标的 | 最后更新 |
-|-----|------|---------|---------|
-| N+2/N+3制程 | 中芯DUV多重曝光7nm方案 | 00981 | 2026-06-29 |
-| 28nm设备堰塞湖 | 中芯四厂囤积设备未转固 | 00981 | 2026-06-29 |
-| 国产AI芯片代工 | 国内7nm需求与产能匹配 | 00981 | 2026-06-29 |
-| Serenity F-A-B-E-S-R-P | 七步投研框架：Funnel-Architecture-Bottleneck-Exposure-Security-Repricing-Portfolio | 全标的 | 2026-06-30 |
-| 五层AI工业蛋糕 | 能源→芯片硬件→数据中心→模型→应用 | 00981, NVDA | 2026-06-30 |
-| SSA800国产光刻机 | 上海微电子28nm浸没式DUV量产验证，良率90-95% | 00981, 01347 | 2026-06-30 |
-| 技术-金融-投资交叉框架 | 佩雷斯四阶段+反脆弱+柏基成长+半导体产业纵深 | 00981 | 2026-06-30 |
-| 台积电5年折旧周期策略 | 折旧作为竞争武器：低点建厂→高点折旧→无折旧价格战 | 00981, TSM | 2026-06-30 |
-| 光纤泡沫教训 | 线性外推需求+忽视技术指数增长=资本错配，AI数据中心类比 | 全标的 | 2026-06-30 |
-| Lollapalooza效应 | 多重力量同向叠加产生极端结果（NVIDIA: CUDA+Mellanox+NVLink+NN） | NVDA | 2026-06-30 |
-| EUV定义陷阱 | "生产可用芯片"vs in-line量产：国产EUV验收标准被低估 | 00981, W1 | 2026-06-30 |
-| 切香肠式制裁 | 美国对华半导体制裁渐进升级模式（1007→1017→GAA→MATCH） | 00981, W2-W5 | 2026-06-30 |
-| AI不吃产能 | 晶圆厂视角：AI芯片量级小、wafer产出有限，成熟制程才是主力 | 00981, H1 | 2026-06-30 |
-| CoWoS恐怖平衡 | 台积电通过产能紧张叙事迫使客户预付款的博弈策略 | TSM, NVDA | 2026-06-30 |
+## 二、Concepts（概念/行业框架）
 
-## 来源库（sources）
-| ID | 标题 | 类型 | 关联假设 |
-|----|------|------|---------|
-| SRC-NVIDIA | [NVIDIA Jensen Huang](sources/SRC-NVIDIA-Jensen-Huang-2026-06-10.md) | 播客 | H1,H6 |
-| SRC-Balaji | [Balaji 供应链与地缘](sources/SRC-Balaji-Supply-Chain-2026-06-03.md) | 播客 | W1,H3 |
-| SRC-All-In | [All-In Best Ideas](sources/SRC-All-In-Best-Ideas-2026-06-12.md) | 播客 | H6 |
-| **SRC-ZSXQ-SMIC** | [**中芯国际深度分析**](sources/SRC-ZSXQ-SMIC.md) | **星球** | **H1,H2,H3,H4,H5** ⭐ |
-| **SRC-ZSXQ-Lithography** | [**光刻机/EUV/国产替代**](sources/SRC-ZSXQ-Lithography.md) | **星球** | **W1,H3,H4,H6** ⭐ |
-| **SRC-ZSXQ-TSMC** | [**台积电/CoWoS/AI产业链**](sources/SRC-ZSXQ-TSMC.md) | **星球** | **H1,H6** ⭐ |
-| **SRC-ZSXQ-Sanctions** | [**制裁/关税/地缘政治**](sources/SRC-ZSXQ-Sanctions.md) | **星球** | **W2-W5,H3,H6** ⭐ |
-| **SRC-ZSXQ-DomesticChip** | [**华为/麒麟/国产芯片**](sources/SRC-ZSXQ-DomesticChip.md) | **星球** | **H3,H4,H6** |
-| **SRC-ZSXQ-GPU-ASIC** | [**AI芯片竞争格局**](sources/SRC-ZSXQ-GPU-ASIC.md) | **星球** | **H6** |
-| SRC-WEREAD-Chip-Wave | [芯片浪潮（台积电折旧/SMIC追赶）](sources/SRC-WEREAD-Chip-Wave.md) | 书 | H1,H2,H3,H5,W5 |
-| SRC-WEREAD-Antifragile | [反脆弱](sources/SRC-WEREAD-Antifragile.md) | 书 | 方法论,W1-W5 |
-| SRC-WEREAD-Baillie | [柏基投资之道](sources/SRC-WEREAD-Baillie-Gifford.md) | 书 | H6 |
-| SRC-WEREAD-Tech-Bubble | [泡沫逃生](sources/SRC-WEREAD-Tech-Bubble.md) | 书 | W1-W5,H6 |
-| SRC-WEREAD-Poor-Charlie | [穷查理宝典](sources/SRC-WEREAD-Poor-Charlie.md) | 书 | H3,H6,方法论 |
-| SRC-WEREAD-Judgment | [判断力定价一切](sources/SRC-WEREAD-Judgment-Pricing.md) | 合集 | H4,H6 ⚠️ |
-| SRC-WEREAD-Perez | [技术革命与金融资本](sources/SRC-WEREAD-Perez.md) | 书 | H6 |
-| SRC-WEREAD-Situational | [Situational Awareness](sources/SRC-WEREAD-Situational-Awareness.md) | 长文 | H6,H1 |
-| SRC-WEREAD-Buffett | [巴菲特致股东信](sources/SRC-WEREAD-Buffett-Letters.md) | 书 | 方法论 |
-| → | [飞书来源索引（26个）](_index.md) | | |
-| → | [微信读书来源索引（78个）](_index-weread.md) | | |
-| → | [**知识星球来源索引（139个）**](_index-zsxq.md) | | |
+| 概念 | 文件 | 说明 |
+|------|------|------|
+| Serenity 方法论 | [[concepts/Serenity方法论.md]] | 投研方法论框架 |
+| AI 五层蛋糕 | [[00-system/SYSTEM.md]] | L2-L5 投资透镜 |
+| MLCC 周期 | [[concepts/MLCC周期.md]] | MLCC 行业周期框架 |
+| AI 服务器供应链 | [[concepts/AI服务器供应链.md]] | AI 服务器从芯片到终端的供应链映射 |
+| 技术-金融-投资交叉框架 | [[concepts/技术-金融-投资交叉框架.md]] | 跨学科投资认知框架 |
+| 国产光刻机突围路线 | [[concepts/国产光刻机突围路线.md]] | 基于27篇专栏，制裁下光刻机三重突围路径 |
+| CPO/光互联/硅光技术 | [[concepts/CPO光互联硅光技术.md]] | 基于18篇专栏，光互联从光模块到CPO到OIO演进 |
+| 中美半导体博弈与制裁 | [[concepts/中美半导体博弈与制裁.md]] | 基于17篇专栏，BIS制裁工具箱与中国反制 |
+| CoWoS与先进封装生态 | [[concepts/CoWoS与先进封装生态.md]] | 基于16篇专栏，台积电垄断与OSAT困境 |
+| 华为芯片生态/韬定律 | [[concepts/华为芯片生态-韬定律.md]] | 基于16篇专栏，制裁下的系统级创新方法论 |
+| HBM产业链 | [[concepts/HBM产业链.md]] | 基于14篇专栏，AI存储制高点与国产替代 |
+| GPU vs ASIC竞争格局 | [[concepts/GPU-vs-ASIC竞争格局.md]] | 基于12篇专栏，训练GPU稳固+推理ASIC侵蚀 |
+| 英特尔IFS衰退与重组 | [[concepts/英特尔IFS衰退与重组.md]] | 基于12篇专栏，Foundry格局剧变 |
+| 半导体设备国产替代 | [[concepts/半导体设备国产替代.md]] | 基于10篇专栏，binding constraint接力上移 |
+| 先进制程节点竞争 | [[concepts/先进制程节点竞争.md]] | 基于9篇专栏，2nm/1.4nm三强争霸 |
 
-## 操作日志
-见 [log.md](log.md)
+### 概念扫描归档（2026-07-04）
+
+> 以下概念经扫描后决定不建立独立文档：
+> - **小米生态链**（9篇）→ 建议作为 entity 而非 concept，专栏多为零散提及
+> - **大基金/产业政策**（6篇）→ 专栏覆盖不足，内容偏信息层面
+>
+> 扫描方法：139篇AI专栏 → 16个分类 → 按主题聚类 → 按专栏支撑度分级
+- [[concepts/AI服务器供应链.md]] — 与 Tier1 部分重叠，可互补
+- [[concepts/MLCC周期.md]] — 独立赛道
+- [[concepts/Serenity方法论.md]] — 方法论层
+
+## 三、Sources（来源摘要）
+
+### 数据管道
+
+| 管道 | 篇数 | 索引文件 | 说明 |
+|------|------|---------|------|
+| 知识星球 | 751 topics + 139 专栏 | [[sources/_index-zsxq.md]] | 吴梓豪「半导体大佬的会议室」全量导入 |
+| 微信读书 | 78 本 | [[sources/_index-weread.md]] | ~4900 条划线+想法 |
+| 飞书播客 | 26 篇 | [[sources/_index.md]] | NVIDIA/Balaji/All-In 等 |
+| Podwise | 持续同步 | [[sources/_index-podwise.md]] | GitHub 自动推送 |
+
+### 临时来源
+
+| ID | 标题 | 日期 | 关联 |
+|----|------|------|------|
+| SRC-NVIDIA | NVIDIA Jensen Huang 演讲 | 2026-06-10 | — |
+| SRC-Balaji | Balaji 供应链 | 2026-06-03 | — |
+| SRC-All-In | All-In Best Ideas | 2026-06-12 | — |
+| SRC-MLCC | MLCC 涨价事件 | 2026-07-04 | — |
+
+## 四、Hypotheses（活跃假设）
+
+> 协议: [[hypotheses/README.md]] — 7维度判断层、certainty%标尺、候选假设自动发现、多对多映射
+> 
+> 已于 2026-07-04 建立协议框架，等待第一批假设创建。
+
+| 维度 | 代号 | 说明 |
+|------|------|------|
+| 行业趋势 | D1-Trend行业趋势 | AI Capex周期, 供需, 产能节奏 |
+| 竞争壁垒 | D2-Moat竞争壁垒 | 护城河, 市占率, 定价权 |
+| 公司基本面 | D3-Fund公司基本面 | 营收/利润, 产能, 客户集中度 |
+| 宏观/地缘 | D4-Macro宏观地缘 | 制裁, 关税, 汇率, 政策 |
+| 技术路线 | D5-Tech技术路线 | GPU/ASIC, 互联, 封装, 制程 |
+| 下游需求 | D6-Demand下游需求 | 云厂商Capex, 企业采纳, 推理增长 |
+| 产业链位置 | D7-Chain产业链位置 | 价值分配, 利润率迁移, 垂直整合 |
+
+| 编号 | 假设 | 维度 | certainty% | 最后更新 |
+|------|------|------|-----------|----------|
+| H1.1 | AI服务器Capex 2026-2028持续高增长，台积电先进工厂满载 | D1-Trend行业趋势 | 90% | 2026-07-04 |
+| H1.2 | 存储周期特性向成长特性转变，HBM+DDR5结构性紧缺长期化 | D1-Trend行业趋势 | 70% | 2026-07-04 |
+| H2.1 | GPU训练统治稳固，推理市场ASIC侵蚀加速 | D2-Moat竞争壁垒 | 65% | 2026-07-04 |
+| H2.2 | 台积电先进制程+先进封装双重垄断2027前无替代 | D2-Moat竞争壁垒 | 75% | 2026-07-04 |
+| H3.1 | 基本面向好/利润拐点/利润高速增长 | D3-Fund公司基本面 | 50% | 2026-07-04 |
+| H4.1 | BIS制裁切香肠升级，但国内28nm+2027前基本自主可控 | D4-Macro宏观地缘 | 55% | 2026-07-04 |
+| H4.2 | 全球半导体产业链区域化已成定局，东南亚/日本受益 | D4-Macro宏观地缘 | 60% | 2026-07-04 |
+| H5.2 | AI推理GPU与ASIC长期趋近5:5，ASIC增速高于GPU | D5-Tech技术路线 | 45% | 2026-07-04 |
+| H6.1 | 中国AI芯片本土化需求2026-2028爆发式增长 | D6-Demand下游需求 | 50% | 2026-07-04 |
+| H7.1 | AI产业链价值从训练侧向推理+应用侧迁移 | D7-Chain产业链位置 | 50% | 2026-07-04 |
+| H7.2 | 先进封装(CoWoS/SoIC)是AI最稀缺产能，Foundry向下兼容 | D7-Chain产业链位置 | 60% | 2026-07-04 |
+| H2.3 | AI芯片竞争格局头部集中，CR3>80% | D2-Moat竞争壁垒 | 55% | 2026-07-04 |
+| H3.2 | AI业务占比持续提升，重塑公司估值锚 | D3-Fund公司基本面 | 50% | 2026-07-04 |
+| H6.2 | AI拉动传统制造业升级（智能驾驶/机器人/工业） | D6-Demand下游需求 | 40% | 2026-07-04 |
+| H7.3 | 半导体设备国产替代存在binding constraint接力上移规律 | D7-Chain产业链位置 | 40% | 2026-07-04 |
+
+## 五、Walls（城墙/风险点）
+
+> 已于 2026-07-04 清空全部旧城墙（原 W1-W4 均围绕中芯国际），等待建立更高维度的城墙。
+
+| 编号 | 风险 | 维度 | 状态 |
+|------|------|------|------|
+| （待建立） | — | — | — |
+
+## 六、Rules（已晋升规则）
+
+> 已于 2026-07-04 清空全部旧规则，等待重新建立。
+
+详见：[[rules.md]]
+
+| 编号 | 规则 | 验证次数 | 状态 |
+|------|------|---------|------|
+| （待建立） | — | — | — |
+
+## 七、输出产物
+
+- 日报：`04-output/today/`
+- 周报：`04-output/weekly/`
+- 研报：`04-output/research/`

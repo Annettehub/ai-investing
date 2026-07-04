@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""小苔花投研系统健康检查"""
+"""Annette投研系统投研系统健康检查"""
 import os
 import sys
 from pathlib import Path
@@ -77,7 +77,7 @@ def count_commands():
         print(f"  Commands: 0")
 
 if __name__ == "__main__":
-    print(f"=== 小苔花投研系统健康检查 ({datetime.now().strftime('%Y-%m-%d %H:%M')}) ===")
+    print(f"=== Annette投研系统投研系统健康检查 ({datetime.now().strftime('%Y-%m-%d %H:%M')}) ===")
     print("\nDirectory structure:")
     check_dirs()
     print("\nCore files:")
