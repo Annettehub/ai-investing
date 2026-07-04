@@ -2,7 +2,7 @@ site_name: Annette 投研系统
 site_description: AI 驱动的半导体投研知识库
 site_author: Annette
 site_url: https://annettehub.github.io/ai-investing/
-docs_dir: .
+
 
 theme:
   name: material
