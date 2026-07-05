@@ -2,7 +2,7 @@
 import os
 from datetime import datetime
 
-base = "C:/Users/Annette Zhang/WorkBuddy/Claw/ai-investing/02-kb/hypotheses"
+base = "D:/WorkBuddy/Claw/ai-investing/02-kb/hypotheses"
 
 hypotheses = [
     # D1-Trend

@@ -2,7 +2,7 @@
 """Create entity files for 6 entities based on local knowledge base data."""
 import os
 
-BASE = "C:/Users/Annette Zhang/WorkBuddy/Claw/ai-investing/02-kb/entities"
+BASE = "D:/WorkBuddy/Claw/ai-investing/02-kb/entities"
 
 entities = {}
 

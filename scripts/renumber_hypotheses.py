@@ -4,7 +4,7 @@
 import os
 from datetime import datetime
 
-base = 'C:/Users/Annette Zhang/WorkBuddy/Claw/ai-investing/02-kb/hypotheses'
+base = 'D:/WorkBuddy/Claw/ai-investing/02-kb/hypotheses'
 today = datetime.now().strftime('%Y-%m-%d')
 
 # Step 1: Delete all old candidate files

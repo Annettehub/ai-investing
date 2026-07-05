@@ -9,7 +9,7 @@
 | 字段 | 值 |
 |------|-----|
 | 项目名称 | Annette投研系统 · AI 投研系统 |
-| 根目录 | `C:/Users/Annette Zhang/WorkBuddy/Claw/ai-investing/` |
+| 根目录 | `D:/WorkBuddy/Claw/ai-investing/` |
 | 工作模式 | Markdown 文件协议，零代码优先 |
 | 核心标的 | 00981 中芯国际（当前） |
 | 投资框架 | AI 五层蛋糕（L2-L5） |

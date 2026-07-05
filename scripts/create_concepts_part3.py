@@ -5,7 +5,7 @@
 
 import os
 
-OUTPUT_DIR = "C:/Users/Annette Zhang/WorkBuddy/Claw/ai-investing/02-kb/concepts"
+OUTPUT_DIR = "D:/WorkBuddy/Claw/ai-investing/02-kb/concepts"
 os.makedirs(OUTPUT_DIR, exist_ok=True)
 
 # =============================================================================

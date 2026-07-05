@@ -11,8 +11,8 @@ import re
 from datetime import datetime
 
 BASE = "D:/Users/Annette Zhang/Documents/Project1/ZsxqCrawler/output"
-KB_SOURCES = "C:/Users/Annette Zhang/WorkBuddy/Claw/ai-investing/02-kb/sources"
-RAW_ZSXQ = "C:/Users/Annette Zhang/WorkBuddy/Claw/ai-investing/03-raw/zsxq"
+KB_SOURCES = "D:/WorkBuddy/Claw/ai-investing/02-kb/sources"
+RAW_ZSXQ = "D:/WorkBuddy/Claw/ai-investing/03-raw/zsxq"
 
 # 1. Load AI package articles (139 专栏)
 ai_articles = []

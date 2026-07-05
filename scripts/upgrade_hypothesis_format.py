@@ -10,7 +10,7 @@ import re
 import os
 from pathlib import Path
 
-HYPOTHESES_DIR = Path("C:/Users/Annette Zhang/WorkBuddy/Claw/ai-investing/02-kb/hypotheses")
+HYPOTHESES_DIR = Path("D:/WorkBuddy/Claw/ai-investing/02-kb/hypotheses")
 
 
 def extract_field(content, field_name):
