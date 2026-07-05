@@ -88,3 +88,8 @@
 - 2026-07-05 14:45 [创建] value-investing/ 目录结构（00-framework/01-sources/02-concepts/03-mental-models/04-case-studies/05-raw/）
 - 2026-07-05 14:45 [创建] value-investing/00-framework/README.md 价值投资框架定位与边界定义
 - 2026-07-05 14:45 [修改] 02-kb/index.md 新增"八、价值投资框架"独立子系统入口
+- 2026-07-05 20:40 [创建] concepts/AI应用的发展和商业模式.md 长期追踪AI应用商业模式演进
+- 2026-07-05 20:40 [创建] concepts/AI应用渗透率观察.md S曲线+摩擦层双维度追踪框架
+- 2026-07-05 20:45 [同步] IMA Workbuddy同步库新增6篇资料：但斌/谷歌专家/20VC/霍华德马克斯访谈/霍华德马克斯备忘录/Leopold
+- 2026-07-05 20:50 [ingest] 生成6篇结构化摘要，存入02-kb/sources/
+- 2026-07-05 20:50 [修改] 02-kb/index.md 新增6条临时来源
