@@ -19,6 +19,8 @@
 | 风华高科 | [[entities/风华高科.md]] | MLCC | 新增 |
 | 三环集团 | [[entities/三环集团.md]] | MLCC | 新增 |
 | 村田 | [[entities/村田.md]] | MLCC | 新增 |
+| 中微公司 | [[entities/中微公司.md]] | 半导体-刻蚀设备 | 新增 |
+| 拓荆科技 | [[entities/拓荆科技.md]] | 半导体-薄膜沉积 | 新增 |
 
 ## 二、Concepts（概念/行业框架）
 
@@ -66,6 +68,10 @@
 
 | ID | 标题 | 日期 | 关联 |
 |----|------|------|------|
+| SRC-20260705-1 | Naval - Live in the Future (Podwise) | 2026-07-05 | AI算力/软件商品化 |
+| SRC-20260705-2 | Q1硅谷AI观察-比想象中更疯狂地加速 | 2026-07-05 | AI商业化/Coding/算力紧缺 |
+| SRC-20260705-3 | Q2硅谷AI观察笔记-仍远被低估的硅基时代加速度 | 2026-07-05 | AGI/模型格局/Capex/机器人 |
+| SRC-20260705-4 | 26H2中国半导体展望-存储（长江存储） | 2026-07-05 | YMTC/国产设备/存储周期 |
 | SRC-NVIDIA | NVIDIA Jensen Huang 演讲 | 2026-06-10 | — |
 | SRC-Balaji | Balaji 供应链 | 2026-06-03 | — |
 | SRC-All-In | All-In Best Ideas | 2026-06-12 | — |

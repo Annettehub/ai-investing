@@ -57,6 +57,30 @@ GPU vs ASIC竞争格局是指在AI算力市场中，通用型GPU（以英伟达C
 > - 推理：GPU 60%→40%，ASIC 40%→60%（2027年）
 > - 整体：GPU:ASIC 从 8:2 → 5:5（长期）
 
+### 2.4 一线观察补充（2026 Q1-Q2）
+
+**Anthropic 爆发性增长** [Q2硅谷观察]:
+- ARR 从 ~90亿 → 600亿美元以上（数月内），全年预计 1200亿+
+- 斜率本身就是需求侧最硬证据
+- Claude Code 因算力不足、使用量限制很低，用户被迫转用 Codex
+
+**Google 结构性掉队** [Q2硅谷观察]:
+- 方向押错：Demis 坚持原生多模态路线，但本轮胜负手是 coding 元能力
+- 组织臃肿：DeepMind 数月新增数千人，资源争抢
+- 核心人员出走：Noam Shazeer（Transformer作者，27亿挖回）→ OpenAI；John Jumper（诺奖得主，AlphaFold核心）→ Anthropic
+- 算力分配矛盾：云团队把大量 TPU 分给外部客户，挤压自家前沿模型开发
+- 有人担心 Google 会迎来自己的 Llama 4 时刻，掉到 Tier 2
+
+**OpenAI 紧追 Anthropic** [Q2硅谷观察]:
+- GPT-5.5 基模训得很好，RL 公认最强
+- Codex 用户数据快速积累，短期内追上 Claude Code
+- 已摆脱暂时性危机
+
+**xAI 并入 SpaceX，模型不再是重心** [Q2硅谷观察]:
+- 核心人员因高压管理+股权落袋接连离开
+- 2月并入 SpaceX，SpaceX 以 600亿美元（股票）收购 Cursor
+- 模型本身反而不是 Musk 体系重心
+
 ---
 
 ## 三、关键数据 / 证据
