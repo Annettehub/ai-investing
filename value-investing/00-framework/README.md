@@ -76,7 +76,11 @@ Step 4: 更新索引
 
 ## 当前已收集内容
 
-### 来源
+### 已收集来源
+- `01-sources/2026-07-05-howard-marks-interview.md` — 霍华德·马克斯访谈（播客）
+- `01-sources/2026-07-05-howard-marks-35years-memos.md` — 霍华德·马克斯35年备忘录（深度）
+
+### 待迁移来源
 - `wiki/reading/巴菲特致股东信.md` — 待迁移
 - `wiki/reading/穷查理宝典.md` — 待迁移
 - `wiki/reading/聪明的投资者.md` — 待迁移
@@ -84,6 +88,11 @@ Step 4: 更新索引
 - `wiki/reading/投资研习录.md` — 待迁移
 - `wiki/reading/加文贝克投资观.md` — 待迁移
 - `wiki/reading/Rick Rubin - AI与创造力.md` — 待迁移
+
+### 已建概念
+- [x] 风险的本质 (The Nature of Risk) — 波动率≠风险、本金永久损失、风险五层演变
+- [x] 钟摆理论 (The Pendulum) — 市场在极端停留时间长于中间
+- [x] 逆向投资 (Contrarian Investing) — 脱离群体思维、第二层思维
 
 ### 待建概念
 - [ ] 能力圈 (Circle of Competence)
@@ -93,7 +102,15 @@ Step 4: 更新索引
 - [ ] 市场先生 (Mr. Market)
 - [ ] 复利 (Compound Interest)
 - [ ] 机会成本 (Opportunity Cost)
-- [ ] 逆向思维 (Inversion)
+
+### 已建思维模型
+- [x] 你不能预测，但你可以准备 — 位置识别 > 方向预测
+- [x] 过于超前与犯错无异 — survived > right
+
+### 待建思维模型
+- [ ] 复利模型
+- [ ] 机会成本模型
+- [ ] 心理偏见清单（芒格的人类误判心理学）
 
 ---
 

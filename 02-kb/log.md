@@ -94,6 +94,12 @@
 - 2026-07-05 20:45 [分发] concepts/AI应用的发展和商业模式.md 新增但斌"算法商品化"观点
 - 2026-07-05 20:45 [分发] concepts/AI应用渗透率观察.md 新增谷歌专家"编程市场千亿级+Token消耗结构"
 - 2026-07-05 20:45 [分发] concepts/AI服务器供应链.md 新增Leopold"AGI 2027"算力需求预测追踪
+- 2026-07-05 20:47 [分发] value-investing/01-sources/ 霍华德·马克斯访谈+35年备忘录（2篇来源摘要）
+- 2026-07-05 20:47 [创建] value-investing/02-concepts/风险的本质.md — 波动率≠风险、本金永久损失、风险五层演变
+- 2026-07-05 20:47 [创建] value-investing/02-concepts/钟摆理论.md — 市场在极端停留时间长于中间
+- 2026-07-05 20:47 [创建] value-investing/02-concepts/逆向投资.md — 脱离群体思维、第二层思维
+- 2026-07-05 20:47 [创建] value-investing/03-mental-models/你不能预测但你可以准备.md — 位置识别>方向预测
+- 2026-07-05 20:47 [创建] value-investing/03-mental-models/过于超前与犯错无异.md — survived>right
 - 2026-07-05 14:45 [修改] 02-kb/index.md 新增"八、价值投资框架"独立子系统入口
 - 2026-07-05 20:40 [创建] concepts/AI应用的发展和商业模式.md 长期追踪AI应用商业模式演进
 - 2026-07-05 20:40 [创建] concepts/AI应用渗透率观察.md S曲线+摩擦层双维度追踪框架
