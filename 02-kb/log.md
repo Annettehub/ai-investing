@@ -85,3 +85,6 @@
 - 2026-07-05 14:25 [创建] entities/中微公司.md v2.0实体档案（刻蚀设备龙头，长存核心供应商）
 - 2026-07-05 14:25 [创建] entities/拓荆科技.md v2.0实体档案（薄膜沉积，Fab2达产关键配套）
 - 2026-07-05 14:25 [修改] 02-kb/index.md 新增中微公司+拓荆科技实体链接
+- 2026-07-05 14:45 [创建] value-investing/ 目录结构（00-framework/01-sources/02-concepts/03-mental-models/04-case-studies/05-raw/）
+- 2026-07-05 14:45 [创建] value-investing/00-framework/README.md 价值投资框架定位与边界定义
+- 2026-07-05 14:45 [修改] 02-kb/index.md 新增"八、价值投资框架"独立子系统入口

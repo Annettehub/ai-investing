@@ -134,3 +134,19 @@
 - 日报：`04-output/today/`
 - 周报：`04-output/weekly/`
 - 研报：`04-output/research/`
+
+---
+
+## 八、价值投资框架（独立子系统）
+
+> 与 AI 产业投研并行运行，建立认知底盘，不参与交易判断。
+> 详见：`value-investing/00-framework/README.md`
+
+| 模块 | 路径 | 说明 |
+|------|------|------|
+| 框架总纲 | `value-investing/00-framework/README.md` | 定位、边界、SOP |
+| 来源摘要 | `value-investing/01-sources/` | 巴菲特/芒格/格雷厄姆等来源消化 |
+| 核心概念 | `value-investing/02-concepts/` | 能力圈、护城河、安全边际等 |
+| 思维模型 | `value-investing/03-mental-models/` | 多学科格栅 |
+| 案例研究 | `value-investing/04-case-studies/` | 喜诗糖果、可口可乐、苹果等 |
+| 原始资料 | `value-investing/05-raw/` | 每日收件箱 + 书籍/信件/播客 |
