@@ -27,7 +27,15 @@
 - 2026-07-04 14:50 [创建] 04-output/weekly/2026-W27.md 闭环测试 周报
 - 2026-07-04 14:55 [修改] 02-kb/index.md 更新H1-H7 certainty%和来源索引
 - 2026-07-04 14:55 [修改] 05-meta/maintenance/dashboard.md 更新系统看板状态
-- 2026-07-04 14:55 [修改] 05-meta/maintenance/health-mx.md 首次健康度评估
+- 2026-07-06 20:40 [同步] IMA Workbuddy同步库 拉取 13 篇资料（7月4-5日），全部为新内容
+- 2026-07-06 20:40 [ingest] 生成 2 篇新增结构化摘要（东山精密、字节采购国产芯片）
+- 2026-07-06 20:40 [分发] 新建 entities/字节跳动.md / 寒武纪.md / 海光信息.md / 昆仑芯.md / 东山精密.md / 中际旭创.md
+- 2026-07-06 20:40 [分发] 新建 concepts/光模块产业链.md / 国产算力替代.md / 存储周期.md
+- 2026-07-06 20:40 [分发] 更新 concepts/AI服务器供应链.md / GPU-vs-ASIC竞争格局.md / AI应用的发展和商业模式.md / AI应用渗透率观察.md / 技术-金融-投资交叉框架.md / 半导体设备国产替代.md / 中美半导体博弈与制裁.md / 华为芯片生态-韬定律.md
+- 2026-07-06 20:40 [分发] 更新 hypotheses/H1.1.md / H2.1.md / H3.1.md / H4.1.md / H5.2.md / H6.1.md / H7.1.md 证据时间线
+- 2026-07-06 20:40 [修改] 02-kb/index.md 新增 entities 和 concepts 索引
+- 2026-07-06 20:40 [状态] 更新 .workbuddy/ima-sync-state.json，标记 13 篇 media_id 为已同步
+
 - 2026-07-04 14:55 [修改] 05-meta/evolution/friction-log.md 记录2条摩擦事件
 - 2026-07-04 14:55 [修改] active-context.md 更新断点续传状态
 - 2026-07-04 15:16 [删除] 02-kb/hypotheses/H1-H7 全部 用户清除旧假设，待重建
