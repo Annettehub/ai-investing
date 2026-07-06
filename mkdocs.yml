@@ -1,25 +1,25 @@
-site_name: Annette 投研系统
-site_description: AI 驱动的半导体投研知识库
+site_name: "Annette's Investing"
+site_description: 翻开每一页 · 投研知识库
 site_author: Annette
 site_url: https://annettehub.github.io/ai-investing/
-
+docs_dir: .
 
 theme:
   name: material
   language: zh
   palette:
     - scheme: default
-      primary: indigo
-      accent: indigo
+      primary: custom
+      accent: custom
       toggle:
         icon: material/brightness-7
-        name: 切换到深色模式
+        name: 切换深色模式
     - scheme: slate
-      primary: indigo
-      accent: indigo
+      primary: custom
+      accent: custom
       toggle:
         icon: material/brightness-4
-        name: 切换到浅色模式
+        name: 切换浅色模式
   features:
     - navigation.tabs
     - navigation.sections
@@ -29,17 +29,19 @@ theme:
     - search.highlight
     - content.code.copy
     - content.tabs.link
+  font:
+    text: Roboto
+    code: Roboto Mono
+
+extra_css:
+  - stylesheets/extra.css
 
 plugins:
   - search:
       lang:
         - zh
         - en
-
-extra:
-  social:
-    - icon: fontawesome/brands/github
-      link: https://github.com/Annettehub/ai-investing
+  - awesome-pages
 
 markdown_extensions:
   - pymdownx.highlight:
@@ -50,50 +52,18 @@ markdown_extensions:
   - tables
   - toc:
       permalink: true
+  - admonition
+  - pymdownx.details
+  - pymdownx.tabbed:
+      alternate_style: true
+  - attr_list
+  - md_in_html
+  - pymdownx.emoji:
+      emoji_index: !!python/name:material.extensions.emoji.twemoji
+      emoji_generator: !!python/name:material.extensions.emoji.to_svg
 
-nav:
-  - 首页: index.md
-  - 系统协议:
-    - SYSTEM: 00-system/SYSTEM.md
-    - AGENTS: AGENTS.md
-    - 连接配置: 00-system/connectors.md
-  - 命令手册:
-    - today: 01-commands/today.md
-    - research: 01-commands/research.md
-    - track: 01-commands/track.md
-  - 知识库:
-    - 总索引: 02-kb/index.md
-    - 实体档案:
-      - YMTC 长江存储: 02-kb/entities/YMTC.md
-      - TSM 台积电: 02-kb/entities/TSM-台积电.md
-      - SK Hynix 海力士: 02-kb/entities/SK-Hynix-海力士.md
-      - 00981 中芯国际: 02-kb/entities/00981-中芯国际.md
-      - 688372 伟测科技: 02-kb/entities/688372-伟测科技.md
-      - 0700 腾讯控股: 02-kb/entities/0700-腾讯控股.md
-      - 兆易创新: 02-kb/entities/兆易创新.md
-    - 概念框架:
-      - 国产光刻机突围路线: 02-kb/concepts/国产光刻机突围路线.md
-      - CPO/光互联/硅光技术: 02-kb/concepts/CPO光互联硅光技术.md
-      - 中美半导体博弈与制裁: 02-kb/concepts/中美半导体博弈与制裁.md
-      - CoWoS与先进封装生态: 02-kb/concepts/CoWoS与先进封装生态.md
-      - 华为芯片生态/韬定律: 02-kb/concepts/华为芯片生态-韬定律.md
-      - HBM产业链: 02-kb/concepts/HBM产业链.md
-      - GPU vs ASIC竞争格局: 02-kb/concepts/GPU-vs-ASIC竞争格局.md
-      - 英特尔IFS衰退与重组: 02-kb/concepts/英特尔IFS衰退与重组.md
-      - 半导体设备国产替代: 02-kb/concepts/半导体设备国产替代.md
-      - 先进制程节点竞争: 02-kb/concepts/先进制程节点竞争.md
-      - AI服务器供应链: 02-kb/concepts/AI服务器供应链.md
-      - MLCC周期: 02-kb/concepts/MLCC周期.md
-      - Serenity方法论: 02-kb/concepts/Serenity方法论.md
-    - 假设判断层:
-      - 协议说明: 02-kb/hypotheses/README.md
-      - H1.1 AI Capex: 02-kb/hypotheses/H1.1.md
-      - H1.2 存储周期转变: 02-kb/hypotheses/H1.2.md
-      - H2.1 GPU+ASIC分化: 02-kb/hypotheses/H2.1.md
-      - H2.2 台积电垄断: 02-kb/hypotheses/H2.2.md
-      - H4.1 制裁切香肠: 02-kb/hypotheses/H4.1.md
-      - H7.3 binding constraint: 02-kb/hypotheses/H7.3.md
-  - 输出产物:
-    - 日报: 04-output/today/2026-07-04.md
-    - 研报: 04-output/research/2026-07-04-YMTC-长江存储.md
-  - Obsidian 配置: OBSIDIAN_SETUP.md
+extra:
+  social:
+    - icon: fontawesome/brands/github
+      link: https://github.com/Annettehub/ai-investing
+  generator: false
