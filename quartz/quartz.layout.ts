@@ -1,6 +1,15 @@
 import { PageLayout, SharedLayout } from "./quartz/cfg"
 import * as Component from "./quartz/components"
 
+const explorerWithShortHypothesisNames = {
+  mapFn: (node) => {
+    // 左侧导航栏对 hypotheses 下的 H*.md 文件显示短文件名，右侧文件夹列表仍显示完整 title
+    if (!node.isFolder && node.slug.startsWith("02-kb/hypotheses/") && /^H\d/.test(node.slugSegment)) {
+      node.displayName = node.slugSegment
+    }
+  },
+}
+
 // components shared across all pages
 export const sharedPageComponents: SharedLayout = {
   head: Component.Head(),
@@ -37,7 +46,7 @@ export const defaultContentPageLayout: PageLayout = {
         { Component: Component.ReaderMode() },
       ],
     }),
-    Component.Explorer(),
+    Component.Explorer(explorerWithShortHypothesisNames),
   ],
   right: [
     Component.Graph(),
@@ -61,7 +70,7 @@ export const defaultListPageLayout: PageLayout = {
         { Component: Component.Darkmode() },
       ],
     }),
-    Component.Explorer(),
+    Component.Explorer(explorerWithShortHypothesisNames),
   ],
   right: [],
 }
