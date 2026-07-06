@@ -2,7 +2,7 @@ site_name: "Annette's Investing"
 site_description: 翻开每一页 · 投研知识库
 site_author: Annette
 site_url: https://annettehub.github.io/ai-investing/
-docs_dir: .
+
 
 theme:
   name: material
