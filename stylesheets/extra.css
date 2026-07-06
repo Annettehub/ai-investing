@@ -194,3 +194,51 @@
 .md-footer-copyright {
   display: none;
 }
+
+/* ========== 右侧目录栏加宽 ========== */
+.md-sidebar--secondary {
+  width: 15rem;  /* 默认 12.1rem → 15rem */
+}
+
+@media screen and (min-width: 76.1875em) {
+  .md-sidebar--secondary .md-sidebar__scrollwrap {
+    width: 15rem;
+  }
+}
+
+/* 目录文字不断行 */
+.md-nav--secondary .md-nav__link {
+  word-break: keep-all;
+  white-space: normal;
+}
+
+/* ========== 标题字体调小 ========== */
+.md-typeset h1 {
+  font-size: 1.6em;        /* 默认 2em，太大 */
+  font-weight: 700;
+  margin-bottom: 0.6em;
+  line-height: 1.3;
+}
+
+.md-typeset h2 {
+  font-size: 1.3em;        /* 默认 1.5em */
+  font-weight: 600;
+  margin-top: 1.2em;
+  margin-bottom: 0.5em;
+  line-height: 1.35;
+}
+
+.md-typeset h3 {
+  font-size: 1.1em;        /* 默认 1.25em */
+  font-weight: 600;
+  margin-top: 1em;
+  margin-bottom: 0.4em;
+}
+
+/* 正文区域随 TOC 加宽微调 */
+@media screen and (min-width: 76.1875em) {
+  .md-content {
+    max-width: 880px;
+    margin-right: 1rem;
+  }
+}
