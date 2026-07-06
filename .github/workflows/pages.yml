@@ -37,6 +37,8 @@ jobs:
         run: |
           mkdir -p docs
           cp -r 00-system 01-commands 02-kb 03-raw 04-output 05-meta wiki hypothesis mkdocs.yml OBSIDIAN_SETUP.md docs/ 2>/dev/null || true
+          cp -r stylesheets docs/ 2>/dev/null || true
+          cp .pages docs/ 2>/dev/null || true
 
       - name: Build site
         run: mkdocs build
