@@ -214,24 +214,24 @@
 
 /* ========== 标题字体调小 ========== */
 .md-typeset h1 {
-  font-size: 1.4em;        /* 默认 2em，太大 */
-  font-weight: 700;
+  font-size: 1.3em;        /* 默认 2em，太大 */
+  font-weight: 600;
   margin-bottom: 0.6em;
   line-height: 1.3;
 }
 
 .md-typeset h2 {
-  font-size: 1.3em;        /* 默认 1.5em */
-  font-weight: 600;
-  margin-top: 1.2em;
+  font-size: 1.2em;        /* 默认 1.5em */
+  font-weight: 500;
+  margin-top: 1.1em;
   margin-bottom: 0.5em;
   line-height: 1.35;
 }
 
 .md-typeset h3 {
-  font-size: 1.1em;        /* 默认 1.25em */
-  font-weight: 600;
-  margin-top: 1em;
+  font-size: 1.0em;        /* 默认 1.25em */
+  font-weight: 500;
+  margin-top: 0.9em;
   margin-bottom: 0.4em;
 }
 
@@ -244,7 +244,7 @@
 }
 /* ========== 右侧目录栏字号调小 ========== */
 .md-nav--secondary .md-nav__link {
-  font-size: 0.75rem;        /* 默认约 0.9rem，调小到 0.75 */
+  font-size: 0.6rem;        /* 默认约 0.9rem，调小到 0.6 */
   line-height: 1.4;
   padding-top: 0.3rem;
   padding-bottom: 0.3rem;
