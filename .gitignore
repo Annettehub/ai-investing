@@ -15,3 +15,8 @@
 *.log
 .DS_Store
 Thumbs.db
+
+# Quartz build output
+quartz/public/
+quartz/.quartz-cache/
+
