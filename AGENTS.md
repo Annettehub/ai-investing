@@ -1,4 +1,4 @@
-# Annette投研系统 · AI投研系统 — Agent 入口协议
+# Annette AI投研系统 — Agent 入口协议
 
 > 本文件是 WorkBuddy / Claude / Kimi 等 AI Agent 进入此目录后的第一站。
 > 协议不在模型里，在文件里。改行为 = 改 Markdown，不写代码。
@@ -72,14 +72,20 @@ L1 电力: 电网/发电/能源（不碰）
 | 源 | 状态 | 输入方式 | 到达位置 |
 |----|------|---------|---------|
 | GitHub | ✅ | Star/Watch → WebFetch | 03-raw/github/ |
-| 飞书云盘 | ⚡ | sync_feishu_drive.py → GitHub Actions | 03-raw/feishu/ |
-| Gmail | 🔜 | 过滤器+标签 → connector | 03-raw/gmail/ |
-| 微信读书 | ✅ | API自动同步 → GitHub Actions | 03-raw/weread/ |
-| 知识星球 | ✅ | 手动导入 → 03-raw/zsxq/ | 03-raw/zsxq/ |
-| 行情数据 | 🔑 | fetch_market_data.py → watchlist | Step 0 of /today |
+| 飞书 | ✅ | WorkBuddy connector 读写 | 03-raw/feishu/ |
+| 微信读书 | ✅ | API 自动同步 → GitHub Actions | 03-raw/weread/ |
+| 知识星球 | ✅ | ZsxqCrawler 采集 | 03-raw/zsxq/ |
+| Podwise | ✅ | 播客摘要入库 | 03-raw/podwise/ |
+| IMA 知识库 | ✅ | 推送 → ima-sync-ingest | 02-kb/sources/ |
 | WebSearch | ✅ | 内置浏览器搜索 | 直接进入研究 |
+| Gmail | 🔜 | 标签 + 手动触发 | 03-raw/gmail/ |
+| 行情数据 | 🔑 | fetch_market_data.py → watchlist | /today Step 0 |
+| 腾讯云 | ⚡ | COS 备份 | 备份（非输入源） |
+| Substack | ⚡ | 待接入 | 03-raw/（规划） |
+| Gantise | ⚡ | 待接入 | A股行情/财务 |
 
-详见 `00-system/connectors.md`
+> 已连接（✅）7 个：GitHub / 飞书 / 微信读书 / 知识星球 / Podwise / IMA / WebSearch。
+> 详见 `00-system/connectors.md` 管道状态一览。
 
 ---
 ### 六点五、Python 工具脚本
