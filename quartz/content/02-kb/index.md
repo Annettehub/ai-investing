@@ -32,84 +32,76 @@
 
 ## 二、Concepts（知识/行业框架）
 
-> 按「AI 五层蛋糕 + 跨层/方法论」组织。一级=分层，二级=技术路线/供需周期与供应链/商业模式/地缘政治等，三级=具体 Concept 文档。`（待补充）` 表示已建档、内容待补充。
-
-### L1 能源层（Energy — AI 的物理天花板）
+### L1-能源层
 
 **技术路线**
-- [[concepts/散热与电源技术（液冷vs风冷、HVDC直流电源、浸没式冷却）.md]]  `（待补充）`
+- [[concepts/L1-能源层（Energy）/技术路线/散热与电源技术（液冷vs风冷、HVDC直流电源、浸没式冷却）]] | 散热与电源技术
 
 **供需周期与供应链**
-- [[concepts/AIDC电力基建周期（建设节奏、电力缺口、能源消耗）.md]]  `（待补充）`
+- [[concepts/L1-能源层（Energy）/供需周期与供应链/AIDC电力基建周期（建设节奏、电力缺口、能源消耗）]] | AIDC电力基建周期
 
 **地缘政治**
-- [[concepts/海外算力中心布局（美国、中东、东南亚、中国）.md]]  `（待补充）`
-
-### L2 芯片层（Chips — 能源→算力的转化枢纽）
+- [[concepts/L1-能源层（Energy）/地缘政治/海外算力中心布局（美国、中东、东南亚、中国）]] | 海外算力中心布局
+### L2-芯片层
 
 **技术路线**
-- [[concepts/先进制程节点竞争（台积电vs三星vs英特尔IFS）.md]]
-- [[concepts/GPU-vs-ASIC竞争格局.md]]
-- [[concepts/国产光刻机突围路线.md]]
+- [[concepts/L2-芯片层（Chips）/技术路线/先进制程节点竞争（台积电vs三星vs英特尔IFS）]] | 先进制程节点竞争
+- [[concepts/L2-芯片层（Chips）/技术路线/GPU-vs-ASIC竞争格局]] | GPU-vs-ASIC竞争格局
+- [[concepts/L2-芯片层（Chips）/技术路线/国产光刻机突围路线]] | 国产光刻机突围路线
 
 **供需周期与供应链**
-- [[concepts/存储产业链与周期（HBM、DRAM、NAND）.md]]
-- [[concepts/先进封装生态（CoWoS、2.5D、3D封装）.md]]
-- [[concepts/ASIC设计服务生态（博通、Marvell、联发科）.md]]  `（待补充）`
+- [[concepts/L2-芯片层（Chips）/供需周期与供应链/存储产业链与周期（HBM、DRAM、NAND）]] | 存储产业链与周期
+- [[concepts/L2-芯片层（Chips）/供需周期与供应链/先进封装生态（CoWoS、2.5D、3D封装）]] | 先进封装生态
+- [[concepts/L2-芯片层（Chips）/供需周期与供应链/ASIC设计服务生态（博通、Marvell、联发科）]] | ASIC设计服务生态
 
 **地缘政治**
-- [[concepts/国产替代全景（半导体设备、算力芯片）.md]]
-- [[concepts/中美半导体博弈与制裁.md]]
-- [[concepts/华为芯片生态-韬定律.md]]
-
-### L3 基础设施层（Infrastructure — 制造智能的 AI 工厂）
+- [[concepts/L2-芯片层（Chips）/地缘政治/国产替代全景（半导体设备、算力芯片）]] | 国产替代全景
+- [[concepts/L2-芯片层（Chips）/地缘政治/中美半导体博弈与制裁]] | 中美半导体博弈与制裁
+- [[concepts/L2-芯片层（Chips）/地缘政治/华为芯片生态-韬定律]] | 华为芯片生态-韬定律
+### L3-基础设施层
 
 **技术路线**
-- [[concepts/CPO光互联硅光技术.md]]
+- [[concepts/L3-基础设施层（Infrastructure）/技术路线/CPO光互联硅光技术]] | CPO光互联硅光技术
 
 **供需周期与供应链**
-- [[concepts/硬件：光模块产业链.md]]
-- [[concepts/硬件：AI服务器供应链.md]]
-- [[concepts/硬件：MLCC周期.md]]
+- [[concepts/L3-基础设施层（Infrastructure）/供需周期与供应链/硬件：光模块产业链]] | 硬件：光模块产业链
+- [[concepts/L3-基础设施层（Infrastructure）/供需周期与供应链/硬件：AI服务器供应链]] | 硬件：AI服务器供应链
+- [[concepts/L3-基础设施层（Infrastructure）/供需周期与供应链/硬件：MLCC周期]] | 硬件：MLCC周期
 
 **系统软件**
-- [[concepts/算子库与编译生态（CUDA、Triton、XLA）.md]]  `（待补充）`
-- [[concepts/通信集合（NCCL、RDMA、网络拓扑优化）.md]]  `（待补充）`
-- [[concepts/注意力机制底层实现（FlashAttention、PagedAttention、序列并行）.md]]  `（待补充）`
+- [[concepts/L3-基础设施层（Infrastructure）/系统软件/算子库与编译生态（CUDA、Triton、XLA）]] | 算子库与编译生态
+- [[concepts/L3-基础设施层（Infrastructure）/系统软件/通信集合（NCCL、RDMA、网络拓扑优化）]] | 通信集合
+- [[concepts/L3-基础设施层（Infrastructure）/系统软件/注意力机制底层实现（FlashAttention、PagedAttention、序列并行）]] | 注意力机制底层实现
 
 **地缘政治**
-- [[concepts/光模块与服务器代工地域转移与关税风险.md]]  `（待补充）`
-
-### L4 模型层（Models — 智能能力的核心载体）
+- [[concepts/L3-基础设施层（Infrastructure）/地缘政治/光模块与服务器代工地域转移与关税风险]] | 光模块与服务器代工地域转移与关税风险
+### L4-模型层
 
 **技术路线**
-- [[concepts/模型架构演进（Transformer、MoE、推理优化、物理AI）.md]]  `（待补充）`
+- [[concepts/L4-模型层（Models）/技术路线/模型架构演进（Transformer、MoE、推理优化、物理AI）]] | 模型架构演进
 
 **供需周期与供应链**
-- [[concepts/云厂商算力采购节奏（英伟达、自研ASIC、第三方云）.md]]  `（待补充）`
+- [[concepts/L4-模型层（Models）/供需周期与供应链/云厂商算力采购节奏（英伟达、自研ASIC、第三方云）]] | 云厂商算力采购节奏
 
 **商业模式**
-- [[concepts/模型商业模式（API定价、Token经济学、开源vs闭源生态）.md]]  `（待补充）`
-
-### L5 应用层（Applications — 商业价值的最终兑现地）
+- [[concepts/L4-模型层（Models）/商业模式/模型商业模式（API定价、Token经济学、开源vs闭源生态）]] | 模型商业模式
+### L5-应用层
 
 **商业模式**
-- [[concepts/AI应用商业模式与赛道（Agent、Copilot、机器人、自动驾驶、应用发展）.md]]
+- [[concepts/L5-应用层（Applications）/商业模式/AI应用商业模式与赛道（Agent、Copilot、机器人、自动驾驶、应用发展）]] | AI应用商业模式与赛道
 
 **渗透率与周期**
-- [[concepts/AI应用渗透率观察.md]]
+- [[concepts/L5-应用层（Applications）/渗透率与周期/AI应用渗透率观察]] | AI应用渗透率观察
 
-### 跨层 / 方法论（穿透五层的分析操作系统）
+### 跨层 / 方法论
 
-**分析框架**
-- [[concepts/Serenity投研方法论框架.md]]
-- [[concepts/技术-金融-投资交叉框架.md]]
+- [[concepts/跨层-方法论（Cross-Layer）/Serenity投研方法论框架]] | Serenity投研方法论框架
+- [[concepts/跨层-方法论（Cross-Layer）/技术-金融-投资交叉框架]] | 技术-金融-投资交叉框架
+- [[concepts/跨层-方法论（Cross-Layer）/推理成本曲线（L2芯片成本×L3网络延迟×L4模型效率×L5应用定价）]] | 推理成本曲线
+- [[concepts/跨层-方法论（Cross-Layer）/算力-能源-资本开支三角（L1能源约束×L2芯片产能×L3基建投资）]] | 算力-能源-资本开支三角
+- [[concepts/跨层-方法论（Cross-Layer）/硬件、系统软件、模型架构协同设计的乘数效应]] | 硬件、系统软件、模型架构协同设计的乘数效应
 
-**跨层动态跟踪**
-- [[concepts/GPU-vs-ASIC竞争格局.md]]（L2 芯片架构 × L4 模型推理需求 × L5 应用成本结构）
-- [[concepts/推理成本曲线（L2芯片成本×L3网络延迟×L4模型效率×L5应用定价）.md]]  `（待补充）`
-- [[concepts/算力-能源-资本开支三角（L1能源约束×L2芯片产能×L3基建投资）.md]]  `（待补充）`
-- [[concepts/硬件、系统软件、模型架构协同设计的乘数效应.md]]  `（待补充）`
+> **注**: GPU-vs-ASIC 竞争格局同时属于 L2 技术路线 和跨层动态跟踪，主文档位于 L2。
 
 ## 三、Sources（来源摘要）
 
