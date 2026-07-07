@@ -1,0 +1,23 @@
+---
+title: "The Untold Story of NeXT and the Remaking of an American Visionary — Dan'l Lewin"
+---
+
+
+
+# The Untold Story of NeXT and the Remaking of an American Visionary
+
+- **作者：** Dan'l Lewin
+- **来源：** 微信读书 (bookId: CB_3M2CTiCV984O74S75IDAV3kM)
+- **同步日期：** 2026-07-07
+- **阅读进度：** 4%
+- **读完状态：** 已读完
+- **总笔记数：** 划线 1 + 想法 0 + 书签 0
+- **微信读书链接：** [打开阅读](weread://reading?bId=CB_3M2CTiCV984O74S75IDAV3kM)
+
+## 第7章
+
+> 正如我们在NeXT时常讨论的那样，发展一家公司就像用滚筒打磨石头。随着时间的推移，那些最初的成分和杂质会逐渐转化为一个高效运转、团结协作的团队。不过过程中必然充满波折：大家会相互碰撞，经历起伏不定。那些忽视这些艰难过程的描述，也抹去了NeXT时期对史蒂夫领导力成长以及最终成果的重要性—20世纪90年代末，NeXT的核心技术成为了苹果公司生存的关键。
+
+*划线时间：2026-06-16*
+
+---
