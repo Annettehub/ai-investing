@@ -4,7 +4,6 @@ nav:
   - 实体档案: entities
   - 假设验证: hypotheses
   - 信息来源: sources
-  - 主题跟踪: themes
   - 更新日志: log.md
   - 规则快照: rules.md
   - 快照记录: snapshot.md
