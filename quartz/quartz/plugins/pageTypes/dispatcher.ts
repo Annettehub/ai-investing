@@ -210,42 +210,35 @@ export const PageTypeDispatcher: QuartzEmitterPlugin<Partial<DispatcherOptions>>
       // Merge virtual page data into allFiles so renderPage can resolve transcludes
       const allFilesWithVirtual = [...allFiles, ...virtualEntries.map((ve) => ve.vfile.data)]
 
-      // Phase 2: Emit regular pages (with virtual page data available for transclusion)
+      // Phase 2: Emit regular pages AND their corresponding virtual pages
+      // in the same loop. When a content file's slug matches a virtual folder
+      // page slug, use VirtualPageBody so FolderContent renders the listing
+      // (no duplication since FolderContent only shows content when VirtualPageBody).
+      const virtualSlugSet = new Set(virtualEntries.map((ve) => ve.vpSlug))
       for (const [tree, file] of content) {
         const slug = file.data.slug!
         const fileData = file.data
         for (const pt of pageTypes) {
           if (pt.match({ slug, fileData, cfg })) {
             const layout = resolveLayout(pt, defaults, byPageType)
+            // If this file is also a virtual folder page, emit the virtual version
+            // instead of the regular version (avoids duplicate listing in folder pages)
+            const virtualEntry = virtualSlugSet.has(slug)
+              ? virtualEntries.find((ve) => ve.vpSlug === slug)
+              : undefined
             yield emitPage(
               ctx,
               slug,
               tree,
               fileData,
               allFilesWithVirtual,
-              layout,
+              virtualEntry ? { ...virtualEntry.layout, pageBody: VirtualPageBody } : layout,
               resources,
               treeTransforms,
             )
             break
           }
         }
-      }
-
-      // Phase 3: Emit virtual pages. Their body has already been rendered once
-      // to populate htmlAst, so use a pass-through body to avoid duplicate listings.
-      for (const ve of virtualEntries) {
-        const layout = { ...ve.layout, pageBody: VirtualPageBody }
-        yield emitPage(
-          ctx,
-          ve.vpSlug,
-          ve.tree,
-          ve.vfile.data,
-          allFilesWithVirtual,
-          layout,
-          resources,
-          treeTransforms,
-        )
       }
     },
     async *partialEmit(ctx, content, resources, changeEvents) {
@@ -302,7 +295,8 @@ export const PageTypeDispatcher: QuartzEmitterPlugin<Partial<DispatcherOptions>>
       // Merge virtual page data into allFiles for transclude resolution
       const allFilesWithVirtual = [...allFiles, ...virtualEntries.map((ve) => ve.vfile.data)]
 
-      // Phase 2: Emit changed regular pages
+      // Phase 2: Emit changed regular pages AND their corresponding virtual pages
+      const virtualSlugSet = new Set(virtualEntries.map((ve) => ve.vpSlug))
       for (const [tree, file] of content) {
         const slug = file.data.slug!
         if (!changedSlugs.has(slug)) continue
@@ -311,35 +305,22 @@ export const PageTypeDispatcher: QuartzEmitterPlugin<Partial<DispatcherOptions>>
         for (const pt of pageTypes) {
           if (pt.match({ slug, fileData, cfg })) {
             const layout = resolveLayout(pt, defaults, byPageType)
+            const virtualEntry = virtualSlugSet.has(slug)
+              ? virtualEntries.find((ve) => ve.vpSlug === slug)
+              : undefined
             yield emitPage(
               ctx,
               slug,
               tree,
               fileData,
               allFilesWithVirtual,
-              layout,
+              virtualEntry ? { ...virtualEntry.layout, pageBody: VirtualPageBody } : layout,
               resources,
               treeTransforms,
             )
             break
           }
         }
-      }
-
-      // Phase 3: Emit virtual pages (incremental). Use pass-through body to
-      // avoid duplicating pre-rendered listings.
-      for (const ve of virtualEntries) {
-        const layout = { ...ve.layout, pageBody: VirtualPageBody }
-        yield emitPage(
-          ctx,
-          ve.vpSlug,
-          ve.tree,
-          ve.vfile.data,
-          allFilesWithVirtual,
-          layout,
-          resources,
-          treeTransforms,
-        )
       }
     },
   }
