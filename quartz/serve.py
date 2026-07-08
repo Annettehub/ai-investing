@@ -11,6 +11,10 @@ class QuietHandler(http.server.SimpleHTTPRequestHandler):
         ".html": "text/html",
     }
 
+    # Strip the GitHub Pages project-site base path so the rewritten links
+    # can be previewed locally at the repository root.
+    base_path = "/ai-investing"
+
     def end_headers(self):
         self.send_header("Cache-Control", "no-cache")
         super().end_headers()
@@ -22,6 +26,11 @@ class QuietHandler(http.server.SimpleHTTPRequestHandler):
         # Decode percent-encoded path
         path = urllib.parse.unquote(path)
         path = posixpath.normpath(path)
+
+        # Strip the base path so /ai-investing/foo/bar -> /foo/bar
+        if path.startswith(self.base_path):
+            path = path[len(self.base_path):]
+
         words = path.split("/")
         words = [w for w in words if w]
 

@@ -45,6 +45,10 @@ jobs:
         working-directory: ./quartz
         run: npx quartz build
 
+      - name: Rewrite base path for GitHub Pages project site
+        working-directory: ./quartz
+        run: node ./scripts/rewrite-basepath.mjs
+
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
