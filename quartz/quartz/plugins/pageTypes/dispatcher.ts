@@ -9,7 +9,17 @@ import { BuildCtx, trieFromAllFiles } from "../../util/ctx"
 import { StaticResources } from "../../util/resources"
 import { render } from "preact-render-to-string"
 import { fromHtml } from "hast-util-from-html"
-import { Root as HtmlRoot } from "hast"
+import { Root as HtmlRoot, Node } from "hast"
+import { htmlToJsx } from "../../util/jsx"
+
+// For virtual pages, the page body has already been rendered once during
+// populateVirtualPageHtmlAst and stored as htmlAst on the tree. Re-running
+// the page-type body component (e.g. FolderContent/TagContent) would render the
+// listing a second time, causing duplication. Use a pass-through body that
+// simply emits the pre-rendered tree instead.
+const VirtualPageBody: QuartzComponent = (props: QuartzComponentProps) => {
+  return htmlToJsx("" as FilePath, props.tree as Node)
+}
 
 function getPageTypes(ctx: BuildCtx): QuartzPageTypePluginInstance[] {
   return (ctx.cfg.plugins.pageTypes ?? []) as unknown as QuartzPageTypePluginInstance[]
@@ -222,15 +232,17 @@ export const PageTypeDispatcher: QuartzEmitterPlugin<Partial<DispatcherOptions>>
         }
       }
 
-      // Phase 3: Emit virtual pages
+      // Phase 3: Emit virtual pages. Their body has already been rendered once
+      // to populate htmlAst, so use a pass-through body to avoid duplicate listings.
       for (const ve of virtualEntries) {
+        const layout = { ...ve.layout, pageBody: VirtualPageBody }
         yield emitPage(
           ctx,
           ve.vpSlug,
           ve.tree,
           ve.vfile.data,
           allFilesWithVirtual,
-          ve.layout,
+          layout,
           resources,
           treeTransforms,
         )
@@ -314,15 +326,17 @@ export const PageTypeDispatcher: QuartzEmitterPlugin<Partial<DispatcherOptions>>
         }
       }
 
-      // Phase 3: Emit virtual pages
+      // Phase 3: Emit virtual pages (incremental). Use pass-through body to
+      // avoid duplicating pre-rendered listings.
       for (const ve of virtualEntries) {
+        const layout = { ...ve.layout, pageBody: VirtualPageBody }
         yield emitPage(
           ctx,
           ve.vpSlug,
           ve.tree,
           ve.vfile.data,
           allFilesWithVirtual,
-          ve.layout,
+          layout,
           resources,
           treeTransforms,
         )
