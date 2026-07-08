@@ -132,7 +132,7 @@ plugins:
   - source: github:quartz-community/favicon
     enabled: true
   - source: github:quartz-community/og-image
-    enabled: true
+    enabled: false
   # 无自定义域名（用的是 GitHub Pages 项目页 annettehub.github.io/ai-investing），关闭 CNAME 写入
   - source: github:quartz-community/cname
     enabled: false

@@ -31,11 +31,15 @@ jobs:
 
       - name: Install Quartz dependencies
         working-directory: ./quartz
-        run: npm ci
+        run: npm install
 
       - name: Install Quartz plugins
         working-directory: ./quartz
         run: npx quartz plugin install
+
+      - name: Install plugin dependencies
+        working-directory: ./quartz
+        run: node ./scripts/install-plugin-deps.mjs
 
       - name: Build Quartz site
         working-directory: ./quartz
