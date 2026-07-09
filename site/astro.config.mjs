@@ -14,6 +14,9 @@ export default defineConfig({
         src: './src/assets/logo.svg',
         alt: 'AI Investing',
       },
+      components: {
+        Sidebar: './src/components/Sidebar.astro',
+      },
       social: [
         {
           icon: 'github',

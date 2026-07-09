@@ -129,6 +129,8 @@ def frontmatter(title: str, description: str) -> str:
 
 
 def clean_dir_label(value: str) -> str:
+    if value in CATEGORY_LABELS:
+        return CATEGORY_LABELS[value]
     if value in DIR_LABEL_OVERRIDES:
         return DIR_LABEL_OVERRIDES[value]
     label = re.sub(r"-(?:[0-9a-f]{8}|[0-9a-f]{7})$", "", value, flags=re.IGNORECASE)
@@ -148,6 +150,18 @@ def sidebar_slug_for(source_path: Path, source_root: Path, dest_root: Path) -> s
     route = relative_posix(out_path.with_suffix(""), DOCS_ROOT)
     if route.endswith("/index"):
         route = route[: -len("/index")]
+    return route
+
+
+def output_dir_for_source_dir(source_dir: Path, source_root: Path, dest_root: Path) -> Path:
+    rel = source_dir.relative_to(source_root)
+    if rel == Path("."):
+        return dest_root
+    return dest_root.joinpath(*[slugify(part) for part in rel.parts])
+
+
+def sidebar_slug_for_source_dir(source_dir: Path, source_root: Path, dest_root: Path) -> str:
+    route = relative_posix(output_dir_for_source_dir(source_dir, source_root, dest_root), DOCS_ROOT)
     return route
 
 
@@ -297,6 +311,44 @@ def write_index(dest: Path, title: str, description: str, links: list[tuple[str,
     dest.write_text("\n".join(lines).rstrip() + "\n", encoding="utf-8")
 
 
+def append_index_tree(lines: list[str], source_dir: Path, source_root: Path, dest_root: Path, depth: int = 2) -> None:
+    for source_path in markdown_files(source_dir):
+        link = f"/ai-investing/{sidebar_slug_for(source_path, source_root, dest_root)}/"
+        title = get_title(source_path, read_text(source_path))
+        lines.append(f"{'  ' * (depth - 2)}- [{title}]({link})")
+
+    for child in sorted((item for item in source_dir.iterdir() if item.is_dir()), key=lambda item: item.name.lower()):
+        child_title = clean_dir_label(child.name)
+        child_link = f"/ai-investing/{sidebar_slug_for_source_dir(child, source_root, dest_root)}/"
+        lines.append("")
+        lines.append(f"{'#' * depth} [{child_title}]({child_link})")
+        lines.append("")
+        append_index_tree(lines, child, source_root, dest_root, min(depth + 1, 6))
+
+
+def write_directory_overview(source_dir: Path, source_root: Path, dest_root: Path) -> None:
+    rel = source_dir.relative_to(source_root)
+    if rel == Path("."):
+        return
+
+    title = clean_dir_label(source_dir.name)
+    description = f"{title} 下的全部子标题索引"
+    lines = [frontmatter(title, description)]
+    lines.append("这个页面汇总当前栏目下所有层级的子标题，方便直接进入最底层内容。")
+    lines.append("")
+    append_index_tree(lines, source_dir, source_root, dest_root)
+
+    out_path = output_dir_for_source_dir(source_dir, source_root, dest_root) / "index.md"
+    out_path.parent.mkdir(parents=True, exist_ok=True)
+    out_path.write_text("\n".join(lines).rstrip() + "\n", encoding="utf-8")
+
+
+def write_directory_overviews(source_root: Path, dest_root: Path) -> None:
+    for source_dir in sorted((item for item in source_root.rglob("*") if item.is_dir()), key=lambda item: item.as_posix()):
+        if any(markdown_files(source_dir)) or any(child.is_dir() for child in source_dir.iterdir()):
+            write_directory_overview(source_dir, source_root, dest_root)
+
+
 def sidebar_link(source_path: Path, source_root: Path, dest_root: Path) -> dict[str, str]:
     text = read_text(source_path)
     return {
@@ -314,9 +366,15 @@ def markdown_files(path: Path) -> list[Path]:
 
 def build_tree_sidebar(path: Path, source_root: Path, dest_root: Path) -> list[dict[str, object]]:
     items: list[dict[str, object]] = [
+        {
+            "label": "总览",
+            "slug": sidebar_slug_for_source_dir(path, source_root, dest_root),
+        },
+    ]
+    items.extend(
         sidebar_link(source_path, source_root, dest_root)
         for source_path in markdown_files(path)
-    ]
+    )
 
     for child in sorted((item for item in path.iterdir() if item.is_dir()), key=lambda item: item.name.lower()):
         child_items = build_tree_sidebar(child, source_root, dest_root)
@@ -332,7 +390,13 @@ def build_tree_sidebar(path: Path, source_root: Path, dest_root: Path) -> list[d
 
 
 def build_flat_sidebar(path: Path, source_root: Path, dest_root: Path) -> list[dict[str, str]]:
-    return [sidebar_link(source_path, source_root, dest_root) for source_path in markdown_files(path)]
+    return [
+        {
+            "label": "总览",
+            "slug": sidebar_slug_for_source_dir(path, source_root, dest_root),
+        },
+        *[sidebar_link(source_path, source_root, dest_root) for source_path in markdown_files(path)],
+    ]
 
 
 def build_output_sidebar(category: str) -> list[dict[str, str]]:
@@ -343,7 +407,12 @@ def build_output_sidebar(category: str) -> list[dict[str, str]]:
         rel = normalize_rel(source_path, OUTPUT_SRC)
         if rel.parts and rel.parts[0] == category:
             items.append(sidebar_link(source_path, OUTPUT_SRC, OUTPUT_DEST))
-    return sorted(items, key=lambda item: item["label"])
+    source_dir = OUTPUT_SRC / category
+    overview = {
+        "label": "总览",
+        "slug": sidebar_slug_for_source_dir(source_dir, OUTPUT_SRC, OUTPUT_DEST),
+    }
+    return [overview, *sorted(items, key=lambda item: item["label"])]
 
 
 def write_generated_sidebar() -> None:
@@ -396,12 +465,9 @@ def write_generated_sidebar() -> None:
             ],
         },
     ]
-    SIDEBAR_DEST.write_text(
-        "export default "
-        + json.dumps(sidebar, ensure_ascii=False, indent=2)
-        + ";\n",
-        encoding="utf-8",
-    )
+    sidebar_content = "export default " + json.dumps(sidebar, ensure_ascii=False, indent=2) + ";\n"
+    with SIDEBAR_DEST.open("w", encoding="utf-8", newline="\n") as file:
+        file.write(sidebar_content)
 
 
 def generate() -> None:
@@ -424,12 +490,14 @@ def generate() -> None:
         kb_links.append((CATEGORY_LABELS[key], href))
     if not (KB_DEST / "index.md").exists():
         write_index(KB_DEST / "index.md", "02-kb 结构化知识库", "02-kb generated entry", kb_links)
+    write_directory_overviews(KB_SRC, KB_DEST)
 
     output_links = []
     for key in ("research", "today", "weekly"):
         href = f"/ai-investing/outputs/{slugify(key)}/"
         output_links.append((CATEGORY_LABELS[key], href))
     write_index(OUTPUT_DEST / "index.md", "04-output 输出区", "04-output generated entry", output_links)
+    write_directory_overviews(OUTPUT_SRC, OUTPUT_DEST)
     write_generated_sidebar()
 
     print("Generated Starlight content from 02-kb and 04-output.")

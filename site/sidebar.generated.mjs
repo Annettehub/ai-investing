@@ -11,6 +11,10 @@ export default [
         "collapsed": true,
         "items": [
           {
+            "label": "总览",
+            "slug": "kb/entities"
+          },
+          {
             "label": "00981.HK / 688981.SH 中芯国际 — 实体档案",
             "slug": "kb/entities/00981-8b5fb491"
           },
@@ -93,13 +97,25 @@ export default [
         "collapsed": true,
         "items": [
           {
+            "label": "总览",
+            "slug": "kb/concepts"
+          },
+          {
             "label": "L1 能源层",
             "collapsed": true,
             "items": [
               {
+                "label": "总览",
+                "slug": "kb/concepts/l1-energy-4e813ddd"
+              },
+              {
                 "label": "供需周期与供应链",
                 "collapsed": true,
                 "items": [
+                  {
+                    "label": "总览",
+                    "slug": "kb/concepts/l1-energy-4e813ddd/p-ef36a975"
+                  },
                   {
                     "label": "AIDC电力基建周期（建设节奏、电力缺口、能源消耗）",
                     "slug": "kb/concepts/l1-energy-4e813ddd/p-ef36a975/aidc-49b4dca5"
@@ -111,6 +127,10 @@ export default [
                 "collapsed": true,
                 "items": [
                   {
+                    "label": "总览",
+                    "slug": "kb/concepts/l1-energy-4e813ddd/p-a33d4e39"
+                  },
+                  {
                     "label": "海外算力中心布局（美国、中东、东南亚、中国）",
                     "slug": "kb/concepts/l1-energy-4e813ddd/p-a33d4e39/p-dc9605dc"
                   }
@@ -120,6 +140,10 @@ export default [
                 "label": "技术路线",
                 "collapsed": true,
                 "items": [
+                  {
+                    "label": "总览",
+                    "slug": "kb/concepts/l1-energy-4e813ddd/p-0ef0d64d"
+                  },
                   {
                     "label": "散热与电源技术（液冷vs风冷、HVDC直流电源、浸没式冷却）",
                     "slug": "kb/concepts/l1-energy-4e813ddd/p-0ef0d64d/vs-hvdc-0a73ddcd"
@@ -133,9 +157,17 @@ export default [
             "collapsed": true,
             "items": [
               {
+                "label": "总览",
+                "slug": "kb/concepts/l2-chips-4e6f9936"
+              },
+              {
                 "label": "供需周期与供应链",
                 "collapsed": true,
                 "items": [
+                  {
+                    "label": "总览",
+                    "slug": "kb/concepts/l2-chips-4e6f9936/p-ef36a975"
+                  },
                   {
                     "label": "ASIC设计服务生态（博通、Marvell、联发科）",
                     "slug": "kb/concepts/l2-chips-4e6f9936/p-ef36a975/asic-marvell-4c3abf28"
@@ -155,6 +187,10 @@ export default [
                 "collapsed": true,
                 "items": [
                   {
+                    "label": "总览",
+                    "slug": "kb/concepts/l2-chips-4e6f9936/p-a33d4e39"
+                  },
+                  {
                     "label": "中美半导体博弈与制裁",
                     "slug": "kb/concepts/l2-chips-4e6f9936/p-a33d4e39/p-00ec4e03"
                   },
@@ -172,6 +208,10 @@ export default [
                 "label": "技术路线",
                 "collapsed": true,
                 "items": [
+                  {
+                    "label": "总览",
+                    "slug": "kb/concepts/l2-chips-4e6f9936/p-0ef0d64d"
+                  },
                   {
                     "label": "GPU vs ASIC 竞争格局",
                     "slug": "kb/concepts/l2-chips-4e6f9936/p-0ef0d64d/gpu-vs-asic-d4b71950"
@@ -193,9 +233,17 @@ export default [
             "collapsed": true,
             "items": [
               {
+                "label": "总览",
+                "slug": "kb/concepts/l3-infrastructure-e54cb097"
+              },
+              {
                 "label": "供需周期与供应链",
                 "collapsed": true,
                 "items": [
+                  {
+                    "label": "总览",
+                    "slug": "kb/concepts/l3-infrastructure-e54cb097/p-ef36a975"
+                  },
                   {
                     "label": "AI 服务器供应链",
                     "slug": "kb/concepts/l3-infrastructure-e54cb097/p-ef36a975/ai-4ed75228"
@@ -215,6 +263,10 @@ export default [
                 "collapsed": true,
                 "items": [
                   {
+                    "label": "总览",
+                    "slug": "kb/concepts/l3-infrastructure-e54cb097/p-a33d4e39"
+                  },
+                  {
                     "label": "光模块与服务器代工地域转移与关税风险",
                     "slug": "kb/concepts/l3-infrastructure-e54cb097/p-a33d4e39/p-c24cac56"
                   }
@@ -225,6 +277,10 @@ export default [
                 "collapsed": true,
                 "items": [
                   {
+                    "label": "总览",
+                    "slug": "kb/concepts/l3-infrastructure-e54cb097/p-0ef0d64d"
+                  },
+                  {
                     "label": "CPO / 光互联 / 硅光技术",
                     "slug": "kb/concepts/l3-infrastructure-e54cb097/p-0ef0d64d/cpo-bc7abbaf"
                   }
@@ -234,6 +290,10 @@ export default [
                 "label": "系统软件",
                 "collapsed": true,
                 "items": [
+                  {
+                    "label": "总览",
+                    "slug": "kb/concepts/l3-infrastructure-e54cb097/p-73900298"
+                  },
                   {
                     "label": "注意力机制底层实现（FlashAttention、PagedAttention、序列并行）",
                     "slug": "kb/concepts/l3-infrastructure-e54cb097/p-73900298/flashattention-pagedattention-edbe3b3b"
@@ -255,9 +315,17 @@ export default [
             "collapsed": true,
             "items": [
               {
+                "label": "总览",
+                "slug": "kb/concepts/l4-models-43960a81"
+              },
+              {
                 "label": "供需周期与供应链",
                 "collapsed": true,
                 "items": [
+                  {
+                    "label": "总览",
+                    "slug": "kb/concepts/l4-models-43960a81/p-ef36a975"
+                  },
                   {
                     "label": "云厂商算力采购节奏（英伟达、自研ASIC、第三方云）",
                     "slug": "kb/concepts/l4-models-43960a81/p-ef36a975/asic-873be542"
@@ -269,6 +337,10 @@ export default [
                 "collapsed": true,
                 "items": [
                   {
+                    "label": "总览",
+                    "slug": "kb/concepts/l4-models-43960a81/p-0dae4ae6"
+                  },
+                  {
                     "label": "模型商业模式（API定价、Token经济学、开源vs闭源生态）",
                     "slug": "kb/concepts/l4-models-43960a81/p-0dae4ae6/api-token-vs-637d857e"
                   }
@@ -278,6 +350,10 @@ export default [
                 "label": "技术路线",
                 "collapsed": true,
                 "items": [
+                  {
+                    "label": "总览",
+                    "slug": "kb/concepts/l4-models-43960a81/p-0ef0d64d"
+                  },
                   {
                     "label": "模型架构演进（Transformer、MoE、推理优化、物理AI）",
                     "slug": "kb/concepts/l4-models-43960a81/p-0ef0d64d/transformer-moe-ai-ecb08901"
@@ -291,9 +367,17 @@ export default [
             "collapsed": true,
             "items": [
               {
+                "label": "总览",
+                "slug": "kb/concepts/l5-applications-6ee59df2"
+              },
+              {
                 "label": "商业模式",
                 "collapsed": true,
                 "items": [
+                  {
+                    "label": "总览",
+                    "slug": "kb/concepts/l5-applications-6ee59df2/p-0dae4ae6"
+                  },
                   {
                     "label": "AI应用的发展和商业模式",
                     "slug": "kb/concepts/l5-applications-6ee59df2/p-0dae4ae6/ai-agent-copilot-7ca408b2"
@@ -304,6 +388,10 @@ export default [
                 "label": "渗透率与周期",
                 "collapsed": true,
                 "items": [
+                  {
+                    "label": "总览",
+                    "slug": "kb/concepts/l5-applications-6ee59df2/p-398e43ce"
+                  },
                   {
                     "label": "AI应用渗透率观察",
                     "slug": "kb/concepts/l5-applications-6ee59df2/p-398e43ce/ai-443c953a"
@@ -316,6 +404,10 @@ export default [
             "label": "跨层方法论",
             "collapsed": true,
             "items": [
+              {
+                "label": "总览",
+                "slug": "kb/concepts/cross-layer-3d89b007"
+              },
               {
                 "label": "Serenity 投研方法论框架",
                 "slug": "kb/concepts/cross-layer-3d89b007/serenity-c4d5a906"
@@ -344,6 +436,10 @@ export default [
         "label": "投资假设",
         "collapsed": true,
         "items": [
+          {
+            "label": "总览",
+            "slug": "kb/hypotheses"
+          },
           {
             "label": "H1.1 [D1-Trend] AI服务器Capex 2026-2028持续高增长，台积电先进工厂满载",
             "slug": "kb/hypotheses/h1-1-f26496a5"
@@ -414,6 +510,10 @@ export default [
         "label": "来源摘要",
         "collapsed": true,
         "items": [
+          {
+            "label": "总览",
+            "slug": "kb/sources"
+          },
           {
             "label": "来源摘要：字节采购国产芯片专家交流",
             "slug": "kb/sources/2026-07-05-byterdance-chip-procurement-6a99b736"
@@ -570,6 +670,10 @@ export default [
         "collapsed": true,
         "items": [
           {
+            "label": "总览",
+            "slug": "outputs/research"
+          },
+          {
             "label": "YMTC 长江存储 深度研究 — 进口种子与国产设备阶梯扩产路径",
             "slug": "outputs/research/2026-07-04-ymtc-62e43162"
           },
@@ -583,6 +687,10 @@ export default [
         "label": "每日跟踪",
         "collapsed": true,
         "items": [
+          {
+            "label": "总览",
+            "slug": "outputs/today"
+          },
           {
             "label": "2026-07-04 每日信号扫描",
             "slug": "outputs/today/2026-07-04-67de87b0"
@@ -605,6 +713,10 @@ export default [
         "label": "周度复盘",
         "collapsed": true,
         "items": [
+          {
+            "label": "总览",
+            "slug": "outputs/weekly"
+          },
           {
             "label": "2026-W27 周度复盘（测试版）",
             "slug": "outputs/weekly/2026-w27-264a99e7"
