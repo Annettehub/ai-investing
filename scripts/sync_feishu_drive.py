@@ -27,27 +27,27 @@ def list_files(token):
     headers = {"Authorization": f"Bearer {token}"}
     files = []
     page_token = None
-    
+
     while True:
         params = {"folder_token": FOLDER_TOKEN, "page_size": 200}
         if page_token:
             params["page_token"] = page_token
-        
+
         resp = requests.get(url, headers=headers, params=params)
         data = resp.json()
-        
+
         if data.get("code") != 0:
             print(f"列出文件失败: {data}")
             break
-        
+
         items = data.get("data", {}).get("files", [])
         print(f"API 返回 {len(items)} 个 items")
-        
+
         for item in items:
             file_type = item.get("type")
             file_name = item.get("name", "")
             print(f"  文件: {file_name} | type: {file_type}")
-            
+
             # 跳过文件夹(type=1)，其他全部保留
             if file_type != "1" and file_type != 1:
                 files.append({
@@ -55,11 +55,11 @@ def list_files(token):
                     "name": file_name,
                     "size": item.get("size", 0)
                 })
-        
+
         if not data.get("data", {}).get("has_more"):
             break
         page_token = data.get("data", {}).get("next_page_token")
-    
+
     return files
 
 def download_file(token, file_token):
@@ -67,7 +67,7 @@ def download_file(token, file_token):
     url = f"https://open.feishu.cn/open-apis/drive/v1/files/{file_token}/download"
     headers = {"Authorization": f"Bearer {token}"}
     resp = requests.get(url, headers=headers)
-    
+
     if resp.status_code == 200:
         return resp.content
     else:
@@ -87,65 +87,72 @@ def save_hashes(hashes):
 
 def main():
     os.makedirs(RAW_DIR, exist_ok=True)
-    
+
     print("Getting token...")
     token = get_token()
     if not token:
         print("Failed to get token")
         return
-    
+
     print("Listing files...")
     files = list_files(token)
     print(f"Found {len(files)} files total")
-    
+
     # 只处理 .md 文件
     md_files = [f for f in files if f["name"].endswith(".md")]
     print(f"Markdown files: {len(md_files)}")
-    
+
     if not md_files:
         print("No .md files found")
         return
-    
+
     synced_hashes = load_hashes()
     new_count = 0
-    
+
     for file_info in md_files:
         try:
             file_token = file_info["token"]
             file_name = file_info["name"]
-            
+
             print(f"\nDownloading: {file_name}")
             content = download_file(token, file_token)
-            
+
             if not content:
                 continue
-            
+
             # 用内容哈希去重
             content_hash = hashlib.md5(content).hexdigest()[:16]
             if content_hash in synced_hashes:
                 print(f"  Already synced")
                 continue
-            
+
             # 保存文件
             filepath = os.path.join(RAW_DIR, file_name)
+            if os.path.exists(filepath):
+                with open(filepath, "rb") as existing:
+                    existing_hash = hashlib.md5(existing.read()).hexdigest()[:16]
+                if existing_hash == content_hash:
+                    synced_hashes.add(content_hash)
+                    print(f"  Already exists")
+                    continue
             counter = 1
             original = filepath
             while os.path.exists(filepath):
                 name, ext = os.path.splitext(original)
                 filepath = f"{name}_{counter}{ext}"
                 counter += 1
-            
+
             with open(filepath, "wb") as f:
                 f.write(content)
-            
+
             synced_hashes.add(content_hash)
             new_count += 1
             print(f"  Saved: {os.path.basename(filepath)}")
-            
+
         except Exception as e:
             print(f"  Error: {e}")
             continue
-    
+
     save_hashes(synced_hashes)
     print(f"\n{'='*50}")
     print(f"Total: {len(md_files)}, New: {new_count}")

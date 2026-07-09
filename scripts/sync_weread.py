@@ -1,45 +1,49 @@
 #!/usr/bin/env python3
-"""
-微信读书笔记同步脚本
-通过 Weread Agent API Gateway 拉取全部划线+想法，输出到 03-raw/weread/
-"""
+"""Sync WeRead notes into 03-raw/weread without deleting existing files."""
+
+from __future__ import annotations
+
 import os
+import re
 import sys
-import json
-import requests
 from datetime import datetime
+from pathlib import Path
+
+import requests
 
 API_BASE = "https://i.weread.qq.com/api/agent/gateway"
 SKILL_VERSION = "1.0.3"
-OUTPUT_DIR = os.path.join(os.path.dirname(__file__), "..", "03-raw", "weread")
+PROJECT_ROOT = Path(__file__).resolve().parent.parent
+OUTPUT_DIR = PROJECT_ROOT / "03-raw" / "weread"
+
 
 def call_api(api_name: str, **params):
-    """调用微信读书 Agent API Gateway"""
     api_key = os.environ.get("WEREAD_API_KEY", "")
     if not api_key:
-        print("ERROR: WEREAD_API_KEY 未设置")
+        print("ERROR: WEREAD_API_KEY is not set")
         sys.exit(1)
 
     body = {"api_name": api_name, "skill_version": SKILL_VERSION, **params}
-    resp = requests.post(API_BASE,
+    resp = requests.post(
+        API_BASE,
         headers={
             "Authorization": f"Bearer {api_key}",
-            "Content-Type": "application/json"
+            "Content-Type": "application/json",
         },
         json=body,
-        timeout=30
+        timeout=30,
     )
+    resp.raise_for_status()
     data = resp.json()
     if data.get("errcode", 0) != 0:
         print(f"  API Error [{api_name}]: {data.get('errmsg', 'unknown')}")
         return None
     if "upgrade_info" in data:
-        print(f"  ⚠️  Skill 版本更新: {data['upgrade_info'].get('message', '')}")
+        print(f"  Skill update notice: {data['upgrade_info'].get('message', '')}")
     return data
 
 
-def get_all_notebooks():
-    """获取所有有笔记的书籍"""
+def get_all_notebooks() -> list[dict]:
     all_books = []
     params = {"count": 50}
     while True:
@@ -55,16 +59,14 @@ def get_all_notebooks():
     return all_books
 
 
-def get_book_highlights(book_id: str):
-    """获取单本书的划线"""
+def get_book_highlights(book_id: str) -> list[dict]:
     data = call_api("/book/bookmarklist", bookId=book_id)
     if not data:
         return []
     return data.get("updated", [])
 
 
-def get_book_reviews(book_id: str):
-    """获取单本书的想法/点评（全量翻页）"""
+def get_book_reviews(book_id: str) -> list[dict]:
     all_reviews = []
     params = {"bookid": book_id, "count": 50}
     while True:
@@ -79,133 +81,150 @@ def get_book_reviews(book_id: str):
     return all_reviews
 
 
-def format_timestamp(ts):
-    """Unix timestamp → YYYY-MM-DD"""
+def format_timestamp(ts) -> str:
     if not ts:
         return "未知"
     return datetime.fromtimestamp(ts).strftime("%Y-%m-%d")
 
 
-def save_book_notes(book: dict, highlights: list, reviews: list) -> str:
-    """将一本书的笔记保存为 .md 文件"""
+def safe_filename_part(value: str, max_length: int = 60) -> str:
+    value = re.sub(r'[<>:"/\\|?*\r\n\t]+', "-", value).strip(" .-")
+    return (value or "unknown")[:max_length]
+
+
+def find_existing_file(book_id: str, fallback_filename: str) -> Path:
+    fallback = OUTPUT_DIR / fallback_filename
+    if fallback.exists():
+        return fallback
+
+    marker = f"bookId: {book_id}"
+    for path in OUTPUT_DIR.glob("*.md"):
+        try:
+            if marker in path.read_text(encoding="utf-8", errors="ignore"):
+                return path
+        except OSError:
+            continue
+    return fallback
+
+
+def render_book_notes(book: dict, highlights: list[dict], reviews: list[dict]) -> str:
     book_info = book.get("book", {})
     title = book_info.get("title", "未知书名")
     author = book_info.get("author", "未知作者")
     book_id = book.get("bookId", "")
 
-    safe_title = title.replace("/", "-").replace(":", "-")[:60]
-    filename = f"微信读书-{safe_title}-{author}.md"
-    filepath = os.path.join(OUTPUT_DIR, filename)
+    lines = [
+        f"# {title}",
+        "",
+        f"- **作者：** {author}",
+        f"- **来源：** 微信读书 (bookId: {book_id})",
+        f"- **阅读进度：** {book.get('readingProgress', 0)}%",
+        f"- **读完状态：** {'已读完' if book.get('markedStatus') == 1 else '在读'}",
+        f"- **总笔记数：** 划线 {book.get('noteCount', 0)} + 想法 {book.get('reviewCount', 0)} + 书签 {book.get('bookmarkCount', 0)}",
+        f"- **微信读书链接：** [打开阅读](weread://reading?bId={book_id})",
+        "",
+    ]
 
-    lines = []
-    lines.append(f"# {title}")
-    lines.append(f"")
-    lines.append(f"- **作者：** {author}")
-    lines.append(f"- **来源：** 微信读书 (bookId: {book_id})")
-    lines.append(f"- **同步日期：** {datetime.now().strftime('%Y-%m-%d')}")
-    lines.append(f"- **阅读进度：** {book.get('readingProgress', 0)}%")
-    lines.append(f"- **读完状态：** {'已读完' if book.get('markedStatus') == 1 else '在读'}")
-    lines.append(f"- **总笔记数：** 划线 {book.get('noteCount', 0)} + 想法 {book.get('reviewCount', 0)} + 书签 {book.get('bookmarkCount', 0)}")
-    lines.append(f"- **微信读书链接：** [打开阅读](weread://reading?bId={book_id})")
-    lines.append(f"")
+    chapters: dict[object, dict[str, list[dict]]] = {}
+    for highlight in highlights:
+        chapter_uid = highlight.get("chapterUid", 0)
+        chapters.setdefault(chapter_uid, {"highlights": [], "reviews": []})
+        chapters[chapter_uid]["highlights"].append(highlight)
 
-    # 按章节分组
-    chapters = {}
-    for h in highlights:
-        ch_uid = h.get("chapterUid", 0)
-        if ch_uid not in chapters:
-            chapters[ch_uid] = {"highlights": [], "reviews": []}
-        chapters[ch_uid]["highlights"].append(h)
+    for review in reviews:
+        review_data = review.get("review", {})
+        chapter_uid = review_data.get("chapterUid") or review_data.get("chapterIdx") or "misc"
+        chapters.setdefault(chapter_uid, {"highlights": [], "reviews": []})
+        chapters[chapter_uid]["reviews"].append(review)
 
-    # 关联想法到章节
-    for r in reviews:
-        review_data = r.get("review", {})
-        matched = False
-        for ch_data in chapters.values():
-            if not matched:
-                ch_data["reviews"].append(r)
-                matched = True
-                break
-        if not matched:
-            if "misc" not in chapters:
-                chapters["misc"] = {"highlights": [], "reviews": []}
-            chapters["misc"]["reviews"].append(r)
+    for chapter_uid, chapter_data in chapters.items():
+        if chapter_data["highlights"]:
+            lines.extend([f"## 第 {chapter_uid} 章", ""])
+            for highlight in chapter_data["highlights"]:
+                mark_text = highlight.get("markText", "").strip()
+                if not mark_text:
+                    continue
+                lines.extend(
+                    [
+                        f"> {mark_text}",
+                        "",
+                        f"*划线时间：{format_timestamp(highlight.get('createTime'))}*",
+                        "",
+                        "---",
+                        "",
+                    ]
+                )
 
-    # 输出
-    for ch_uid, ch_data in chapters.items():
-        if ch_data["highlights"]:
-            lines.append(f"## 第{ch_uid}章")
-            lines.append(f"")
-            for hl in ch_data["highlights"]:
-                lines.append(f"> {hl.get('markText', '').strip()}")
-                lines.append(f"")
-                lines.append(f"*划线时间：{format_timestamp(hl.get('createTime'))}*")
-                lines.append(f"")
-                lines.append(f"---")
-                lines.append(f"")
-
-        if ch_data["reviews"]:
-            lines.append(f"### 想法与点评")
-            lines.append(f"")
-            for rv in ch_data["reviews"]:
-                review_data = rv.get("review", {})
+        if chapter_data["reviews"]:
+            lines.extend(["### 想法与点评", ""])
+            for review in chapter_data["reviews"]:
+                review_data = review.get("review", {})
                 content = review_data.get("content", "").strip()
-                if content:
-                    lines.append(f"💭 {content}")
-                    if review_data.get("abstract"):
-                        lines.append(f"  > *原文：{review_data['abstract']}*")
-                    lines.append(f"  *{format_timestamp(review_data.get('createTime'))}*")
-                    lines.append(f"")
+                if not content:
+                    continue
+                lines.append(f"💭 {content}")
+                if review_data.get("abstract"):
+                    lines.append(f"  > *原文：{review_data['abstract']}*")
+                lines.extend([f"  *{format_timestamp(review_data.get('createTime'))}*", ""])
 
-    with open(filepath, "w", encoding="utf-8") as f:
-        f.write("\n".join(lines))
+    return "\n".join(lines).rstrip() + "\n"
 
-    return filename
+
+def save_if_changed(book: dict, highlights: list[dict], reviews: list[dict]) -> str:
+    book_info = book.get("book", {})
+    title = book_info.get("title", "未知书名")
+    author = book_info.get("author", "未知作者")
+    book_id = book.get("bookId", "")
+    filename = f"微信读书-{safe_filename_part(title)}-{safe_filename_part(author, 40)}.md"
+    filepath = find_existing_file(book_id, filename)
+    content = render_book_notes(book, highlights, reviews)
+
+    if not filepath.exists():
+        filepath.write_text(content, encoding="utf-8")
+        return "new"
+
+    old_content = filepath.read_text(encoding="utf-8", errors="ignore")
+    if old_content == content:
+        return "unchanged"
+
+    filepath.write_text(content, encoding="utf-8")
+    return "updated"
 
 
 def main():
-    os.makedirs(OUTPUT_DIR, exist_ok=True)
+    OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
 
-    print("📚 微信读书笔记同步")
-    print(f"   版本: {SKILL_VERSION}")
-    print()
-
-    print("📋 获取笔记本列表...")
+    print("WeRead notes sync")
     notebooks = get_all_notebooks()
     if not notebooks:
-        print("   未找到有笔记的书籍（或 API Key 未生效）")
+        print("No notebooks found, or the API key is not valid.")
         return
 
-    total_notes = sum(
-        b.get("noteCount", 0) + b.get("reviewCount", 0)
-        for b in notebooks
-    )
-    print(f"   找到 {len(notebooks)} 本有笔记的书，共 {total_notes} 条笔记")
-    print()
+    total_notes = sum(b.get("noteCount", 0) + b.get("reviewCount", 0) for b in notebooks)
+    print(f"Found {len(notebooks)} books with {total_notes} notes.")
 
-    synced = 0
-    for i, book in enumerate(notebooks, 1):
+    counts = {"new": 0, "updated": 0, "unchanged": 0}
+    for index, book in enumerate(notebooks, 1):
         book_info = book.get("book", {})
         title = book_info.get("title", "未知")
         book_id = book.get("bookId", "")
-
         note_count = book.get("noteCount", 0)
         review_count = book.get("reviewCount", 0)
 
         if note_count == 0 and review_count == 0:
             continue
 
-        print(f"  [{i}/{len(notebooks)}] {title} (划线{note_count}, 想法{review_count})...", end=" ")
-
+        print(f"[{index}/{len(notebooks)}] {title}...", end=" ")
         highlights = get_book_highlights(book_id) if note_count > 0 else []
         reviews = get_book_reviews(book_id) if review_count > 0 else []
+        status = save_if_changed(book, highlights, reviews)
+        counts[status] += 1
+        print(status)
 
-        filename = save_book_notes(book, highlights, reviews)
-        print(f"✅ {len(highlights)}条划线 + {len(reviews)}条想法 → {filename}")
-        synced += 1
-
-    print()
-    print(f"✅ 同步完成：{synced} 本书 → {OUTPUT_DIR}")
+    print(
+        "Done: "
+        f"new={counts['new']}, updated={counts['updated']}, unchanged={counts['unchanged']}"
+    )
 
 
 if __name__ == "__main__":
