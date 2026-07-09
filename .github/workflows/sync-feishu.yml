@@ -8,14 +8,18 @@ on:
 permissions:
   contents: write
 
+concurrency:
+  group: sync-feishu
+  cancel-in-progress: false
+
 jobs:
   sync:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout with PAT
+      - name: Checkout repository
         uses: actions/checkout@v4
         with:
-          token: ${{ secrets.PAT }}
+          token: ${{ secrets.PAT || github.token }}
 
       - name: Set up Python
         uses: actions/setup-python@v5
@@ -36,6 +40,10 @@ jobs:
         run: |
           git config user.name "github-actions"
           git config user.email "actions@github.com"
-          git add 03-raw/
-          git diff --cached --quiet || git commit -m "Sync feishu drive: $(date +%Y-%m-%d-%H:%M)"
-          git push
+          git add 03-raw/feishu 03-raw/.synced_hashes.json
+          if git diff --cached --quiet; then
+            echo "No Feishu changes to commit."
+          else
+            git commit -m "Sync feishu drive: $(date +%Y-%m-%d-%H:%M)"
+            git push
+          fi

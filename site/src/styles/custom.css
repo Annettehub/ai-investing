@@ -1,0 +1,24 @@
+:root {
+  --sl-content-width: 52rem;
+  --sl-text-5xl: 2.8rem;
+}
+
+.site-title {
+  letter-spacing: 0;
+}
+
+.sl-markdown-content {
+  line-height: 1.85;
+}
+
+.sl-markdown-content h2 {
+  margin-top: 2.4rem;
+}
+
+.sl-markdown-content table {
+  font-size: 0.94rem;
+}
+
+.hero img {
+  border-radius: 8px;
+}
