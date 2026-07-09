@@ -21,6 +21,7 @@ KB_SRC = ROOT / "02-kb"
 OUTPUT_SRC = ROOT / "04-output"
 KB_DEST = DOCS_ROOT / "kb"
 OUTPUT_DEST = DOCS_ROOT / "outputs"
+SIDEBAR_DEST = ROOT / "site" / "sidebar.generated.mjs"
 GITHUB_BLOB = "https://github.com/Annettehub/ai-investing/blob/main"
 
 CATEGORY_LABELS = {
@@ -41,6 +42,15 @@ SLUG_OVERRIDES = {
     "research": "research",
     "today": "today",
     "weekly": "weekly",
+}
+
+DIR_LABEL_OVERRIDES = {
+    "L1-能源层（Energy）": "L1 能源层",
+    "L2-芯片层（Chips）": "L2 芯片层",
+    "L3-基础设施层（Infrastructure）": "L3 基础设施层",
+    "L4-模型层（Models）": "L4 模型层",
+    "L5-应用层（Applications）": "L5 应用层",
+    "跨层-方法论（Cross-Layer）": "跨层方法论",
 }
 
 
@@ -81,6 +91,26 @@ def strip_frontmatter(text: str) -> str:
     return text
 
 
+def normalize_heading(value: str) -> str:
+    return re.sub(r"\s+", " ", value).strip()
+
+
+def remove_duplicate_h1(body: str, title: str) -> str:
+    lines = body.splitlines()
+    if not lines:
+        return body
+
+    match = re.match(r"^#\s+(.+?)\s*$", lines[0])
+    if not match:
+        return body
+
+    if normalize_heading(match.group(1)) != normalize_heading(title):
+        return body
+
+    remaining = "\n".join(lines[1:]).lstrip()
+    return remaining + ("\n" if remaining else "")
+
+
 def get_title(path: Path, text: str) -> str:
     for line in strip_frontmatter(text).splitlines():
         match = re.match(r"^#\s+(.+?)\s*$", line)
@@ -98,8 +128,27 @@ def frontmatter(title: str, description: str) -> str:
     )
 
 
+def clean_dir_label(value: str) -> str:
+    if value in DIR_LABEL_OVERRIDES:
+        return DIR_LABEL_OVERRIDES[value]
+    label = re.sub(r"-(?:[0-9a-f]{8}|[0-9a-f]{7})$", "", value, flags=re.IGNORECASE)
+    label = re.sub(r"^p-[0-9a-f]{8}$", "页面", label, flags=re.IGNORECASE)
+    label = re.sub(r"[（(][A-Za-z][A-Za-z0-9 /\-_.]*[）)]", "", label)
+    label = label.replace("-", " ")
+    label = re.sub(r"\s+", " ", label).strip()
+    return label or value
+
+
 def relative_posix(path: Path, base: Path) -> str:
     return path.relative_to(base).as_posix()
+
+
+def sidebar_slug_for(source_path: Path, source_root: Path, dest_root: Path) -> str:
+    out_path = output_path_for(source_path, source_root, dest_root)
+    route = relative_posix(out_path.with_suffix(""), DOCS_ROOT)
+    if route.endswith("/index"):
+        route = route[: -len("/index")]
+    return route
 
 
 def normalize_rel(source_path: Path, source_root: Path) -> Path:
@@ -226,6 +275,7 @@ def transform_markdown(
     original = read_text(source_path)
     title = get_title(source_path, original)
     body = strip_frontmatter(original).lstrip()
+    body = remove_duplicate_h1(body, title)
     body = transform_wikilinks(body, path_map, basename_map)
     body = append_raw_reference_boxes(body)
     source_rel = relative_posix(source_path, ROOT)
@@ -240,11 +290,118 @@ def transform_markdown(
 
 
 def write_index(dest: Path, title: str, description: str, links: list[tuple[str, str]]) -> None:
-    lines = [frontmatter(title, description), f"# {title}", ""]
+    lines = [frontmatter(title, description)]
     for label, href in links:
         lines.append(f"- [{label}]({href})")
     dest.parent.mkdir(parents=True, exist_ok=True)
     dest.write_text("\n".join(lines).rstrip() + "\n", encoding="utf-8")
+
+
+def sidebar_link(source_path: Path, source_root: Path, dest_root: Path) -> dict[str, str]:
+    text = read_text(source_path)
+    return {
+        "label": get_title(source_path, text),
+        "slug": sidebar_slug_for(source_path, source_root, dest_root),
+    }
+
+
+def markdown_files(path: Path) -> list[Path]:
+    return sorted(
+        (item for item in path.glob("*.md") if item.name.lower() != "index.md"),
+        key=lambda item: item.name.lower(),
+    )
+
+
+def build_tree_sidebar(path: Path, source_root: Path, dest_root: Path) -> list[dict[str, object]]:
+    items: list[dict[str, object]] = [
+        sidebar_link(source_path, source_root, dest_root)
+        for source_path in markdown_files(path)
+    ]
+
+    for child in sorted((item for item in path.iterdir() if item.is_dir()), key=lambda item: item.name.lower()):
+        child_items = build_tree_sidebar(child, source_root, dest_root)
+        if child_items:
+            items.append(
+                {
+                    "label": clean_dir_label(child.name),
+                    "collapsed": True,
+                    "items": child_items,
+                }
+            )
+    return items
+
+
+def build_flat_sidebar(path: Path, source_root: Path, dest_root: Path) -> list[dict[str, str]]:
+    return [sidebar_link(source_path, source_root, dest_root) for source_path in markdown_files(path)]
+
+
+def build_output_sidebar(category: str) -> list[dict[str, str]]:
+    items = []
+    for source_path in OUTPUT_SRC.rglob("*.md"):
+        if source_path.name.lower() == "index.md":
+            continue
+        rel = normalize_rel(source_path, OUTPUT_SRC)
+        if rel.parts and rel.parts[0] == category:
+            items.append(sidebar_link(source_path, OUTPUT_SRC, OUTPUT_DEST))
+    return sorted(items, key=lambda item: item["label"])
+
+
+def write_generated_sidebar() -> None:
+    sidebar: list[dict[str, object]] = [
+        {
+            "label": "02-kb 知识库",
+            "items": [
+                {"label": "总索引", "slug": "kb"},
+                {
+                    "label": CATEGORY_LABELS["entities"],
+                    "collapsed": True,
+                    "items": build_flat_sidebar(KB_SRC / "entities", KB_SRC, KB_DEST),
+                },
+                {
+                    "label": CATEGORY_LABELS["concepts"],
+                    "collapsed": True,
+                    "items": build_tree_sidebar(KB_SRC / "concepts", KB_SRC, KB_DEST),
+                },
+                {
+                    "label": CATEGORY_LABELS["hypotheses"],
+                    "collapsed": True,
+                    "items": build_flat_sidebar(KB_SRC / "hypotheses", KB_SRC, KB_DEST),
+                },
+                {
+                    "label": CATEGORY_LABELS["sources"],
+                    "collapsed": True,
+                    "items": build_flat_sidebar(KB_SRC / "sources", KB_SRC, KB_DEST),
+                },
+            ],
+        },
+        {
+            "label": "04-output 输出",
+            "items": [
+                {"label": "输出总览", "slug": "outputs"},
+                {
+                    "label": CATEGORY_LABELS["research"],
+                    "collapsed": True,
+                    "items": build_output_sidebar("research"),
+                },
+                {
+                    "label": CATEGORY_LABELS["today"],
+                    "collapsed": True,
+                    "items": build_output_sidebar("today"),
+                },
+                {
+                    "label": CATEGORY_LABELS["weekly"],
+                    "collapsed": True,
+                    "items": build_output_sidebar("weekly"),
+                },
+            ],
+        },
+    ]
+    SIDEBAR_DEST.write_text(
+        "export default "
+        + json.dumps(sidebar, ensure_ascii=False, indent=2)
+        + ";\n",
+        encoding="utf-8",
+    )
 
 
 def generate() -> None:
@@ -273,6 +430,7 @@ def generate() -> None:
         href = f"/ai-investing/outputs/{slugify(key)}/"
         output_links.append((CATEGORY_LABELS[key], href))
     write_index(OUTPUT_DEST / "index.md", "04-output 输出区", "04-output generated entry", output_links)
+    write_generated_sidebar()
 
     print("Generated Starlight content from 02-kb and 04-output.")
 

@@ -4,10 +4,10 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "astro dev",
+    "dev": "npm run generate && astro dev",
     "generate": "python ../scripts/generate_site_content.py",
     "build": "npm run generate && astro build",
-    "preview": "astro preview"
+    "preview": "npm run generate && astro preview"
   },
   "dependencies": {
     "@astrojs/starlight": "^0.38.1",
