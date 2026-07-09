@@ -55,6 +55,25 @@ export default defineConfig({
             { label: '自动同步', slug: 'pipeline/automation' },
           ],
         },
+        {
+          label: '02-kb 知识库',
+          items: [
+            { label: '总索引', slug: 'kb' },
+            { label: '公司与标的', autogenerate: { directory: 'kb/entities', collapsed: true }, collapsed: true },
+            { label: '概念框架', autogenerate: { directory: 'kb/concepts', collapsed: true }, collapsed: true },
+            { label: '投资假设', autogenerate: { directory: 'kb/hypotheses', collapsed: true }, collapsed: true },
+            { label: '来源摘要', autogenerate: { directory: 'kb/sources', collapsed: true }, collapsed: true },
+          ],
+        },
+        {
+          label: '04-output 输出',
+          items: [
+            { label: '输出总览', slug: 'outputs' },
+            { label: '研究报告', autogenerate: { directory: 'outputs/research', collapsed: true }, collapsed: true },
+            { label: '每日跟踪', autogenerate: { directory: 'outputs/today', collapsed: true }, collapsed: true },
+            { label: '周度复盘', autogenerate: { directory: 'outputs/weekly', collapsed: true }, collapsed: true },
+          ],
+        },
       ],
     }),
   ],

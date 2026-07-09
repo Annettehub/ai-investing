@@ -1,0 +1,281 @@
+#!/usr/bin/env python3
+"""Generate Starlight docs from 02-kb and 04-output.
+
+The generated website publishes structured knowledge pages while keeping
+03-raw out of the site content tree. References to raw files are rendered as
+small expandable source boxes linking back to GitHub.
+"""
+
+from __future__ import annotations
+
+import hashlib
+import json
+import re
+import shutil
+from urllib.parse import quote
+from pathlib import Path
+
+ROOT = Path(__file__).resolve().parent.parent
+DOCS_ROOT = ROOT / "site" / "src" / "content" / "docs"
+KB_SRC = ROOT / "02-kb"
+OUTPUT_SRC = ROOT / "04-output"
+KB_DEST = DOCS_ROOT / "kb"
+OUTPUT_DEST = DOCS_ROOT / "outputs"
+GITHUB_BLOB = "https://github.com/Annettehub/ai-investing/blob/main"
+
+CATEGORY_LABELS = {
+    "concepts": "概念框架",
+    "entities": "公司与标的",
+    "hypotheses": "投资假设",
+    "sources": "来源摘要",
+    "research": "研究报告",
+    "today": "每日跟踪",
+    "weekly": "周度复盘",
+}
+
+SLUG_OVERRIDES = {
+    "concepts": "concepts",
+    "entities": "entities",
+    "hypotheses": "hypotheses",
+    "sources": "sources",
+    "research": "research",
+    "today": "today",
+    "weekly": "weekly",
+}
+
+
+def is_within(path: Path, parent: Path) -> bool:
+    path = path.resolve()
+    parent = parent.resolve()
+    return path == parent or parent in path.parents
+
+
+def reset_dir(path: Path) -> None:
+    if path.exists():
+        if not is_within(path, DOCS_ROOT):
+            raise RuntimeError(f"Refusing to remove outside docs root: {path}")
+        shutil.rmtree(path)
+    path.mkdir(parents=True, exist_ok=True)
+
+
+def slugify(value: str) -> str:
+    value = value.replace(".md", "")
+    if value in SLUG_OVERRIDES:
+        return SLUG_OVERRIDES[value]
+    ascii_part = re.sub(r"[^a-zA-Z0-9]+", "-", value).strip("-").lower()
+    digest = hashlib.sha1(value.encode("utf-8")).hexdigest()[:8]
+    if ascii_part:
+        return f"{ascii_part[:42]}-{digest}"
+    return f"p-{digest}"
+
+
+def read_text(path: Path) -> str:
+    return path.read_text(encoding="utf-8", errors="replace")
+
+
+def strip_frontmatter(text: str) -> str:
+    if text.startswith("---\n"):
+        end = text.find("\n---\n", 4)
+        if end != -1:
+            return text[end + 5 :]
+    return text
+
+
+def get_title(path: Path, text: str) -> str:
+    for line in strip_frontmatter(text).splitlines():
+        match = re.match(r"^#\s+(.+?)\s*$", line)
+        if match:
+            return match.group(1).strip()
+    return path.stem
+
+
+def frontmatter(title: str, description: str) -> str:
+    return (
+        "---\n"
+        f"title: {json.dumps(title, ensure_ascii=False)}\n"
+        f"description: {json.dumps(description, ensure_ascii=False)}\n"
+        "---\n\n"
+    )
+
+
+def relative_posix(path: Path, base: Path) -> str:
+    return path.relative_to(base).as_posix()
+
+
+def normalize_rel(source_path: Path, source_root: Path) -> Path:
+    rel = source_path.relative_to(source_root)
+    if source_root != OUTPUT_SRC or rel.parent != Path(".") or rel.name.lower() == "index.md":
+        return rel
+
+    stem = rel.stem
+    if stem.startswith("today-"):
+        return Path("today") / rel.name
+    if re.search(r"\d{4}-W\d{2}", stem, flags=re.IGNORECASE) or "周度复盘" in stem:
+        return Path("weekly") / rel.name
+    return Path("research") / rel.name
+
+
+def output_path_for(source_path: Path, source_root: Path, dest_root: Path) -> Path:
+    rel = normalize_rel(source_path, source_root)
+    if rel.name.lower() == "index.md":
+        if rel.parent == Path("."):
+            return dest_root / "index.md"
+        return dest_root.joinpath(*[slugify(part) for part in rel.parent.parts], "index.md")
+
+    parts = [slugify(part) for part in rel.parent.parts]
+    filename = f"{slugify(source_path.stem)}.md"
+    return dest_root.joinpath(*parts, filename)
+
+
+def build_maps() -> tuple[dict[str, str], dict[str, str]]:
+    path_map: dict[str, str] = {}
+    basename_map: dict[str, str] = {}
+
+    for source_root, dest_root, route_root in (
+        (KB_SRC, KB_DEST, "kb"),
+        (OUTPUT_SRC, OUTPUT_DEST, "outputs"),
+    ):
+        for source_path in source_root.rglob("*.md"):
+            rel = relative_posix(source_path, source_root)
+            out_path = output_path_for(source_path, source_root, dest_root)
+            route = relative_posix(out_path.with_suffix(""), DOCS_ROOT)
+            if route.endswith("/index"):
+                route = route[: -len("/index")]
+            url = f"/ai-investing/{route}/"
+
+            keys = {
+                rel,
+                rel[:-3] if rel.endswith(".md") else rel,
+                f"{source_root.name}/{rel}",
+                f"{source_root.name}/{rel[:-3]}" if rel.endswith(".md") else f"{source_root.name}/{rel}",
+            }
+            for key in keys:
+                path_map[key] = url
+
+            basename = source_path.stem
+            if basename not in basename_map:
+                basename_map[basename] = url
+            else:
+                basename_map[basename] = ""
+
+    return path_map, basename_map
+
+
+def raw_link(path_text: str) -> str:
+    cleaned = path_text.strip().strip("`'\"，。；;),")
+    href = f"{GITHUB_BLOB}/{quote(cleaned, safe='/()[]-_.~')}"
+    label = cleaned.replace("03-raw/", "") or cleaned
+    return (
+        '<details class="raw-ref">'
+        "<summary>查看原始资料</summary>"
+        f'<a href="{href}" target="_blank" rel="noreferrer">{label}</a>'
+        "</details>"
+    )
+
+
+def transform_wikilinks(text: str, path_map: dict[str, str], basename_map: dict[str, str]) -> str:
+    pattern = re.compile(r"\[\[([^\]|]+)(?:\|([^\]]+))?\]\]")
+
+    def repl(match: re.Match[str]) -> str:
+        target = match.group(1).strip()
+        label = (match.group(2) or Path(target).stem).strip()
+        normalized = target[:-3] if target.endswith(".md") else target
+
+        if normalized.startswith("03-raw/"):
+            return raw_link(normalized)
+
+        url = path_map.get(target) or path_map.get(normalized)
+        if not url and "/" not in normalized:
+            url = basename_map.get(normalized)
+        if url:
+            return f"[{label}]({url})"
+        return label
+
+    return pattern.sub(repl, text)
+
+
+RAW_FILE_PATTERN = re.compile(r"(03-raw/.*?\.md)")
+RAW_DIR_PATTERN = re.compile(r"(?<![\w/])(03-raw/[A-Za-z0-9_\-/]+/?)")
+
+
+def append_raw_reference_boxes(text: str) -> str:
+    refs: list[str] = []
+    for pattern in (RAW_FILE_PATTERN, RAW_DIR_PATTERN):
+        for match in pattern.finditer(text):
+            ref = match.group(1).strip().strip("`'\"，。；;),")
+            if ref not in refs:
+                refs.append(ref)
+    refs = [
+        ref
+        for ref in refs
+        if not any(other != ref and other.startswith(ref) for other in refs)
+    ]
+    if not refs:
+        return text
+
+    boxes = "\n\n## 原始资料链接\n\n" + "\n".join(raw_link(ref) for ref in refs) + "\n"
+    return text.rstrip() + boxes
+
+
+def transform_markdown(
+    source_path: Path,
+    source_root: Path,
+    path_map: dict[str, str],
+    basename_map: dict[str, str],
+) -> str:
+    original = read_text(source_path)
+    title = get_title(source_path, original)
+    body = strip_frontmatter(original).lstrip()
+    body = transform_wikilinks(body, path_map, basename_map)
+    body = append_raw_reference_boxes(body)
+    source_rel = relative_posix(source_path, ROOT)
+    source_href = f"{GITHUB_BLOB}/{quote(source_rel, safe='/()[]-_.~')}"
+    body += (
+        "\n\n---\n\n"
+        '<p class="source-path">仓库源文件：'
+        f'<a href="{source_href}" target="_blank" rel="noreferrer">{source_rel}</a>'
+        "</p>\n"
+    )
+    return frontmatter(title, f"Generated from {source_rel}") + body
+
+
+def write_index(dest: Path, title: str, description: str, links: list[tuple[str, str]]) -> None:
+    lines = [frontmatter(title, description), f"# {title}", ""]
+    for label, href in links:
+        lines.append(f"- [{label}]({href})")
+    dest.parent.mkdir(parents=True, exist_ok=True)
+    dest.write_text("\n".join(lines).rstrip() + "\n", encoding="utf-8")
+
+
+def generate() -> None:
+    reset_dir(KB_DEST)
+    reset_dir(OUTPUT_DEST)
+    path_map, basename_map = build_maps()
+
+    for source_root, dest_root in ((KB_SRC, KB_DEST), (OUTPUT_SRC, OUTPUT_DEST)):
+        for source_path in source_root.rglob("*.md"):
+            out_path = output_path_for(source_path, source_root, dest_root)
+            out_path.parent.mkdir(parents=True, exist_ok=True)
+            out_path.write_text(
+                transform_markdown(source_path, source_root, path_map, basename_map),
+                encoding="utf-8",
+            )
+
+    kb_links = []
+    for key in ("entities", "concepts", "hypotheses", "sources"):
+        href = f"/ai-investing/kb/{slugify(key)}/"
+        kb_links.append((CATEGORY_LABELS[key], href))
+    if not (KB_DEST / "index.md").exists():
+        write_index(KB_DEST / "index.md", "02-kb 结构化知识库", "02-kb generated entry", kb_links)
+
+    output_links = []
+    for key in ("research", "today", "weekly"):
+        href = f"/ai-investing/outputs/{slugify(key)}/"
+        output_links.append((CATEGORY_LABELS[key], href))
+    write_index(OUTPUT_DEST / "index.md", "04-output 输出区", "04-output generated entry", output_links)
+
+    print("Generated Starlight content from 02-kb and 04-output.")
+
+
+if __name__ == "__main__":
+    generate()

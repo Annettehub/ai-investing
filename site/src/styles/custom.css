@@ -22,3 +22,27 @@
 .hero img {
   border-radius: 8px;
 }
+
+.raw-ref {
+  border: 1px solid var(--sl-color-gray-5);
+  border-radius: 8px;
+  margin: 0.75rem 0;
+  padding: 0.65rem 0.8rem;
+  background: var(--sl-color-gray-6);
+}
+
+.raw-ref summary {
+  cursor: pointer;
+  font-weight: 650;
+}
+
+.raw-ref a {
+  display: inline-block;
+  margin-top: 0.45rem;
+  word-break: break-all;
+}
+
+.source-path {
+  color: var(--sl-color-gray-3);
+  font-size: 0.86rem;
+}

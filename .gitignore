@@ -35,3 +35,5 @@ node_modules/
 # Future website build output
 site/dist/
 site/.astro/
+site/src/content/docs/kb/
+site/src/content/docs/outputs/
