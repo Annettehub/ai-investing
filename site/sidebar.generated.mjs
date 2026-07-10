@@ -327,7 +327,7 @@ export default [
             "slug": "kb/hypotheses"
           },
           {
-            "label": "H1.1 [D1-Trend] AI服务器Capex 2026-2028持续高增长，台积电先进工厂满载",
+            "label": "H1.1 [D1-Trend] 2026-2028 AI CAPEX 继续上行，但必须用台积电/CoWoS/国产先进制程产能交叉验证",
             "slug": "kb/hypotheses/h1-1-f26496a5"
           },
           {
