@@ -6,6 +6,7 @@
 import os
 import json
 import hashlib
+import sys
 import requests
 from datetime import datetime
 
@@ -17,9 +18,24 @@ RAW_DIR = "03-raw/feishu"
 HASH_FILE = "03-raw/.synced_hashes.json"
 
 def get_token():
+    missing = [
+        name
+        for name, value in (
+            ("FEISHU_APP_ID", FEISHU_APP_ID),
+            ("FEISHU_APP_SECRET", FEISHU_APP_SECRET),
+            ("FEISHU_FOLDER_TOKEN", FOLDER_TOKEN),
+        )
+        if not value
+    ]
+    if missing:
+        raise RuntimeError(f"Missing required environment variables: {', '.join(missing)}")
+
     url = "https://open.feishu.cn/open-apis/auth/v3/tenant_access_token/internal"
-    resp = requests.post(url, json={"app_id": FEISHU_APP_ID, "app_secret": FEISHU_APP_SECRET})
-    return resp.json().get("tenant_access_token")
+    resp = requests.post(url, json={"app_id": FEISHU_APP_ID, "app_secret": FEISHU_APP_SECRET}, timeout=30)
+    data = resp.json()
+    if resp.status_code != 200 or data.get("code") != 0:
+        raise RuntimeError(f"Failed to get tenant token: {data.get('msg') or resp.status_code}")
+    return data.get("tenant_access_token")
 
 def list_files(token):
     """列出文件夹内所有文件"""
@@ -37,8 +53,12 @@ def list_files(token):
         data = resp.json()
 
         if data.get("code") != 0:
-            print(f"列出文件失败: {data}")
-            break
+            msg = data.get("msg") or "unknown error"
+            code = data.get("code")
+            hint = ""
+            if code == 1061002:
+                hint = " 请检查 FEISHU_FOLDER_TOKEN 是否为云盘文件夹 token，而不是 Wiki/文档页面 token。"
+            raise RuntimeError(f"列出文件失败: code={code}, msg={msg}.{hint}")
 
         items = data.get("data", {}).get("files", [])
         print(f"API 返回 {len(items)} 个 items")
@@ -90,9 +110,6 @@ def main():
 
     print("Getting token...")
     token = get_token()
-    if not token:
-        print("Failed to get token")
-        return
 
     print("Listing files...")
     files = list_files(token)
@@ -104,7 +121,7 @@ def main():
 
     if not md_files:
         print("No .md files found")
-        return
+        return 0
 
     synced_hashes = load_hashes()
     new_count = 0
@@ -157,6 +174,11 @@ def main():
     print(f"\n{'='*50}")
     print(f"Total: {len(md_files)}, New: {new_count}")
     print(f"{'='*50}")
+    return 0
 
 if __name__ == "__main__":
-    main()
+    try:
+        raise SystemExit(main())
+    except Exception as exc:
+        print(f"Sync failed: {exc}", file=sys.stderr)
+        raise SystemExit(1)
