@@ -315,7 +315,7 @@ def append_index_tree(lines: list[str], source_dir: Path, source_root: Path, des
     for source_path in markdown_files(source_dir):
         link = f"/ai-investing/{sidebar_slug_for(source_path, source_root, dest_root)}/"
         title = get_title(source_path, read_text(source_path))
-        lines.append(f"{'  ' * (depth - 2)}- [{title}]({link})")
+        lines.append(f"- [{title}]({link})")
 
     for child in sorted((item for item in source_dir.iterdir() if item.is_dir()), key=lambda item: item.name.lower()):
         child_title = clean_dir_label(child.name)

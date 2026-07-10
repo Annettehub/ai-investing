@@ -23,6 +23,16 @@
   border-radius: 8px;
 }
 
+.hero {
+  max-width: min(70rem, calc(100vw - 2rem));
+}
+
+.hero h1 {
+  max-width: 22ch;
+  font-size: clamp(3rem, 5.2vw, 4.15rem);
+  line-height: 1.12;
+}
+
 .raw-ref {
   border: 1px solid var(--sl-color-gray-5);
   border-radius: 8px;

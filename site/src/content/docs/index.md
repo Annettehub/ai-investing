@@ -3,7 +3,7 @@ title: AI Investing Knowledge Base
 description: Annette 的 AI 投研知识库入口
 template: splash
 hero:
-  title: Annette Knowledge Hub- AI Investing
+  title: Annette Knowledge Hub- AI Investing
   tagline: 面向 AI 基础设施、半导体、算力周期和价值投资的长期知识库。
   actions:
     - text: 进入知识地图
