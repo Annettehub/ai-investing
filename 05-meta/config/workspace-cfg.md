@@ -21,7 +21,7 @@ ai-investing/
 ├── 00-system/          # 系统协议：SYSTEM.md, connectors.md, false-beliefs.md
 ├── 01-commands/        # 快捷命令：idea, ingest, research, trade, today, weekly, collect, update
 ├── 02-kb/              # 知识库：entities, concepts, sources, hypotheses, walls, rules, index, log
-├── 03-raw/             # 原料层：feishu, gmail, github, web, podwise, weread, zsxq, manual
+├── 03-raw/             # 原料层：feishu, gmail, podwise, wechat, weread, zsxq
 ├── 04-output/          # 输出层：today, weekly, research
 ├── 05-meta/            # 元系统：config, skills, commands, maintenance, evolution
 └── scripts/            # 可复用脚本

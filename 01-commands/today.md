@@ -29,7 +29,7 @@
 
 **Step 2: 外部信号扫描**
 - 对关键标的/关键词执行 WebSearch
-- 检查 03-raw/ 中是否有新文件（feishu/gmail/web/podwise/zsxq）
+- 检查 03-raw/ 中是否有新文件（feishu/gmail/wechat/podwise/weread/zsxq）
 - 读取新闻摘要，判断是否与假设/城墙相关
 
 **Step 3: 信号分类**

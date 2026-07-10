@@ -14,6 +14,7 @@ description: GitHub Actions 和本地工具如何把资料放入 03-raw
 | Feishu | `03-raw/feishu` | 每 6 小时自动同步，也可手动触发 | `FEISHU_APP_ID`、`FEISHU_APP_SECRET`、`FEISHU_FOLDER_TOKEN` |
 | WeRead | `03-raw/weread` | 每天自动同步，也可手动触发 | `WEREAD_API_KEY` |
 | Podwise | `03-raw/podwise` | 先保留本地同步，因为依赖本机 CLI 登录状态 | 暂无 |
+| Gmail | `03-raw/gmail` | 暂时保留，未来接通 | 待定 |
 
 ## GitHub Pages
 

@@ -9,8 +9,11 @@
 | Feishu | `03-raw/feishu` | GitHub Actions 定时同步 |
 | WeRead | `03-raw/weread` | GitHub Actions 定时同步 |
 | Podwise | `03-raw/podwise` | 本地 `tools/podwise.exe` + `scripts/sync_podwise.py` |
-| WeChat | `03-raw/wechat` | 手动放入 |
+| WeChat / IMA / 网页摘录 | `03-raw/wechat` | 手动放入或 IMA 同步 |
 | ZSXQ | `03-raw/zsxq` | 手动或脚本导入 |
+| Gmail | `03-raw/gmail` | 暂时保留，未来接通 |
+
+不再保留 `03-raw/github`、`03-raw/inbox`、`03-raw/manual`、`03-raw/web` 四个入口目录。GitHub 和 WebSearch 仍可作为研究工具使用，但不会直接写入原始资料库；手动资料、网页摘录和 IMA 同步内容先统一进入 `03-raw/wechat`。
 
 ## 2. 知识沉淀到 `02-kb` 和 `04-output`
 
