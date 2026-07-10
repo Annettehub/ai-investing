@@ -101,7 +101,7 @@ export default [
             "slug": "kb/concepts"
           },
           {
-            "label": "L1 能源层",
+            "label": "L1 能源层（触发器）",
             "collapsed": true,
             "items": [
               {
@@ -109,51 +109,13 @@ export default [
                 "slug": "kb/concepts/l1-energy-4e813ddd"
               },
               {
-                "label": "供需周期与供应链",
-                "collapsed": true,
-                "items": [
-                  {
-                    "label": "总览",
-                    "slug": "kb/concepts/l1-energy-4e813ddd/p-ef36a975"
-                  },
-                  {
-                    "label": "AIDC电力基建周期（建设节奏、电力缺口、能源消耗）",
-                    "slug": "kb/concepts/l1-energy-4e813ddd/p-ef36a975/aidc-49b4dca5"
-                  }
-                ]
-              },
-              {
-                "label": "地缘政治",
-                "collapsed": true,
-                "items": [
-                  {
-                    "label": "总览",
-                    "slug": "kb/concepts/l1-energy-4e813ddd/p-a33d4e39"
-                  },
-                  {
-                    "label": "海外算力中心布局（美国、中东、东南亚、中国）",
-                    "slug": "kb/concepts/l1-energy-4e813ddd/p-a33d4e39/p-dc9605dc"
-                  }
-                ]
-              },
-              {
-                "label": "技术路线",
-                "collapsed": true,
-                "items": [
-                  {
-                    "label": "总览",
-                    "slug": "kb/concepts/l1-energy-4e813ddd/p-0ef0d64d"
-                  },
-                  {
-                    "label": "散热与电源技术（液冷vs风冷、HVDC直流电源、浸没式冷却）",
-                    "slug": "kb/concepts/l1-energy-4e813ddd/p-0ef0d64d/vs-hvdc-0a73ddcd"
-                  }
-                ]
+                "label": "L1 能源层触发器",
+                "slug": "kb/concepts/l1-energy-4e813ddd/p-b3c64d1f"
               }
             ]
           },
           {
-            "label": "L2 芯片层",
+            "label": "L2 芯片层（长期观察）",
             "collapsed": true,
             "items": [
               {
@@ -229,7 +191,7 @@ export default [
             ]
           },
           {
-            "label": "L3 基础设施层",
+            "label": "L3 基础设施层（触发器）",
             "collapsed": true,
             "items": [
               {
@@ -237,81 +199,13 @@ export default [
                 "slug": "kb/concepts/l3-infrastructure-e54cb097"
               },
               {
-                "label": "供需周期与供应链",
-                "collapsed": true,
-                "items": [
-                  {
-                    "label": "总览",
-                    "slug": "kb/concepts/l3-infrastructure-e54cb097/p-ef36a975"
-                  },
-                  {
-                    "label": "AI 服务器供应链",
-                    "slug": "kb/concepts/l3-infrastructure-e54cb097/p-ef36a975/ai-4ed75228"
-                  },
-                  {
-                    "label": "MLCC 周期",
-                    "slug": "kb/concepts/l3-infrastructure-e54cb097/p-ef36a975/mlcc-aa227dae"
-                  },
-                  {
-                    "label": "光模块产业链",
-                    "slug": "kb/concepts/l3-infrastructure-e54cb097/p-ef36a975/p-8ceadead"
-                  }
-                ]
-              },
-              {
-                "label": "地缘政治",
-                "collapsed": true,
-                "items": [
-                  {
-                    "label": "总览",
-                    "slug": "kb/concepts/l3-infrastructure-e54cb097/p-a33d4e39"
-                  },
-                  {
-                    "label": "光模块与服务器代工地域转移与关税风险",
-                    "slug": "kb/concepts/l3-infrastructure-e54cb097/p-a33d4e39/p-c24cac56"
-                  }
-                ]
-              },
-              {
-                "label": "技术路线",
-                "collapsed": true,
-                "items": [
-                  {
-                    "label": "总览",
-                    "slug": "kb/concepts/l3-infrastructure-e54cb097/p-0ef0d64d"
-                  },
-                  {
-                    "label": "CPO / 光互联 / 硅光技术",
-                    "slug": "kb/concepts/l3-infrastructure-e54cb097/p-0ef0d64d/cpo-bc7abbaf"
-                  }
-                ]
-              },
-              {
-                "label": "系统软件",
-                "collapsed": true,
-                "items": [
-                  {
-                    "label": "总览",
-                    "slug": "kb/concepts/l3-infrastructure-e54cb097/p-73900298"
-                  },
-                  {
-                    "label": "注意力机制底层实现（FlashAttention、PagedAttention、序列并行）",
-                    "slug": "kb/concepts/l3-infrastructure-e54cb097/p-73900298/flashattention-pagedattention-edbe3b3b"
-                  },
-                  {
-                    "label": "算子库与编译生态（CUDA、Triton、XLA）",
-                    "slug": "kb/concepts/l3-infrastructure-e54cb097/p-73900298/cuda-triton-xla-0482ae59"
-                  },
-                  {
-                    "label": "通信集合（NCCL、RDMA、网络拓扑优化）",
-                    "slug": "kb/concepts/l3-infrastructure-e54cb097/p-73900298/nccl-rdma-10a1953a"
-                  }
-                ]
+                "label": "L3 基础设施层触发器",
+                "slug": "kb/concepts/l3-infrastructure-e54cb097/p-d00a0370"
               }
             ]
           },
           {
-            "label": "L4 模型层",
+            "label": "L4 模型层（长期观察）",
             "collapsed": true,
             "items": [
               {
@@ -363,7 +257,7 @@ export default [
             ]
           },
           {
-            "label": "L5 应用层",
+            "label": "L5 应用层（长期观察）",
             "collapsed": true,
             "items": [
               {
@@ -401,7 +295,7 @@ export default [
             ]
           },
           {
-            "label": "跨层方法论",
+            "label": "跨层动态",
             "collapsed": true,
             "items": [
               {
@@ -417,16 +311,8 @@ export default [
                 "slug": "kb/concepts/cross-layer-3d89b007/p-1ec423f0"
               },
               {
-                "label": "推理成本曲线（L2芯片成本×L3网络延迟×L4模型效率×L5应用定价）",
-                "slug": "kb/concepts/cross-layer-3d89b007/l2-l3-l4-l5-61334de4"
-              },
-              {
-                "label": "硬件、系统软件、模型架构协同设计的乘数效应",
-                "slug": "kb/concepts/cross-layer-3d89b007/p-60f9d8cb"
-              },
-              {
-                "label": "算力-能源-资本开支三角（L1能源约束×L2芯片产能×L3基建投资）",
-                "slug": "kb/concepts/cross-layer-3d89b007/l1-l2-l3-53010056"
+                "label": "跨层动态跟踪",
+                "slug": "kb/concepts/cross-layer-3d89b007/p-ac8daf92"
               }
             ]
           }

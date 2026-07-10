@@ -27,7 +27,7 @@
 
 ## 与现有知识库的关联
 - 关联entities: []
-- 关联concepts: [[AI服务器供应链]], [[GPU-vs-ASIC竞争格局]], [[技术-金融-投资交叉框架]]
+- 关联concepts: [[concepts/L3-基础设施层（Infrastructure）/基础设施层触发器|基础设施层触发器]], [[GPU-vs-ASIC竞争格局]], [[技术-金融-投资交叉框架]]
 - 关联hypotheses: [支持 H1.1, 支持 H2.1, 支持 H3.1, 挑战 H4.1（Google地位）]
 
 ## 待核实项

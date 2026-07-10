@@ -34,14 +34,8 @@
 
 ### L1-能源层
 
-**技术路线**
-- [[concepts/L1-能源层（Energy）/技术路线/散热与电源技术（液冷vs风冷、HVDC直流电源、浸没式冷却）]] | 散热与电源技术
-
-**供需周期与供应链**
-- [[concepts/L1-能源层（Energy）/供需周期与供应链/AIDC电力基建周期（建设节奏、电力缺口、能源消耗）]] | AIDC电力基建周期
-
-**地缘政治**
-- [[concepts/L1-能源层（Energy）/地缘政治/海外算力中心布局（美国、中东、东南亚、中国）]] | 海外算力中心布局
+**触发器机制**
+- [[concepts/L1-能源层（Energy）/能源层触发器]] | 能源层触发器
 ### L2-芯片层
 
 **技术路线**
@@ -60,21 +54,8 @@
 - [[concepts/L2-芯片层（Chips）/地缘政治/华为芯片生态-韬定律]] | 华为芯片生态-韬定律
 ### L3-基础设施层
 
-**技术路线**
-- [[concepts/L3-基础设施层（Infrastructure）/技术路线/CPO光互联硅光技术]] | CPO光互联硅光技术
-
-**供需周期与供应链**
-- [[concepts/L3-基础设施层（Infrastructure）/供需周期与供应链/硬件：光模块产业链]] | 硬件：光模块产业链
-- [[concepts/L3-基础设施层（Infrastructure）/供需周期与供应链/硬件：AI服务器供应链]] | 硬件：AI服务器供应链
-- [[concepts/L3-基础设施层（Infrastructure）/供需周期与供应链/硬件：MLCC周期]] | 硬件：MLCC周期
-
-**系统软件**
-- [[concepts/L3-基础设施层（Infrastructure）/系统软件/算子库与编译生态（CUDA、Triton、XLA）]] | 算子库与编译生态
-- [[concepts/L3-基础设施层（Infrastructure）/系统软件/通信集合（NCCL、RDMA、网络拓扑优化）]] | 通信集合
-- [[concepts/L3-基础设施层（Infrastructure）/系统软件/注意力机制底层实现（FlashAttention、PagedAttention、序列并行）]] | 注意力机制底层实现
-
-**地缘政治**
-- [[concepts/L3-基础设施层（Infrastructure）/地缘政治/光模块与服务器代工地域转移与关税风险]] | 光模块与服务器代工地域转移与关税风险
+**触发器机制**
+- [[concepts/L3-基础设施层（Infrastructure）/基础设施层触发器]] | 基础设施层触发器
 ### L4-模型层
 
 **技术路线**
@@ -97,9 +78,7 @@
 
 - [[concepts/跨层-方法论（Cross-Layer）/Serenity投研方法论框架]] | Serenity投研方法论框架
 - [[concepts/跨层-方法论（Cross-Layer）/技术-金融-投资交叉框架]] | 技术-金融-投资交叉框架
-- [[concepts/跨层-方法论（Cross-Layer）/推理成本曲线（L2芯片成本×L3网络延迟×L4模型效率×L5应用定价）]] | 推理成本曲线
-- [[concepts/跨层-方法论（Cross-Layer）/算力-能源-资本开支三角（L1能源约束×L2芯片产能×L3基建投资）]] | 算力-能源-资本开支三角
-- [[concepts/跨层-方法论（Cross-Layer）/硬件、系统软件、模型架构协同设计的乘数效应]] | 硬件、系统软件、模型架构协同设计的乘数效应
+- [[concepts/跨层-方法论（Cross-Layer）/跨层动态跟踪]] | 跨层动态跟踪
 
 > **注**: GPU-vs-ASIC 竞争格局同时属于 L2 技术路线 和跨层动态跟踪，主文档位于 L2。
 

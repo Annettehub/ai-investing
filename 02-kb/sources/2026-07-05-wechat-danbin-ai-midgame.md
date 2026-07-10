@@ -23,7 +23,7 @@
 
 ## 与现有知识库的关联
 - 关联entities: []
-- 关联concepts: [[AI应用的发展和商业模式]], [[AI服务器供应链]], [[GPU-vs-ASIC竞争格局]]
+- 关联concepts: [[AI应用的发展和商业模式]], [[concepts/L3-基础设施层（Infrastructure）/基础设施层触发器|基础设施层触发器]], [[GPU-vs-ASIC竞争格局]]
 - 关联hypotheses: [支持 H1.1, 支持 H7.1]
 
 ## 质量评估

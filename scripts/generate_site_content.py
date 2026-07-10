@@ -45,12 +45,12 @@ SLUG_OVERRIDES = {
 }
 
 DIR_LABEL_OVERRIDES = {
-    "L1-能源层（Energy）": "L1 能源层",
-    "L2-芯片层（Chips）": "L2 芯片层",
-    "L3-基础设施层（Infrastructure）": "L3 基础设施层",
-    "L4-模型层（Models）": "L4 模型层",
-    "L5-应用层（Applications）": "L5 应用层",
-    "跨层-方法论（Cross-Layer）": "跨层方法论",
+    "L1-能源层（Energy）": "L1 能源层（触发器）",
+    "L2-芯片层（Chips）": "L2 芯片层（长期观察）",
+    "L3-基础设施层（Infrastructure）": "L3 基础设施层（触发器）",
+    "L4-模型层（Models）": "L4 模型层（长期观察）",
+    "L5-应用层（Applications）": "L5 应用层（长期观察）",
+    "跨层-方法论（Cross-Layer）": "跨层动态",
 }
 
 
