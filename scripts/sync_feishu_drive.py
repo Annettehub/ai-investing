@@ -103,7 +103,7 @@ def load_hashes():
 def save_hashes(hashes):
     os.makedirs(os.path.dirname(HASH_FILE), exist_ok=True)
     with open(HASH_FILE, 'w', encoding='utf-8') as f:
-        json.dump(list(hashes), f, ensure_ascii=False)
+        json.dump(sorted(hashes), f, ensure_ascii=False)
 
 def main():
     os.makedirs(RAW_DIR, exist_ok=True)
