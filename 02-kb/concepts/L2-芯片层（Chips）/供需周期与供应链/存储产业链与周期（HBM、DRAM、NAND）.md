@@ -1,5 +1,25 @@
 # 存储产业链与周期（HBM、DRAM、NAND）
 
+## 当前小循环入口
+
+当前本概念页只主动服务一个假设：
+
+- `02-kb/hypotheses/H1.2.md`：存储周期特性是否向成长特性转变
+
+H1.2 的当前分层判断：
+
+1. HBM：AI GPU/ASIC 的直接瓶颈，具备成长属性。
+2. DDR5：受 HBM 挤占先进 DRAM 产能影响，形成次级结构性紧缺。
+3. NAND：目前仍偏传统周期和弱复苏，AI 服务器传导尚不如 HBM/DDR5 明确。
+
+相关来源卡片：
+
+- `02-kb/sources/2026-07-11-wuzihao-storage-cycle.md`
+- `02-kb/sources/2026-07-11-wuzihao-hynix-hbm-ddr5.md`
+- `02-kb/sources/2026-07-11-wuzihao-hbm-q3-review.md`
+
+---
+
 > 本文档由以下原文档合并：HBM产业链.md、存储周期.md
 
 # HBM 产业链

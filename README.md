@@ -1,41 +1,49 @@
-# AI Investing Knowledge Base
+# Annette Knowledge Hub - AI Investing
 
-这是 Annette 的 AI 投研知识库仓库。它同时承担三件事：
+这是 Annette 的 AI 投研知识库。当前目标不是继续扩大系统，而是先跑通一个最小、可循环、可生长的知识闭环。
 
-1. 保存长期知识库内容和原始资料。
-2. 通过 Git 同步到 GitHub。
-3. 通过 Astro Starlight 发布为一个可阅读的网站。
+## 当前工作模式
 
-## 当前目录分工
+当前只聚焦一个小循环：
 
-| 路径 | 作用 | 是否建议公开到网站 |
+```text
+03-raw/ 原始资料
+  -> 02-kb/sources/ 来源卡片
+  -> 02-kb/concepts/ 长期概念
+  -> 02-kb/hypotheses/H1.2.md 当前假设
+  -> 04-output/weekly/ 周度复盘
+```
+
+当前焦点见 [CURRENT-FOCUS.md](CURRENT-FOCUS.md)。
+
+## 当前范围
+
+| 路径 | 状态 | 说明 |
 | --- | --- | --- |
-| `02-kb/` | 沉淀后的知识库：概念、公司、假设、来源整理 | 是 |
-| `03-raw/` | 原始资料：播客、飞书、微信读书、知识星球等 | 视情况，默认不全部公开 |
-| `04-output/` | 日报、周报、研究输出 | 是 |
-| `value-investing/` | 价值投资框架和资料 | 是 |
-| `00-system/` | Agent/工作系统规则 | 否 |
-| `01-commands/` | 本地工作流命令 | 否 |
-| `05-meta/` | 维护、配置、演进记录 | 否 |
-| `config/` | 本地配置和 watchlist | 否 |
-| `scripts/` | 本地自动化脚本 | 否 |
-## 当前状态
+| `03-raw/` | 保留 | 信息入口不变，继续接收 feishu、podwise、wechat、weread、zsxq、ima 等原始资料 |
+| `02-kb/` | 保留 | 知识库主体，当前只主动更新 H1.2 相关内容 |
+| `04-output/weekly/` | 保留 | 当前小循环的输出位置 |
+| `site/` | 保留 | 网站阅读层，不作为当前闭环的核心维护对象 |
+| `scripts/` / `config/` | 保留 | 自动同步工具和配置继续保留 |
+| `99-backup/` | 暂停 | 旧系统、旧命令、旧维护层、非当前输出先移到这里，等 H1.2 小循环跑通后再逐步恢复 |
 
-- Git remote: `git@github.com:Annettehub/ai-investing.git`
-- 主分支: `main`
-- 当前网站实现: `site/`，使用 Astro Starlight + Rose Pine 主题。
-- GitHub Pages: 使用 `.github/workflows/deploy-site.yml` 发布。仓库设置里需要选择 GitHub Actions 作为 Pages 来源。
+## 当前三条命令
 
-## 维护原则
+MVP 阶段只使用三个动作：
 
-1. 根目录知识库是主本，未来网站目录只作为发布副本。
-2. 本地密钥、token、`.env`、缓存、账号数据库不进入 Git。
-3. 公开网站只发布整理后的知识内容，不发布 Agent 协议、环境配置和内部命令。
-4. 每次新增资料后，先入 `03-raw/`，再沉淀到 `02-kb/` 或 `04-output/`。
-5. 推送前先看 `git status`，确认没有把本地配置或隐私文件带上去。
+1. `collect`：从 `03-raw/` 找到和当前假设有关的新材料。
+2. `distill`：把有价值的材料沉淀成 `02-kb/sources/` 来源卡片，并更新概念或假设。
+3. `weekly`：每周复盘一次 H1.2 的证据、反证、certainty 和下周问题。
 
-## 常用文档
+命令说明见 `01-commands/`。
 
-- [本地工具与 GitHub 推送流程](docs/LOCAL-WORKFLOW.md)
-- [网站美化与部署方案](docs/WEBSITE-OPTIONS.md)
-- [内容管线](docs/CONTENT-PIPELINE.md)
+## 入库原则
+
+不是所有资料都进入知识库。只有满足任一条件，才从 `03-raw/` 晋升到 `02-kb/`：
+
+- 改变 H1.2 的判断方向或 certainty。
+- 补强或反驳 H1.2 的关键证据链。
+- 更新 `存储产业链与周期` 概念框架。
+- 需要进入周度复盘。
+
+否则资料留在 `03-raw/`，不急着处理。
