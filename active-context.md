@@ -8,6 +8,8 @@
 
 `H1.2 [D1-Trend] 存储周期特性是否向成长特性转变`
 
+2026-07-12，H1.2 第一轮小循环已跑通，进入 `active-tracking` 阶段。
+
 ## 本次调整
 
 2026-07-11 已完成：
@@ -36,15 +38,18 @@
   -> 02-kb/sources/
   -> 02-kb/concepts/L2-芯片层（Chips）/供需周期与供应链/存储产业链与周期（HBM、DRAM、NAND）.md
   -> 02-kb/hypotheses/H1.2.md
+  -> 04-output/reports/H1.2-storage-restructured-2026-07-12.md
+  -> 04-output/tracking/H1.2-storage-tracking.md
   -> 04-output/weekly/
 ```
 
 ## 下一步
 
-1. 继续从吴梓豪 raw 中补 HBM LTA / Contract / 认证证据。
-2. 做 HBM4 / HBM4E 单 GPU 价值量测算。
-3. 搜 NAND / 企业 SSD 是否有 AI 服务器拉动证据。
-4. 如果 H1.2 小循环连续跑通 2-3 次，再从 `99-backup/` 恢复其他模块。
+1. 按 `04-output/tracking/H1.2-storage-tracking.md` 跟踪 HBM4/HBM4E 价格、认证和良率。
+2. 跟踪 CoWoS booking 与 HBM 产能差，确认瓶颈是否仍在存储。
+3. 跟踪服务器 DDR5 合约价和 LTA 覆盖率。
+4. 跟踪企业 SSD / AI SSD 订单，验证 NAND 是否真正被 AI 拉出新曲线。
+5. 如果 H1.2 小循环连续跑通 2-3 次，再从 `99-backup/` 恢复其他模块。
 
 ## 注意
 
