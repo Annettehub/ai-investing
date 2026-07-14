@@ -37,6 +37,24 @@ H1.2 的当前结论：
 - `02-kb/sources/2026-07-12-ms-nand-diverging-trends.md`
 - `02-kb/sources/2026-07-12-samsung-memory-foundry-note.md`
 - `02-kb/sources/2026-07-12-dram-nand-cross-check.md`
+
+### 2026-07-14 IMA 增量更新
+
+#### 新增判断
+
+1. **NAND 的成长增量已经可以量化，但周期边界仍在。** Morgan Stanley 预计 AI NAND 需求由 2025 年 205EB 增至 2027 年 609EB，占总需求 41%；2027 年供给 1,347EB、需求 1,484EB，缺口约 9%。但 2028 年结果对 AI SSD 增速及长江存储等新产能高度敏感。
+2. **LTA 提高可见度，不等于取消周期。** Kioxia 预计 2027 年 LTA 覆盖超过 50%，三星专家称服务器 DRAM 约 70% 被锁定；前者来自署名研报，后者仍需交叉验证。
+3. **价格分化比整体涨价更重要。** eSSD、服务器 DRAM 仍紧，消费 NAND 在涨价后出现砍单、库存积压和价格倒挂。价格上涨可能来自需求成长、停产控产或渠道博弈，三者不能混为一谈。
+
+#### 框架修正
+
+继续坚持“双轨存储”框架：HBM/服务器 DRAM/AI eSSD 观察成长性，消费 NAND/低端 DRAM 观察周期性；2028 年新增产能是否重新制造过剩，是下一阶段的核心反证。
+
+#### 新增来源
+
+- `02-kb/sources/2026-07-12-ms-nand-diverging-trends.md`
+- `02-kb/sources/2026-07-14-samsung-hbm-memory-interview.md`
+- `02-kb/sources/2026-07-14-storage-q2-pricing-update.md`
 - `02-kb/sources/2026-07-11-wuzihao-storage-cycle.md`
 - `02-kb/sources/2026-07-11-wuzihao-hynix-hbm-ddr5.md`
 - `02-kb/sources/2026-07-11-wuzihao-hbm-q3-review.md`
