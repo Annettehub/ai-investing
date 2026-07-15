@@ -1,0 +1,20 @@
+---
+import StarlightPage from '@astrojs/starlight/components/StarlightPage.astro';
+import ResearchDashboardScaffold from '../../components/ResearchDashboardScaffold.astro';
+import dashboard from '../../data/r1-dashboard.json';
+
+const base = `${import.meta.env.BASE_URL.replace(/\/?$/, '')}/`;
+const hypothesisHref = `${base}kb/hypotheses/r-866fb3b7/r1-upstream-ai-infrastructure-earnings-cbff56ef/`;
+const dataSourceHref = 'https://github.com/Annettehub/ai-investing/blob/main/04-output/data/R1-upstream-dashboard.json';
+const pageHeadings = [
+  { depth: 2, slug: 'path-title', text: '验证路径' },
+  { depth: 2, slug: 'lane-title', text: '首批跟踪池' },
+  { depth: 2, slug: 'metric-title', text: '待接指标' },
+  { depth: 2, slug: 'evidence-title', text: '证据流' },
+  { depth: 2, slug: 'intake-title', text: '数据入口' },
+];
+---
+
+<StarlightPage headings={pageHeadings} frontmatter={{ title: 'R1 上游兑现 | 投研驾驶舱', description: 'AI 基础设施需求进入产业链业绩的验证驾驶舱', pagefind: false }}>
+  <ResearchDashboardScaffold dashboard={dashboard} hypothesisHref={hypothesisHref} dataSourceHref={dataSourceHref} />
+</StarlightPage>

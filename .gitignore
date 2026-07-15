@@ -37,4 +37,4 @@ site/dist/
 site/.astro/
 site/src/content/docs/kb/
 site/src/content/docs/outputs/
-site/src/data/h12-dashboard.json
+site/src/data/*-dashboard.json

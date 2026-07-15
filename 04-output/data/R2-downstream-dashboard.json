@@ -1,0 +1,121 @@
+{
+  "meta": {
+    "hypothesis": "R2",
+    "title": "下游回报",
+    "subtitle": "最终采用者 ROI 与应用层持续付费的双账验证",
+    "asOf": "2026-07-15",
+    "generatedAt": null,
+    "certainty": 40,
+    "status": "待接数据",
+    "decision": "部分 AI 工作流已显示效率收益，但最终采用者的可持续回报尚未形成大样本验证。",
+    "reviewPolicy": "使用量和厂商收入不能直接提高置信度，必须同时验证采用者净收益。"
+  },
+  "stages": [
+    {
+      "code": "01",
+      "label": "工作流采用",
+      "question": "AI 是否进入真实生产流程？",
+      "metrics": ["生产部署率", "活跃用户", "使用频率", "试点转生产率"]
+    },
+    {
+      "code": "02",
+      "label": "采用者 ROI",
+      "question": "扣除全部成本后是否仍有净收益？",
+      "metrics": ["增量收入", "成本节约", "周期缩短", "回收期"]
+    },
+    {
+      "code": "03",
+      "label": "持续付费",
+      "question": "客户是否续费、扩容并保留预算？",
+      "metrics": ["续费率", "扩容率", "NRR", "RPO"]
+    },
+    {
+      "code": "04",
+      "label": "供应商业绩",
+      "question": "持续付费是否进入利润和现金流？",
+      "metrics": ["AI ARR", "毛利率", "推理单位经济", "自由现金流"]
+    }
+  ],
+  "lanes": [
+    {
+      "label": "最终采用者",
+      "sample": "企业 / 机构 / 个人付费用户",
+      "metrics": "增量收入、节省工时、单位成本、回收期"
+    },
+    {
+      "label": "企业应用",
+      "sample": "ServiceNow / Salesforce / SAP / Oracle",
+      "metrics": "AI ARR、RPO、NRR、续费与扩容"
+    },
+    {
+      "label": "模型与云",
+      "sample": "模型公司 / Hyperscaler / 第三方云",
+      "metrics": "推理收入、单位 Token 毛利、客户集中度"
+    },
+    {
+      "label": "集成与咨询",
+      "sample": "Accenture / 数据平台 / 实施服务商",
+      "metrics": "试点转生产、签约转收入、客户复购"
+    }
+  ],
+  "metrics": [
+    {
+      "group": "采用者",
+      "indicator": "可量化增收、降本与回收期",
+      "current": null,
+      "trigger": "主动样本中过半无法证明净收益或 24 个月内回收",
+      "frequency": "月度 / 季度",
+      "source": "客户案例 / 访谈 / 财务数据"
+    },
+    {
+      "group": "部署",
+      "indicator": "AI 试点转规模化生产率",
+      "current": null,
+      "trigger": "连续四季低于 30%",
+      "frequency": "季度",
+      "source": "企业调研 / 软件厂商披露"
+    },
+    {
+      "group": "应用软件",
+      "indicator": "AI 产品 NRR 与 RPO",
+      "current": null,
+      "trigger": "NRR 低于 100% 或 RPO 连续下滑",
+      "frequency": "季度",
+      "source": "公司财报 / IR"
+    },
+    {
+      "group": "企业预算",
+      "indicator": "基础设施与应用预算的释放节奏",
+      "current": null,
+      "trigger": "五个样本中至少三个确认应用预算延后",
+      "frequency": "季度",
+      "source": "ServiceNow / Salesforce / SAP / Oracle / Accenture"
+    },
+    {
+      "group": "单位经济",
+      "indicator": "推理成本、AI 毛利率与经营现金流",
+      "current": null,
+      "trigger": "AI 收入增长但毛利和现金流连续恶化",
+      "frequency": "季度",
+      "source": "模型 / 云 / 应用公司财报"
+    }
+  ],
+  "evidence": [],
+  "intake": [
+    {
+      "label": "客户案例",
+      "formats": "Markdown / PDF / 访谈",
+      "use": "记录投入、收益、回收期和是否扩容"
+    },
+    {
+      "label": "经营指标",
+      "formats": "Excel / CSV",
+      "use": "跟踪采用率、续费、NRR、RPO 与单位经济"
+    },
+    {
+      "label": "公司分析",
+      "formats": "财报 / 法说会 / 研报",
+      "use": "验证应用预算是否进入收入、利润和现金流"
+    }
+  ]
+}

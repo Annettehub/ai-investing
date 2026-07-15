@@ -22,8 +22,11 @@ OUTPUT_SRC = ROOT / "04-output"
 KB_DEST = DOCS_ROOT / "kb"
 OUTPUT_DEST = DOCS_ROOT / "outputs"
 SIDEBAR_DEST = ROOT / "site" / "sidebar.generated.mjs"
-DASHBOARD_SRC = OUTPUT_SRC / "data" / "H1.2-storage-dashboard.json"
-DASHBOARD_DEST = ROOT / "site" / "src" / "data" / "h12-dashboard.json"
+DASHBOARD_FILES = {
+    OUTPUT_SRC / "data" / "H1.2-storage-dashboard.json": ROOT / "site" / "src" / "data" / "h12-dashboard.json",
+    OUTPUT_SRC / "data" / "R1-upstream-dashboard.json": ROOT / "site" / "src" / "data" / "r1-dashboard.json",
+    OUTPUT_SRC / "data" / "R2-downstream-dashboard.json": ROOT / "site" / "src" / "data" / "r2-dashboard.json",
+}
 GITHUB_BLOB = "https://github.com/Annettehub/ai-investing/blob/main"
 
 CATEGORY_LABELS = {
@@ -511,8 +514,9 @@ def generate() -> None:
     write_directory_overviews(OUTPUT_SRC, OUTPUT_DEST)
     write_generated_sidebar()
 
-    DASHBOARD_DEST.parent.mkdir(parents=True, exist_ok=True)
-    shutil.copyfile(DASHBOARD_SRC, DASHBOARD_DEST)
+    for source, destination in DASHBOARD_FILES.items():
+        destination.parent.mkdir(parents=True, exist_ok=True)
+        shutil.copyfile(source, destination)
 
     print("Generated Starlight content from 02-kb and 04-output.")
 

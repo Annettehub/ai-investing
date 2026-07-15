@@ -1,0 +1,20 @@
+---
+import StarlightPage from '@astrojs/starlight/components/StarlightPage.astro';
+import ResearchDashboardScaffold from '../../components/ResearchDashboardScaffold.astro';
+import dashboard from '../../data/r2-dashboard.json';
+
+const base = `${import.meta.env.BASE_URL.replace(/\/?$/, '')}/`;
+const hypothesisHref = `${base}kb/hypotheses/r-866fb3b7/r2-end-user-sustainable-roi-6d68bd49/`;
+const dataSourceHref = 'https://github.com/Annettehub/ai-investing/blob/main/04-output/data/R2-downstream-dashboard.json';
+const pageHeadings = [
+  { depth: 2, slug: 'path-title', text: '验证路径' },
+  { depth: 2, slug: 'lane-title', text: '首批跟踪池' },
+  { depth: 2, slug: 'metric-title', text: '待接指标' },
+  { depth: 2, slug: 'evidence-title', text: '证据流' },
+  { depth: 2, slug: 'intake-title', text: '数据入口' },
+];
+---
+
+<StarlightPage headings={pageHeadings} frontmatter={{ title: 'R2 下游回报 | 投研驾驶舱', description: '最终采用者 ROI 与应用层持续付费的验证驾驶舱', pagefind: false }}>
+  <ResearchDashboardScaffold dashboard={dashboard} hypothesisHref={hypothesisHref} dataSourceHref={dataSourceHref} />
+</StarlightPage>

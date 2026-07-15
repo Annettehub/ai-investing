@@ -1,0 +1,51 @@
+---
+interface Props {
+  current: 'G2' | 'R1' | 'R2';
+}
+
+const { current } = Astro.props;
+const base = `${import.meta.env.BASE_URL.replace(/\/?$/, '')}/`;
+const topics = [
+  { code: 'G2', label: '存储', href: `${base}dashboard/h1-2-storage/` },
+  { code: 'R1', label: '上游兑现', href: `${base}dashboard/r1-upstream/` },
+  { code: 'R2', label: '下游回报', href: `${base}dashboard/r2-downstream/` },
+];
+---
+
+<nav class="topic-switcher" aria-label="投研题材切换">
+  <div class="topic-switcher-label">
+    <span class="topic-menu-icon" aria-hidden="true">☰</span>
+    <span>题材切换</span>
+  </div>
+  <div class="topic-tabs">
+    {topics.map((topic) => (
+      <a
+        class:list={['topic-tab', { 'is-active': topic.code === current }]}
+        href={topic.href}
+        aria-current={topic.code === current ? 'page' : undefined}
+      >
+        <b>{topic.code}</b>
+        <span>{topic.label}</span>
+      </a>
+    ))}
+  </div>
+</nav>
+
+<style>
+  .topic-switcher { display: flex; align-items: center; gap: .75rem; min-width: 0; padding: .55rem .7rem; border: 1px solid var(--sl-color-gray-5); border-radius: 6px; background: var(--sl-color-gray-7); }
+  .topic-switcher-label { display: inline-flex; flex: 0 0 auto; align-items: center; gap: .4rem; color: var(--sl-color-gray-2); font-size: .76rem; font-weight: 700; white-space: nowrap; }
+  .topic-menu-icon { color: var(--sl-color-accent-high); font-size: 1rem; line-height: 1; }
+  .topic-tabs { display: flex; gap: .4rem; min-width: 0; overflow-x: auto; padding-bottom: .1rem; scrollbar-width: thin; }
+  .topic-tab { display: inline-flex; flex: 0 0 auto; align-items: baseline; gap: .35rem; min-height: 2.1rem; padding: .42rem .68rem; border: 1px solid transparent; border-radius: 4px; color: var(--sl-color-gray-2); text-decoration: none; white-space: nowrap; }
+  .topic-tab b { font-size: .84rem; }
+  .topic-tab span { color: var(--sl-color-gray-3); font-size: .76rem; }
+  .topic-tab:hover { border-color: var(--sl-color-gray-4); }
+  .topic-tab.is-active { border-color: var(--sl-color-accent); background: color-mix(in srgb, var(--sl-color-accent) 12%, transparent); color: var(--sl-color-accent-high); }
+  .topic-tab.is-active span { color: var(--sl-color-accent-high); }
+  [data-theme='light'] .topic-tab span { color: #625a6b; }
+  @media (max-width: 34rem) {
+    .topic-switcher { gap: .45rem; padding-inline: .5rem; }
+    .topic-switcher-label > span:last-child { display: none; }
+    .topic-tab { padding-inline: .55rem; }
+  }
+</style>

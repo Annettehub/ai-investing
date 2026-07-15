@@ -1,0 +1,163 @@
+---
+import ResearchTopicSwitcher from './ResearchTopicSwitcher.astro';
+
+interface DashboardData {
+  meta: {
+    hypothesis: 'R1' | 'R2';
+    title: string;
+    subtitle: string;
+    asOf: string;
+    certainty: number;
+    status: string;
+    decision: string;
+    reviewPolicy: string;
+  };
+  stages: Array<{ code: string; label: string; question: string; metrics: string[] }>;
+  lanes: Array<{ label: string; sample: string; metrics: string }>;
+  metrics: Array<{ group: string; indicator: string; current: string | number | null; trigger: string; frequency: string; source: string }>;
+  evidence: Array<{ date: string; title: string; detail: string; source: string; direction?: string }>;
+  intake: Array<{ label: string; formats: string; use: string }>;
+}
+
+interface Props {
+  dashboard: DashboardData;
+  hypothesisHref: string;
+  dataSourceHref: string;
+}
+
+const { dashboard, hypothesisHref, dataSourceHref } = Astro.props;
+const current = dashboard.meta.hypothesis;
+---
+
+<div class="research-dashboard">
+  <ResearchTopicSwitcher current={current} />
+
+  <section class="dashboard-summary" aria-labelledby="current-decision">
+    <div class="summary-copy">
+      <p class="eyebrow">{dashboard.meta.hypothesis} · 更新至 {dashboard.meta.asOf}</p>
+      <h2 id="current-decision">{dashboard.meta.decision}</h2>
+      <p>{dashboard.meta.subtitle}</p>
+      <nav class="dashboard-links" aria-label={`${dashboard.meta.hypothesis}相关文档`}>
+        <a href={hypothesisHref}>查看假设文档</a>
+        <a href={dataSourceHref}>查看底层数据</a>
+      </nav>
+    </div>
+    <div class="certainty-panel" aria-label={`当前置信度${dashboard.meta.certainty}%`}>
+      <div class="certainty-topline"><span>当前置信度</span><span class="status-chip">{dashboard.meta.status}</span></div>
+      <strong>{dashboard.meta.certainty}<small>%</small></strong>
+      <div class="certainty-track" aria-hidden="true"><span style={`width:${dashboard.meta.certainty}%`}></span></div>
+      <p>{dashboard.meta.reviewPolicy}</p>
+    </div>
+  </section>
+
+  <section aria-labelledby="path-title">
+    <div class="section-heading"><div><p class="eyebrow">验证路径</p><h2 id="path-title">从信号到业绩的四道门</h2></div><p>当前阶段先固定验证顺序，避免新资料直接改变结论。</p></div>
+    <div class="stage-grid">
+      {dashboard.stages.map((stage) => (
+        <article class="stage-card">
+          <div class="stage-top"><span>{stage.code}</span><b>待接数据</b></div>
+          <h3>{stage.label}</h3>
+          <p>{stage.question}</p>
+          <ul>{stage.metrics.map((metric) => <li>{metric}</li>)}</ul>
+        </article>
+      ))}
+    </div>
+  </section>
+
+  <section aria-labelledby="lane-title">
+    <div class="section-heading"><div><p class="eyebrow">观察对象</p><h2 id="lane-title">首批跟踪池</h2></div><p>公司和指标可以增加，但每条数据都要回到同一条验证链。</p></div>
+    <div class="lane-grid">
+      {dashboard.lanes.map((lane) => (
+        <article class="lane-card"><h3>{lane.label}</h3><p>{lane.sample}</p><small>{lane.metrics}</small></article>
+      ))}
+    </div>
+  </section>
+
+  <section aria-labelledby="metric-title">
+    <div class="section-heading"><div><p class="eyebrow">待接指标</p><h2 id="metric-title">判断阈值已经就位</h2></div><p>当前值为空；接入数据后才显示状态、变化和更新时间。</p></div>
+    <div class="metric-table-wrap">
+      <table class="metric-table">
+        <thead><tr><th>分组</th><th>指标</th><th>当前值</th><th>触发条件</th><th>频率</th><th>数据源</th></tr></thead>
+        <tbody>{dashboard.metrics.map((metric) => (
+          <tr><td><span class="group-chip">{metric.group}</span></td><th scope="row">{metric.indicator}</th><td><span class="empty-value">{metric.current ?? '待接入'}</span></td><td>{metric.trigger}</td><td>{metric.frequency}</td><td>{metric.source}</td></tr>
+        ))}</tbody>
+      </table>
+    </div>
+  </section>
+
+  <section aria-labelledby="evidence-title">
+    <div class="section-heading"><div><p class="eyebrow">证据流</p><h2 id="evidence-title">进入循环的新信息</h2></div><p>分析资料先归档，再提取成支持、限定或反驳证据。</p></div>
+    {dashboard.evidence.length > 0 ? (
+      <div class="evidence-list">{dashboard.evidence.map((item) => <article><time>{item.date}</time><div><h3>{item.title}</h3><p>{item.detail}</p><small>{item.source}</small></div></article>)}</div>
+    ) : (
+      <div class="empty-panel"><span aria-hidden="true">＋</span><div><h3>尚无结构化证据</h3><p>下一批公司分析、财报或数据表进入知识库后，将在这里形成按时间排列的证据流。</p></div></div>
+    )}
+  </section>
+
+  <section aria-labelledby="intake-title">
+    <div class="section-heading"><div><p class="eyebrow">数据入口</p><h2 id="intake-title">已准备接收的资料</h2></div><p>原始文件继续进入 03-raw，驾驶舱只接收经过整理的指标和判断。</p></div>
+    <div class="intake-grid">
+      {dashboard.intake.map((item) => <article><h3>{item.label}</h3><strong>{item.formats}</strong><p>{item.use}</p></article>)}
+    </div>
+  </section>
+</div>
+
+<style is:global>
+  html:has(.research-dashboard) { --sl-content-width: 76rem; }
+  html:has(.research-dashboard) .content-panel { padding-inline: clamp(1rem, 3vw, 2.4rem); }
+  .research-dashboard { display: grid; gap: 3.5rem; padding-bottom: 2rem; letter-spacing: 0; }
+  .research-dashboard > * { min-width: 0; }
+  .research-dashboard h2, .research-dashboard h3, .research-dashboard p { margin: 0; }
+  .research-dashboard h2 { font-size: clamp(1.35rem, 2vw, 1.8rem); line-height: 1.28; }
+  .research-dashboard h3 { font-size: 1rem; }
+  .research-dashboard .eyebrow { color: var(--sl-color-accent-high); font-size: .72rem; font-weight: 750; letter-spacing: .08em !important; text-transform: uppercase; }
+  .dashboard-summary { display: grid; grid-template-columns: minmax(0, 1.65fr) minmax(16rem, .7fr); gap: 1.2rem; align-items: stretch; }
+  .summary-copy, .certainty-panel { border: 1px solid var(--sl-color-gray-5); border-radius: 8px; background: color-mix(in srgb, var(--sl-color-bg) 92%, var(--sl-color-gray-6)); }
+  .summary-copy { padding: clamp(1.3rem, 3vw, 2.2rem); display: grid; align-content: center; gap: .9rem; border-left: 4px solid var(--sl-color-accent); }
+  .summary-copy h2 { max-width: 31ch; font-size: clamp(1.55rem, 2.7vw, 2.3rem); }
+  .summary-copy > p:not(.eyebrow) { color: var(--sl-color-gray-2); }
+  .dashboard-links { display: flex; flex-wrap: wrap; gap: 1rem; margin-top: .45rem; }
+  .dashboard-links a { font-size: .88rem; font-weight: 700; text-decoration: none; border-bottom: 1px solid currentColor; }
+  .certainty-panel { padding: 1.25rem; display: grid; gap: .7rem; align-content: center; }
+  .certainty-topline { display: flex; align-items: center; justify-content: space-between; gap: .8rem; color: var(--sl-color-gray-2); font-size: .82rem; font-weight: 650; }
+  .certainty-panel > strong { font-size: clamp(3rem, 6vw, 4.5rem); line-height: 1; color: var(--sl-color-white); }
+  .certainty-panel strong small { font-size: .38em; margin-left: .12em; }
+  .certainty-panel p { color: var(--sl-color-gray-3); font-size: .78rem; line-height: 1.5; }
+  .certainty-track { height: .55rem; background: var(--sl-color-gray-6); border-radius: 4px; overflow: hidden; }
+  .certainty-track span { display: block; height: 100%; background: var(--sl-color-accent); }
+  .status-chip { display: inline-flex; align-items: center; min-height: 1.65rem; padding: .18rem .52rem; border-radius: 4px; color: #8b5b08; background: color-mix(in srgb, #d49a35 18%, transparent); font-size: .72rem; font-weight: 750; white-space: nowrap; }
+  .section-heading { display: flex; justify-content: space-between; align-items: end; gap: 1.5rem; margin-bottom: 1rem; }
+  .section-heading > div { display: grid; gap: .35rem; }
+  .section-heading > p { max-width: 31rem; color: var(--sl-color-gray-3); font-size: .83rem; text-align: right; }
+  .stage-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: .8rem; }
+  .stage-card { min-height: 14rem; padding: 1rem; border: 1px solid var(--sl-color-gray-5); border-top: 3px solid var(--sl-color-accent); border-radius: 6px; background: var(--sl-color-bg); }
+  .stage-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: .75rem; }
+  .stage-top span { color: var(--sl-color-accent-high); font-weight: 800; }
+  .stage-top b { color: var(--sl-color-gray-3); background: var(--sl-color-gray-6); border-radius: 3px; padding: .16rem .38rem; font-size: .65rem; }
+  .stage-card > p { min-height: 2.7rem; margin-top: .35rem; color: var(--sl-color-gray-2); font-size: .78rem; }
+  .stage-card ul { margin: .85rem 0 0; padding-left: 1rem; color: var(--sl-color-gray-3); font-size: .72rem; line-height: 1.65; }
+  .lane-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: .8rem; }
+  .lane-card { padding: 1rem; border: 1px solid var(--sl-color-gray-5); border-radius: 6px; background: var(--sl-color-bg); }
+  .lane-card p { margin-top: .45rem; color: var(--sl-color-gray-2); font-size: .78rem; }
+  .lane-card small { display: block; margin-top: .8rem; padding-top: .65rem; border-top: 1px solid var(--sl-color-gray-6); color: var(--sl-color-gray-3); font-size: .7rem; line-height: 1.5; }
+  .metric-table-wrap { overflow-x: auto; border: 1px solid var(--sl-color-gray-5); border-radius: 6px; }
+  .metric-table { display: table !important; width: 100% !important; min-width: 60rem; margin: 0 !important; border: 0 !important; font-size: .76rem !important; }
+  .metric-table th, .metric-table td { padding: .75rem .7rem; vertical-align: middle; border-bottom: 1px solid var(--sl-color-gray-6); }
+  .metric-table thead th { color: var(--sl-color-gray-2); background: var(--sl-color-gray-6); font-size: .68rem; text-transform: uppercase; }
+  .metric-table tbody th { text-align: left; }
+  .group-chip, .empty-value { display: inline-flex; padding: .18rem .4rem; border-radius: 3px; white-space: nowrap; }
+  .group-chip { color: var(--sl-color-accent-high); background: color-mix(in srgb, var(--sl-color-accent) 11%, transparent); font-weight: 700; }
+  .empty-value { color: var(--sl-color-gray-3); background: var(--sl-color-gray-6); }
+  .empty-panel { display: flex; align-items: center; gap: 1rem; min-height: 9rem; padding: 1.2rem; border: 1px dashed var(--sl-color-gray-4); border-radius: 6px; background: color-mix(in srgb, var(--sl-color-bg) 94%, var(--sl-color-gray-6)); }
+  .empty-panel > span { display: grid; place-items: center; width: 2.5rem; height: 2.5rem; border: 1px solid var(--sl-color-gray-4); border-radius: 50%; color: var(--sl-color-accent-high); font-size: 1.25rem; }
+  .empty-panel p { margin-top: .25rem; color: var(--sl-color-gray-3); font-size: .8rem; }
+  .intake-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: .8rem; }
+  .intake-grid article { padding: 1rem; border: 1px solid var(--sl-color-gray-5); border-left: 3px solid var(--sl-color-accent); border-radius: 6px; }
+  .intake-grid strong { display: block; margin-top: .6rem; color: var(--sl-color-accent-high); font-size: .78rem; }
+  .intake-grid p { margin-top: .3rem; color: var(--sl-color-gray-3); font-size: .74rem; line-height: 1.5; }
+  [data-theme='light'] .research-dashboard .eyebrow { color: #286983; }
+  [data-theme='light'] .certainty-panel p, [data-theme='light'] .section-heading > p, [data-theme='light'] .stage-card ul, [data-theme='light'] .lane-card small, [data-theme='light'] .empty-panel p, [data-theme='light'] .intake-grid p { color: #625a6b; }
+  @media (max-width: 72rem) { .stage-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } .lane-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+  @media (max-width: 50rem) { .research-dashboard { gap: 2.7rem; } .dashboard-summary { grid-template-columns: 1fr; } .section-heading { align-items: start; } .section-heading > p { display: none; } }
+  @media (max-width: 34rem) { .stage-grid, .lane-grid, .intake-grid { grid-template-columns: 1fr; } .stage-card { min-height: auto; } .summary-copy, .certainty-panel { padding: 1rem; } }
+</style>

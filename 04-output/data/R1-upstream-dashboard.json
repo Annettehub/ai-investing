@@ -1,0 +1,131 @@
+{
+  "meta": {
+    "hypothesis": "R1",
+    "title": "上游兑现",
+    "subtitle": "AI 基础设施需求进入产业链业绩的四道验证",
+    "asOf": "2026-07-15",
+    "generatedAt": null,
+    "certainty": 50,
+    "status": "待接数据",
+    "decision": "AI 基础设施需求正在进入上游订单，但收入、利润和现金回报仍需分层验证。",
+    "reviewPolicy": "新增数据先更新观测值，完成财报交叉验证后再调整置信度。"
+  },
+  "stages": [
+    {
+      "code": "01",
+      "label": "订单与产能",
+      "question": "需求是否进入真实排产？",
+      "metrics": ["Backlog / LTA", "wafer allocation", "产能利用率", "设备订单"]
+    },
+    {
+      "code": "02",
+      "label": "收入确认",
+      "question": "产品是否交付并进入报表？",
+      "metrics": ["AI 相关收入", "数据中心收入", "HPC 收入", "同比与环比"]
+    },
+    {
+      "code": "03",
+      "label": "利润留存",
+      "question": "供应商是否保留产业价值？",
+      "metrics": ["毛利率", "营业利润率", "产品组合", "价格与成本"]
+    },
+    {
+      "code": "04",
+      "label": "现金回报",
+      "question": "增长是否创造股东价值？",
+      "metrics": ["经营现金流", "自由现金流", "ROIC", "库存与应收"]
+    }
+  ],
+  "lanes": [
+    {
+      "label": "芯片设计",
+      "sample": "NVIDIA / Broadcom / AMD / 国产 AI 芯片",
+      "metrics": "AI 收入、毛利率、库存、应收、现金流"
+    },
+    {
+      "label": "存储",
+      "sample": "SK hynix / Micron / Samsung",
+      "metrics": "HBM 与服务器 DRAM 收入、ASP、产品组合"
+    },
+    {
+      "label": "代工与封装",
+      "sample": "TSMC / Samsung / Intel / 封测厂",
+      "metrics": "HPC 收入、先进节点、封装收入、资本回报"
+    },
+    {
+      "label": "设备与材料",
+      "sample": "ASML / AMAT / Lam / TEL / KLA / 国产链",
+      "metrics": "订单转收入、利润率、回款质量"
+    },
+    {
+      "label": "服务器与互联",
+      "sample": "ODM / 光模块 / 交换机 / PCB / 液冷",
+      "metrics": "AI 订单、收入、单机价值量、库存与应收"
+    },
+    {
+      "label": "电力与基建",
+      "sample": "数据中心 / 电力设备 / 电源与冷却",
+      "metrics": "项目收入、利用率、现金回收期、ROIC"
+    }
+  ],
+  "metrics": [
+    {
+      "group": "芯片设计",
+      "indicator": "NVIDIA 数据中心与 Broadcom AI 收入",
+      "current": null,
+      "trigger": "增速连续两季显著低于主要 CSP AI CAPEX",
+      "frequency": "季度",
+      "source": "公司财报 / IR"
+    },
+    {
+      "group": "代工封装",
+      "indicator": "台积电 HPC、先进节点与先进封装兑现",
+      "current": null,
+      "trigger": "产能上修但收入和毛利不跟随",
+      "frequency": "月度 / 季度",
+      "source": "TSMC 月营收 / 财报 / 法说会"
+    },
+    {
+      "group": "存储",
+      "indicator": "HBM 供应商收入、ASP 与毛利",
+      "current": null,
+      "trigger": "收入、ASP 或毛利连续下修",
+      "frequency": "季度",
+      "source": "三大存储厂财报"
+    },
+    {
+      "group": "设备材料",
+      "indicator": "订单、Backlog 与收入确认质量",
+      "current": null,
+      "trigger": "收入转化变慢且库存、应收异常上升",
+      "frequency": "季度",
+      "source": "公司财报 / 产业数据"
+    },
+    {
+      "group": "基础设施",
+      "indicator": "服务器、网络、液冷与电源盈利质量",
+      "current": null,
+      "trigger": "收入增长但毛利和现金流持续恶化",
+      "frequency": "季度",
+      "source": "公司财报 / 订单数据"
+    }
+  ],
+  "evidence": [],
+  "intake": [
+    {
+      "label": "公司分析",
+      "formats": "Markdown / PDF / 网页",
+      "use": "提取业务口径、订单、收入和管理层指引"
+    },
+    {
+      "label": "财务数据",
+      "formats": "Excel / CSV",
+      "use": "建立收入、利润、现金流和资本回报时间序列"
+    },
+    {
+      "label": "产业数据",
+      "formats": "Excel / 图片 / 研报",
+      "use": "交叉验证产能、份额、价格和交付节奏"
+    }
+  ]
+}
