@@ -357,32 +357,6 @@ export default [
             ]
           },
           {
-            "label": "R 业绩兑现",
-            "collapsed": true,
-            "items": [
-              {
-                "label": "总览",
-                "slug": "kb/hypotheses/r-866fb3b7"
-              },
-              {
-                "label": "R0 公司业绩兑现检查清单",
-                "slug": "kb/hypotheses/r-866fb3b7/r0-company-earnings-checklist-b90e6b50"
-              },
-              {
-                "label": "R1.1 AI 相关收入占比提升",
-                "slug": "kb/hypotheses/r-866fb3b7/r1-1-ai-revenue-share-c2c7663a"
-              },
-              {
-                "label": "R1.2 AI 价值迁移与产业链业绩兑现",
-                "slug": "kb/hypotheses/r-866fb3b7/r1-2-value-migration-to-earnings-5f352663"
-              },
-              {
-                "label": "R 判断范围",
-                "slug": "kb/hypotheses/r-866fb3b7/readme-69e27356"
-              }
-            ]
-          },
-          {
             "label": "S 产业结构与价值捕获",
             "collapsed": true,
             "items": [
@@ -429,6 +403,32 @@ export default [
               {
                 "label": "S3.4 国产设备瓶颈接力",
                 "slug": "kb/hypotheses/s-3ee81c5d/s3-4-domestic-equipment-constraints-cd7e6bc0"
+              }
+            ]
+          },
+          {
+            "label": "R 业绩兑现",
+            "collapsed": true,
+            "items": [
+              {
+                "label": "总览",
+                "slug": "kb/hypotheses/r-866fb3b7"
+              },
+              {
+                "label": "R0 公司业绩兑现检查清单",
+                "slug": "kb/hypotheses/r-866fb3b7/r0-company-earnings-checklist-b90e6b50"
+              },
+              {
+                "label": "R1.1 AI 相关收入占比提升",
+                "slug": "kb/hypotheses/r-866fb3b7/r1-1-ai-revenue-share-c2c7663a"
+              },
+              {
+                "label": "R1.2 AI 价值迁移与产业链业绩兑现",
+                "slug": "kb/hypotheses/r-866fb3b7/r1-2-value-migration-to-earnings-5f352663"
+              },
+              {
+                "label": "R 判断范围",
+                "slug": "kb/hypotheses/r-866fb3b7/readme-69e27356"
               }
             ]
           }

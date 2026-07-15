@@ -17,6 +17,10 @@ function splitOverview(entry: any) {
   }
   return { overview: undefined, entries: entry.entries };
 }
+
+function isSectionIndex(entry: any) {
+  return ['总索引', 'Hypotheses 假设判断层', '输出总览'].includes(entry.label);
+}
 ---
 
 <ul class:list={{ 'top-level': !nested }}>
@@ -27,7 +31,7 @@ function splitOverview(entry: any) {
           <a
             href={entry.href}
             aria-current={entry.isCurrent ? 'page' : undefined}
-            class:list={[{ large: !nested }, entry.attrs.class]}
+            class:list={[{ large: !nested, 'section-index': isSectionIndex(entry) }, entry.attrs.class]}
             {...entry.attrs}
           >
             <span>{entry.label}</span>
@@ -134,6 +138,13 @@ function splitOverview(entry: any) {
     .group-link {
       display: inline-block;
       padding: 0;
+    }
+
+    .section-index {
+      margin-block: 0.1rem;
+      color: var(--sl-color-white);
+      font-size: var(--sl-text-base);
+      font-weight: 600;
     }
 
     a:hover,

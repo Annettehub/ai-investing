@@ -315,13 +315,20 @@ def write_index(dest: Path, title: str, description: str, links: list[tuple[str,
     dest.write_text("\n".join(lines).rstrip() + "\n", encoding="utf-8")
 
 
+def directory_sort_key(item: Path) -> tuple[int, str]:
+    if item.parent == KB_SRC / "hypotheses":
+        prefix = item.name.split("-", 1)[0].upper()
+        return ({"G": 0, "S": 1, "R": 2}.get(prefix, 99), item.name.lower())
+    return (0, item.name.lower())
+
+
 def append_index_tree(lines: list[str], source_dir: Path, source_root: Path, dest_root: Path, depth: int = 2) -> None:
     for source_path in markdown_files(source_dir):
         link = f"/ai-investing/{sidebar_slug_for(source_path, source_root, dest_root)}/"
         title = get_title(source_path, read_text(source_path))
         lines.append(f"- [{title}]({link})")
 
-    for child in sorted((item for item in source_dir.iterdir() if item.is_dir()), key=lambda item: item.name.lower()):
+    for child in sorted((item for item in source_dir.iterdir() if item.is_dir()), key=directory_sort_key):
         child_title = clean_dir_label(child.name)
         child_link = f"/ai-investing/{sidebar_slug_for_source_dir(child, source_root, dest_root)}/"
         lines.append("")
@@ -380,7 +387,7 @@ def build_tree_sidebar(path: Path, source_root: Path, dest_root: Path) -> list[d
         for source_path in markdown_files(path)
     )
 
-    for child in sorted((item for item in path.iterdir() if item.is_dir()), key=lambda item: item.name.lower()):
+    for child in sorted((item for item in path.iterdir() if item.is_dir()), key=directory_sort_key):
         child_items = build_tree_sidebar(child, source_root, dest_root)
         if child_items:
             items.append(
