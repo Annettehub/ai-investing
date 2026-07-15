@@ -1,6 +1,7 @@
 {
-  "hypothesis": "H1.2",
-  "title": "存储周期特性向成长特性转变",
+  "hypothesis": "G2",
+  "legacyHypothesis": "H1.2",
+  "title": "存储成长与周期分层",
   "reviewPolicy": "自动数据只更新观测值，不自动调整假设置信度；定性事件必须人工确认。",
   "sources": {
     "sec": {

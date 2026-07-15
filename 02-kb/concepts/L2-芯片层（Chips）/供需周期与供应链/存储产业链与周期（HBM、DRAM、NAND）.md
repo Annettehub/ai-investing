@@ -4,7 +4,7 @@
 
 当前本概念页主动服务一个假设：
 
-- `02-kb/hypotheses/H1.2.md`：存储周期特性是否向成长特性转变
+- `02-kb/hypotheses/G-需求与周期/G2-storage-growth-and-cycle.md`：G2 存储成长与周期分层（原 H1.2）
 
 正式研究稿：
 

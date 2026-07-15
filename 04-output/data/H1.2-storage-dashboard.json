@@ -1,7 +1,8 @@
 {
   "meta": {
-    "hypothesis": "H1.2",
-    "title": "存储周期向成长转变",
+    "hypothesis": "G2",
+    "legacyHypothesis": "H1.2",
+    "title": "存储成长与周期分层",
     "subtitle": "高端成长与消费周期并存的分层验证",
     "asOf": "2026-07-14",
     "generatedAt": "2026-07-15T01:10:06+00:00",
@@ -278,9 +279,9 @@
     }
   },
   "links": {
-    "hypothesis": "/ai-investing/kb/hypotheses/h1-2-f7cc1f2f/",
-    "tracking": "/ai-investing/outputs/tracking/h1-2-storage-tracking-a7a419e6/",
-    "report": "/ai-investing/outputs/reports/h1-2-storage-restructured-2026-07-12-1cdd92c8/",
+    "hypothesis": "/ai-investing/kb/hypotheses/g-d2af53a1/g2-storage-growth-and-cycle-770b88bf/",
+    "tracking": "/ai-investing/outputs/tracking-da4dfe3f/h1-2-storage-tracking-cb7dd53f/",
+    "report": "/ai-investing/outputs/reports-0b7ec688/h1-2-storage-restructured-2026-07-12-37efdc5d/",
     "github": "https://github.com/Annettehub/ai-investing/blob/main/04-output/tracking/H1.2-storage-tracking.md"
   }
 }

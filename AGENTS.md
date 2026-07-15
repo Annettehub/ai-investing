@@ -10,7 +10,7 @@
 
 1. `CURRENT-FOCUS.md`：当前唯一焦点。
 2. `README.md`：当前目录分工。
-3. `02-kb/hypotheses/H1.2.md`：当前假设。
+3. `02-kb/hypotheses/G-需求与周期/G2-storage-growth-and-cycle.md`：当前假设。
 4. `01-commands/`：只允许使用 collect、distill、weekly 三个动作。
 
 ## 当前闭环

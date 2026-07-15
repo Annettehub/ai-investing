@@ -6,7 +6,7 @@
 
 - 同步提交：`f9b395b`
 - 新增载体：10 篇
-- 当前主动主题：H1.2 存储周期成长性
+- 当前主动主题：G2 存储成长与周期分层（原 H1.2）
 
 | 资料 | 价值 | 处理 |
 | --- | --- | --- |
@@ -26,6 +26,6 @@
 - `02-kb/sources/2026-07-12-ms-nand-diverging-trends.md`
 - `02-kb/sources/2026-07-14-samsung-hbm-memory-interview.md`
 - `02-kb/sources/2026-07-14-storage-q2-pricing-update.md`
-- `02-kb/hypotheses/H1.2.md`
+- `02-kb/hypotheses/G-需求与周期/G2-storage-growth-and-cycle.md`
 - `04-output/tracking/H1.2-storage-tracking.md`
 - `04-output/weekly/2026-W29-H1.2-storage-cycle.md`

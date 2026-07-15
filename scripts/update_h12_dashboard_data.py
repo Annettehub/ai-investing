@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Refresh the H1.2 dashboard with official public data.
+"""Refresh the G2 storage dashboard (legacy H1.2) with official public data.
 
 Official feeds are observation signals only. This script never changes the
 hypothesis certainty or any qualitative trigger status.
@@ -323,7 +323,7 @@ def refresh(offline: bool = False) -> dict[str, Any]:
 
 
 def main() -> int:
-    parser = argparse.ArgumentParser(description="Refresh H1.2 dashboard data")
+    parser = argparse.ArgumentParser(description="Refresh G2 storage dashboard data")
     parser.add_argument("--offline", action="store_true", help="Only merge local imports")
     args = parser.parse_args()
     dashboard = refresh(offline=args.offline)

@@ -327,68 +327,110 @@ export default [
             "slug": "kb/hypotheses"
           },
           {
-            "label": "H1.1 [D1-Trend] 2026-2028 AI CAPEX 继续上行，但必须用台积电/CoWoS/国产先进制程产能交叉验证",
-            "slug": "kb/hypotheses/h1-1-f26496a5"
-          },
-          {
-            "label": "H1.2 [D1-Trend] 存储周期特性是否向成长特性转变",
-            "slug": "kb/hypotheses/h1-2-57c2cbf4"
-          },
-          {
-            "label": "H2.1 [D2-Moat] 英伟达GPU训练市场统治地位2027年前稳固，但推理市场ASIC侵蚀加速",
-            "slug": "kb/hypotheses/h2-1-b9cfbd06"
-          },
-          {
-            "label": "H2.2 [D2-Moat] 台积电先进制程+先进封装双重垄断在2027年前无可替代竞争者",
-            "slug": "kb/hypotheses/h2-2-070893a3"
-          },
-          {
-            "label": "H2.3 [D2-Moat] AI芯片赛道竞争格局趋于头部集中，新玩家准入门槛因设计复杂度+制程依赖+软件生态壁垒持续抬高",
-            "slug": "kb/hypotheses/h2-3-f132a5b8"
-          },
-          {
-            "label": "H3.1 [D3-Fund] 基本面向好/利润拐点/利润高速增长",
-            "slug": "kb/hypotheses/h3-1-c200e05c"
-          },
-          {
-            "label": "H3.2 [D3-Fund] 半导体设备/代工/设计头部公司AI相关业务营收占比从2024年的20-30%持续提升至2026-2028年达到35-50%",
-            "slug": "kb/hypotheses/h3-2-2dad27fc"
-          },
-          {
-            "label": "H4.1 [D4-Macro] BIS制裁持续切香肠升级，但国内28nm以上产能2027年前基本自主可控",
-            "slug": "kb/hypotheses/h4-1-c794841f"
-          },
-          {
-            "label": "H4.2 [D4-Macro] 全球半导体产业链区域化已成定局，东南亚与日本受益于产能转移",
-            "slug": "kb/hypotheses/h4-2-872e7a86"
-          },
-          {
-            "label": "H5.2 [D5-Tech] AI推理市场GPU与ASIC长期格局趋近5:5，ASIC增速持续高于GPU",
-            "slug": "kb/hypotheses/h5-2-a4ea7436"
-          },
-          {
-            "label": "H6.1 [D6-Demand] 中国AI芯片本土化需求2026-2028呈爆发式增长，产能缺口推动制程升级",
-            "slug": "kb/hypotheses/h6-1-90397908"
-          },
-          {
-            "label": "H6.2 [D6-Demand] AI技术渗透正在拉动传统制造业升级改造，产生超出纯云计算之外的增量芯片与设备需求",
-            "slug": "kb/hypotheses/h6-2-349789be"
-          },
-          {
-            "label": "H7.1 [D7-Chain] AI产业链价值从硬件训练侧向推理+应用侧迁移，Foundry和设备商持续受益",
-            "slug": "kb/hypotheses/h7-1-c9a2cc26"
-          },
-          {
-            "label": "H7.2 [D7-Chain] 先进封装(CoWoS/SoIC)是AI时代最稀缺产能，Foundry向下兼容封装，OSAT向上突破困难",
-            "slug": "kb/hypotheses/h7-2-01ffbb9f"
-          },
-          {
-            "label": "H7.3 [D7-Chain] 半导体设备国产替代存在\"binding constraint 接力上移\"规律，不同细分赛道在不同时间窗口获得验证机会",
-            "slug": "kb/hypotheses/h7-3-720e9d7c"
-          },
-          {
             "label": "Hypotheses 假设判断层",
             "slug": "kb/hypotheses/readme-69e27356"
+          },
+          {
+            "label": "G 需求与周期",
+            "collapsed": true,
+            "items": [
+              {
+                "label": "总览",
+                "slug": "kb/hypotheses/g-d2af53a1"
+              },
+              {
+                "label": "G1 AI CAPEX 与制造产能交叉验证",
+                "slug": "kb/hypotheses/g-d2af53a1/g1-ai-capex-and-capacity-595776e6"
+              },
+              {
+                "label": "G2 存储成长与周期分层",
+                "slug": "kb/hypotheses/g-d2af53a1/g2-storage-growth-and-cycle-770b88bf"
+              },
+              {
+                "label": "G3 AI 应用与制造升级需求",
+                "slug": "kb/hypotheses/g-d2af53a1/g3-ai-adoption-and-industrial-demand-7c0972cd"
+              },
+              {
+                "label": "G 判断范围",
+                "slug": "kb/hypotheses/g-d2af53a1/readme-69e27356"
+              }
+            ]
+          },
+          {
+            "label": "R 业绩兑现",
+            "collapsed": true,
+            "items": [
+              {
+                "label": "总览",
+                "slug": "kb/hypotheses/r-866fb3b7"
+              },
+              {
+                "label": "R0 公司业绩兑现检查清单",
+                "slug": "kb/hypotheses/r-866fb3b7/r0-company-earnings-checklist-b90e6b50"
+              },
+              {
+                "label": "R1.1 AI 相关收入占比提升",
+                "slug": "kb/hypotheses/r-866fb3b7/r1-1-ai-revenue-share-c2c7663a"
+              },
+              {
+                "label": "R1.2 AI 价值迁移与产业链业绩兑现",
+                "slug": "kb/hypotheses/r-866fb3b7/r1-2-value-migration-to-earnings-5f352663"
+              },
+              {
+                "label": "R 判断范围",
+                "slug": "kb/hypotheses/r-866fb3b7/readme-69e27356"
+              }
+            ]
+          },
+          {
+            "label": "S 产业结构与价值捕获",
+            "collapsed": true,
+            "items": [
+              {
+                "label": "总览",
+                "slug": "kb/hypotheses/s-3ee81c5d"
+              },
+              {
+                "label": "S 判断范围",
+                "slug": "kb/hypotheses/s-3ee81c5d/readme-69e27356"
+              },
+              {
+                "label": "S1.1 GPU 训练护城河与 ASIC 侵蚀",
+                "slug": "kb/hypotheses/s-3ee81c5d/s1-1-gpu-training-moat-a5a2414f"
+              },
+              {
+                "label": "S1.2 AI 芯片集中度与准入壁垒",
+                "slug": "kb/hypotheses/s-3ee81c5d/s1-2-ai-chip-concentration-da8c6edf"
+              },
+              {
+                "label": "S1.3 推理市场 GPU/ASIC 份额",
+                "slug": "kb/hypotheses/s-3ee81c5d/s1-3-inference-gpu-asic-mix-ef346297"
+              },
+              {
+                "label": "S2.1 先进制程与封装双重壁垒",
+                "slug": "kb/hypotheses/s-3ee81c5d/s2-1-foundry-process-packaging-moat-f97baa41"
+              },
+              {
+                "label": "S2.2 先进封装稀缺性与价值捕获",
+                "slug": "kb/hypotheses/s-3ee81c5d/s2-2-advanced-packaging-value-capture-1a8c2328"
+              },
+              {
+                "label": "S3.1 出口管制与成熟制程自主",
+                "slug": "kb/hypotheses/s-3ee81c5d/s3-1-export-controls-and-mature-node-67779e46"
+              },
+              {
+                "label": "S3.2 半导体供应链区域化",
+                "slug": "kb/hypotheses/s-3ee81c5d/s3-2-semiconductor-regionalization-2bd50cde"
+              },
+              {
+                "label": "S3.3 国产 AI 芯片需求与产能约束",
+                "slug": "kb/hypotheses/s-3ee81c5d/s3-3-domestic-ai-chip-demand-31f13b89"
+              },
+              {
+                "label": "S3.4 国产设备瓶颈接力",
+                "slug": "kb/hypotheses/s-3ee81c5d/s3-4-domestic-equipment-constraints-cd7e6bc0"
+              }
+            ]
           }
         ]
       },
@@ -596,7 +638,7 @@ export default [
             "slug": "outputs/reports-0b7ec688"
           },
           {
-            "label": "H1.2 存储产业链深度研究：HBM、DRAM、NAND 的分层供需与周期重构",
+            "label": "G2 存储产业链深度研究：HBM、DRAM、NAND 的分层供需与周期重构",
             "slug": "outputs/reports-0b7ec688/h1-2-storage-restructured-2026-07-12-37efdc5d"
           },
           {
@@ -618,7 +660,7 @@ export default [
             "slug": "outputs/tracking-da4dfe3f"
           },
           {
-            "label": "H1.2 存储周期成长性长期跟踪表",
+            "label": "G2 存储成长与周期分层长期跟踪表",
             "slug": "outputs/tracking-da4dfe3f/h1-2-storage-tracking-cb7dd53f"
           }
         ]

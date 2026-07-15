@@ -438,7 +438,7 @@ def write_generated_sidebar() -> None:
                 {
                     "label": CATEGORY_LABELS["hypotheses"],
                     "collapsed": True,
-                    "items": build_flat_sidebar(KB_SRC / "hypotheses", KB_SRC, KB_DEST),
+                    "items": build_tree_sidebar(KB_SRC / "hypotheses", KB_SRC, KB_DEST),
                 },
                 {
                     "label": CATEGORY_LABELS["sources"],

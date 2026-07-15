@@ -5,11 +5,11 @@ import dashboard from '../../data/h12-dashboard.json';
 const base = `${import.meta.env.BASE_URL.replace(/\/?$/, '')}/`;
 const reportLink = `${base}outputs/reports-0b7ec688/h1-2-storage-restructured-2026-07-12-37efdc5d/`;
 const trackingLink = `${base}outputs/tracking-da4dfe3f/h1-2-storage-tracking-cb7dd53f/`;
-const hypothesisLink = `${base}kb/hypotheses/h1-2-57c2cbf4/`;
+const hypothesisLink = `${base}kb/hypotheses/g-d2af53a1/g2-storage-growth-and-cycle-770b88bf/`;
 const dashboardTopics = [
-  { code: 'H1.2', label: '存储', href: `${base}dashboard/h1-2-storage/`, current: true },
-  { code: 'H1.3', label: '待创建', disabled: true },
-  { code: 'H2.1', label: '待创建', disabled: true },
+  { code: 'G2', label: '存储', href: `${base}dashboard/h1-2-storage/`, current: true },
+  { code: 'G3', label: '待创建', disabled: true },
+  { code: 'S1', label: '待创建', disabled: true },
 ];
 
 const statusText: Record<string, string> = {
@@ -87,7 +87,7 @@ const pageHeadings = [
         <p class="eyebrow">ACTIVE HYPOTHESIS · 更新至 {dashboard.meta.asOf}</p>
         <h2 id="current-decision">{dashboard.meta.decision}</h2>
         <p>{dashboard.meta.subtitle}</p>
-        <nav class="dashboard-links" aria-label="H1.2相关文档">
+        <nav class="dashboard-links" aria-label="G2相关文档">
           <a href={hypothesisLink}>查看假设</a><a href={trackingLink}>长期跟踪表</a><a href={reportLink}>正式研究报告</a>
         </nav>
       </div>
@@ -174,7 +174,7 @@ const pageHeadings = [
     </section>
 
     <section aria-labelledby="evidence-title">
-      <div class="section-heading"><div><p class="eyebrow">证据流</p><h2 id="evidence-title">最近进入循环的信息</h2></div><p>只显示会支持、反驳或限定H1.2的增量证据。</p></div>
+      <div class="section-heading"><div><p class="eyebrow">证据流</p><h2 id="evidence-title">最近进入循环的信息</h2></div><p>只显示会支持、反驳或限定 G2 的增量证据。</p></div>
       <div class="evidence-list">
         {dashboard.evidence.map((item) => <article class={`evidence-item evidence-${item.direction}`}><div class="evidence-marker"></div><time>{item.date}</time><div><h3>{item.title}</h3><p>{item.detail}</p><small>{item.source} · 置信度{item.confidence}</small></div></article>)}
       </div>

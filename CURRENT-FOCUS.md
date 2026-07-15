@@ -2,7 +2,7 @@
 
 ## 当前唯一主题
 
-H1.2：存储周期特性是否正在向成长特性转变。
+G2（原 H1.2）：存储成长与周期分层。
 
 第一轮小循环已跑通，当前进入 `active-tracking` 阶段。正式研究稿：
 
@@ -26,12 +26,12 @@ H1.2：存储周期特性是否正在向成长特性转变。
 
 1. `03-raw/zsxq/`：吴梓豪存储、HBM、海力士、半导体供需相关文章。
 2. `03-raw/wechat/`：和存储产业链直接相关的文章。
-3. `03-raw/feishu/`、`03-raw/podwise/`、`03-raw/weread/`：只有明确关联 H1.2 时才处理。
+3. `03-raw/feishu/`、`03-raw/podwise/`、`03-raw/weread/`：只有明确关联 G2 时才处理。
 4. 其他来源暂时只收集，不主动沉淀。
 
 ## 当前输出
 
-- 假设主文件：`02-kb/hypotheses/H1.2.md`
+- 假设主文件：`02-kb/hypotheses/G-需求与周期/G2-storage-growth-and-cycle.md`
 - 来源卡片：`02-kb/sources/`
 - 概念承载：`02-kb/concepts/L2-芯片层（Chips）/供需周期与供应链/存储产业链与周期（HBM、DRAM、NAND）.md`
 - 正式报告：`04-output/reports/H1.2-storage-restructured-2026-07-12.md`
@@ -44,6 +44,6 @@ H1.2：存储周期特性是否正在向成长特性转变。
 
 1. 至少处理 3 条 raw 来源。
 2. 至少生成或更新 1 张 source 卡片。
-3. 至少更新 1 次 H1.2 的证据或反证。
+3. 至少更新 1 次 G2 的证据或反证。
 4. 至少生成 1 篇 weekly 复盘。
 5. 能清楚说出下周继续跟踪什么。
