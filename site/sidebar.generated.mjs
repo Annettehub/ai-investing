@@ -369,40 +369,16 @@ export default [
                 "slug": "kb/hypotheses/s-3ee81c5d/readme-69e27356"
               },
               {
-                "label": "S1.1 GPU 训练护城河与 ASIC 侵蚀",
-                "slug": "kb/hypotheses/s-3ee81c5d/s1-1-gpu-training-moat-a5a2414f"
+                "label": "S1.1 芯片与加速器竞争结构",
+                "slug": "kb/hypotheses/s-3ee81c5d/s1-1-chip-accelerator-competition-e8713e7b"
               },
               {
-                "label": "S1.2 AI 芯片集中度与准入壁垒",
-                "slug": "kb/hypotheses/s-3ee81c5d/s1-2-ai-chip-concentration-da8c6edf"
+                "label": "S2.1 先进制造瓶颈、先进封装和国产替代",
+                "slug": "kb/hypotheses/s-3ee81c5d/s2-1-advanced-manufacturing-packaging-loca-bc811463"
               },
               {
-                "label": "S1.3 推理市场 GPU/ASIC 份额",
-                "slug": "kb/hypotheses/s-3ee81c5d/s1-3-inference-gpu-asic-mix-ef346297"
-              },
-              {
-                "label": "S2.1 先进制程与封装双重壁垒",
-                "slug": "kb/hypotheses/s-3ee81c5d/s2-1-foundry-process-packaging-moat-f97baa41"
-              },
-              {
-                "label": "S2.2 先进封装稀缺性与价值捕获",
-                "slug": "kb/hypotheses/s-3ee81c5d/s2-2-advanced-packaging-value-capture-1a8c2328"
-              },
-              {
-                "label": "S3.1 出口管制与成熟制程自主",
-                "slug": "kb/hypotheses/s-3ee81c5d/s3-1-export-controls-and-mature-node-67779e46"
-              },
-              {
-                "label": "S3.2 半导体供应链区域化",
-                "slug": "kb/hypotheses/s-3ee81c5d/s3-2-semiconductor-regionalization-2bd50cde"
-              },
-              {
-                "label": "S3.3 国产 AI 芯片需求与产能约束",
-                "slug": "kb/hypotheses/s-3ee81c5d/s3-3-domestic-ai-chip-demand-31f13b89"
-              },
-              {
-                "label": "S3.4 国产设备瓶颈接力",
-                "slug": "kb/hypotheses/s-3ee81c5d/s3-4-domestic-equipment-constraints-cd7e6bc0"
+                "label": "S3.1 应用层价值捕获：意图入口与执行闭环",
+                "slug": "kb/hypotheses/s-3ee81c5d/s3-1-application-value-capture-2c654b05"
               }
             ]
           },
@@ -525,6 +501,10 @@ export default [
           {
             "label": "2026Q2 存储市场更新：DRAM 与 NAND 价格分化",
             "slug": "kb/sources/2026-07-14-storage-q2-pricing-update-4feb2b13"
+          },
+          {
+            "label": "来源摘要：腾讯 AI 拐点与微信 Agent OS",
+            "slug": "kb/sources/2026-07-15-dots-tencent-agent-os-0a184c36"
           },
           {
             "label": "IMA 知识库来源索引",

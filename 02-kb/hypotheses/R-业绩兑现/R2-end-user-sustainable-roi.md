@@ -78,6 +78,7 @@ R2 同时检查两本账，但不能混为一谈：
 
 | 日期 | 证据 | 判断 | 来源与置信度 |
 |---|---|---|---|
+| 2026-07-15 | Dots 腾讯资料提出 AIM+ 广告 ROI、WorkBuddy/CodeBuddy 付费转化、小程序智能体调用、外部 AI token 毛利和 FCF 稳定性才是腾讯 AI 财务拐点的关键，而不是元宝日活或内部 token 消耗 | 支持 R2 的“两本账”框架：广告 AI 已有局部财务兑现，但 Agent OS、生产力智能体和小程序 AI Skills 尚未完成财务验证 | `02-kb/sources/2026-07-15-dots-tencent-agent-os.md`；中 |
 | 2026-07-15 | IBM 相关材料提出企业 IT 预算可能先转向算力、存储、网络和数据基础设施，应用与咨询预算后置；目前仅为单一公司先行信号 | 削弱近期应用层兑现，但尚未构成产业结论 | `03-raw/feishu/Dots投资者社区观点-IBM企业IT预算重要性重置：AI预算优先级提升 vs IT软件优先级下降.md`；中低 |
 | 2026-06-24 | Databricks 访谈称 AI 代码分析和自动映射可将部分软件迁移从多年、数百万美元缩短为约 30 天 | 支持 AI 在特定工作流中产生时间和成本收益；缺少审计样本 | `03-raw/feishu/SaaStr 863 The Enterprise AI Reality Check From Dashboard Graveyards to 30-Day Migrations with Databricks' Co-Founder and SVP of Field Engineering.md`；中 |
 | 2026-06-24 | 同一访谈指出员工可能大量消耗 Token，却无法清楚看到 ROI，企业需要重新设计治理与绩效指标 | 直接说明使用量不能替代 ROI | 同上；中 |
@@ -113,5 +114,6 @@ R2 同时检查两本账，但不能混为一谈：
 
 - `03-raw/feishu/SaaStr 863 The Enterprise AI Reality Check From Dashboard Graveyards to 30-Day Migrations with Databricks' Co-Founder and SVP of Field Engineering.md`
 - `03-raw/feishu/Dots投资者社区观点-IBM企业IT预算重要性重置：AI预算优先级提升 vs IT软件优先级下降.md`
+- `02-kb/sources/2026-07-15-dots-tencent-agent-os.md`
 - `03-raw/feishu/2026-05-29 - The a16z Show - 为什么 10 亿美元退出已成过去式...md`
 - IMA/微信中的 20VC 企业 AI 支出材料

@@ -223,4 +223,4 @@ AI训练/推理需求爆发 → NVIDIA/AMD/博通ASIC订单激增
 
 - [知识星球] 吴梓豪「半导体大佬的会议室」— 31篇晶圆制造专栏(台积电财报分析、工厂布局、CoWoS扩产、海外厂成本等)
 - [本地] 02-kb/company/TSM-台积电.md (v1.5旧档案)
-- [本地] 02-kb/hypotheses/S-产业结构与价值捕获/S2.1-foundry-process-packaging-moat.md (台积电壁垒假设，原 H2.2)
+- [本地] 02-kb/hypotheses/S-产业结构与价值捕获/S2.1-advanced-manufacturing-packaging-localization.md (先进制造与封装瓶颈假设，含原 H2.2)
