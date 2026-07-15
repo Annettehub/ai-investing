@@ -662,6 +662,10 @@ export default [
           {
             "label": "G2 存储成长与周期分层长期跟踪表",
             "slug": "outputs/tracking-da4dfe3f/h1-2-storage-tracking-cb7dd53f"
+          },
+          {
+            "label": "美股财报长期跟踪表",
+            "slug": "outputs/tracking-da4dfe3f/us-equity-earnings-tracking-db80dffa"
           }
         ]
       },

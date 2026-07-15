@@ -1,0 +1,55 @@
+{
+  "meta": {
+    "name": "US equity earnings watchlist",
+    "description": "Free official-data watchlist for semiconductor and cloud/application earnings tracking.",
+    "dataPolicy": "Use SEC EDGAR as the source of truth for filings and XBRL facts. Earnings-call transcripts are not auto-ingested unless company-official material is filed or provided manually.",
+    "updatedAt": "2026-07-15"
+  },
+  "groups": [
+    {
+      "id": "semiconductor",
+      "label": "半导体",
+      "hypothesis": "R1",
+      "tickers": [
+        { "ticker": "NVDA", "name": "NVIDIA", "role": "AI GPU / 系统平台", "focus": ["data center revenue", "gross margin", "inventory", "capex signal"] },
+        { "ticker": "AMD", "name": "AMD", "role": "GPU / CPU / AI accelerator", "focus": ["data center revenue", "gross margin", "inventory"] },
+        { "ticker": "AVGO", "name": "Broadcom", "role": "ASIC / networking / VMware", "focus": ["AI revenue commentary", "semiconductor revenue", "software mix"] },
+        { "ticker": "MRVL", "name": "Marvell", "role": "ASIC / networking", "focus": ["data center revenue", "custom silicon", "gross margin"] },
+        { "ticker": "MU", "name": "Micron", "role": "DRAM / HBM / NAND", "focus": ["data center revenue", "inventory", "capex"] },
+        { "ticker": "INTC", "name": "Intel", "role": "CPU / foundry", "focus": ["data center revenue", "foundry loss", "capex"] },
+        { "ticker": "QCOM", "name": "Qualcomm", "role": "edge AI / mobile SoC", "focus": ["handset revenue", "automotive", "IoT"] },
+        { "ticker": "AMAT", "name": "Applied Materials", "role": "semiconductor equipment", "focus": ["revenue", "backlog proxy", "gross margin"] },
+        { "ticker": "LRCX", "name": "Lam Research", "role": "etch / deposition equipment", "focus": ["revenue", "China exposure", "gross margin"] },
+        { "ticker": "KLAC", "name": "KLA", "role": "process control equipment", "focus": ["revenue", "gross margin", "orders proxy"] },
+        { "ticker": "ASML", "name": "ASML", "role": "lithography", "focus": ["bookings", "revenue", "gross margin"] },
+        { "ticker": "TSM", "name": "TSMC ADR", "role": "advanced foundry / CoWoS", "focus": ["HPC revenue", "capex", "gross margin"] }
+      ]
+    },
+    {
+      "id": "cloud_application",
+      "label": "云与应用",
+      "hypothesis": "R1/R2",
+      "tickers": [
+        { "ticker": "MSFT", "name": "Microsoft", "role": "cloud / AI application", "focus": ["Azure growth", "capex", "RPO", "AI commentary"] },
+        { "ticker": "GOOGL", "name": "Alphabet", "role": "cloud / ads / AI infrastructure", "focus": ["Google Cloud revenue", "capex", "operating margin"] },
+        { "ticker": "AMZN", "name": "Amazon", "role": "AWS / retail", "focus": ["AWS revenue", "capex", "operating cash flow"] },
+        { "ticker": "META", "name": "Meta", "role": "AI infra / ads", "focus": ["capex", "family apps revenue", "operating margin"] },
+        { "ticker": "ORCL", "name": "Oracle", "role": "cloud infrastructure / database", "focus": ["cloud revenue", "RPO", "capex"] },
+        { "ticker": "CRM", "name": "Salesforce", "role": "enterprise application", "focus": ["revenue", "RPO", "operating margin", "AI ARR if disclosed"] },
+        { "ticker": "NOW", "name": "ServiceNow", "role": "enterprise workflow", "focus": ["subscription revenue", "RPO", "operating margin"] },
+        { "ticker": "ADBE", "name": "Adobe", "role": "creative / document AI", "focus": ["revenue", "ARR", "gross margin"] },
+        { "ticker": "PLTR", "name": "Palantir", "role": "AI platform", "focus": ["commercial revenue", "remaining deal value", "operating margin"] },
+        { "ticker": "SNOW", "name": "Snowflake", "role": "data cloud", "focus": ["product revenue", "RPO", "free cash flow"] },
+        { "ticker": "DDOG", "name": "Datadog", "role": "observability / cloud software", "focus": ["revenue", "large customers", "free cash flow"] },
+        { "ticker": "CRWD", "name": "CrowdStrike", "role": "cybersecurity platform", "focus": ["ARR", "subscription revenue", "free cash flow"] }
+      ]
+    }
+  ],
+  "forms": ["10-Q", "10-K", "8-K", "20-F", "6-K"],
+  "earningsReleaseSignals": ["2.02", "Results of Operations", "EX-99.1", "EX-99", "earnings", "results"],
+  "sec": {
+    "companyTickersUrl": "https://www.sec.gov/files/company_tickers.json",
+    "submissionsUrl": "https://data.sec.gov/submissions/CIK{cik}.json",
+    "companyFactsUrl": "https://data.sec.gov/api/xbrl/companyfacts/CIK{cik}.json"
+  }
+}
