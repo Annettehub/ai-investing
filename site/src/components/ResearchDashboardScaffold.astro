@@ -55,7 +55,7 @@ const current = dashboard.meta.hypothesis;
     <div class="stage-grid">
       {dashboard.stages.map((stage) => (
         <article class="stage-card">
-          <div class="stage-top"><span>{stage.code}</span><b>待接数据</b></div>
+          <div class="stage-top"><span>{stage.code}</span><b>待接入数据</b></div>
           <h3>{stage.label}</h3>
           <p>{stage.question}</p>
           <ul>{stage.metrics.map((metric) => <li>{metric}</li>)}</ul>
@@ -74,10 +74,10 @@ const current = dashboard.meta.hypothesis;
   </section>
 
   <section aria-labelledby="metric-title">
-    <div class="section-heading"><div><p class="eyebrow">待接指标</p><h2 id="metric-title">判断阈值已经就位</h2></div><p>当前值为空；接入数据后才显示状态、变化和更新时间。</p></div>
+    <div class="section-heading"><div><p class="eyebrow">待接入指标</p><h2 id="metric-title">判断阈值已经就位</h2></div><p>当前值为空；接入数据后才显示状态、变化和更新时间。</p></div>
     <div class="metric-table-wrap">
       <table class="metric-table">
-        <thead><tr><th>分组</th><th>指标</th><th>当前值</th><th>触发条件</th><th>频率</th><th>数据源</th></tr></thead>
+        <thead><tr><th>分组</th><th>指标</th><th>当前值</th><th>复核条件</th><th>频率</th><th>数据源</th></tr></thead>
         <tbody>{dashboard.metrics.map((metric) => (
           <tr><td><span class="group-chip">{metric.group}</span></td><th scope="row">{metric.indicator}</th><td><span class="empty-value">{metric.current ?? '待接入'}</span></td><td>{metric.trigger}</td><td>{metric.frequency}</td><td>{metric.source}</td></tr>
         ))}</tbody>
