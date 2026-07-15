@@ -1,0 +1,45 @@
+{
+  "hypothesis": "H1.2",
+  "title": "存储周期特性向成长特性转变",
+  "reviewPolicy": "自动数据只更新观测值，不自动调整假设置信度；定性事件必须人工确认。",
+  "sources": {
+    "sec": {
+      "enabled": true,
+      "frequency": "weekly",
+      "companies": [
+        { "ticker": "MU", "cik": "0000723125", "name": "Micron", "role": "存储供给" },
+        { "ticker": "NVDA", "cik": "0001045810", "name": "NVIDIA", "role": "HBM需求代理" },
+        { "ticker": "AVGO", "cik": "0001730168", "name": "Broadcom", "role": "ASIC需求代理" },
+        { "ticker": "MSFT", "cik": "0000789019", "name": "Microsoft", "role": "CSP需求" },
+        { "ticker": "AMZN", "cik": "0001018724", "name": "Amazon", "role": "CSP需求" },
+        { "ticker": "GOOGL", "cik": "0001652044", "name": "Alphabet", "role": "CSP需求" },
+        { "ticker": "META", "cik": "0001326801", "name": "Meta", "role": "CSP需求" }
+      ]
+    },
+    "twse": {
+      "enabled": true,
+      "frequency": "monthly",
+      "companies": [
+        { "code": "2330", "name": "台积电", "role": "CoWoS与AI芯片需求代理" },
+        { "code": "3711", "name": "日月光投控", "role": "封测需求代理" },
+        { "code": "2382", "name": "广达", "role": "AI服务器需求代理" },
+        { "code": "6669", "name": "纬颖", "role": "云服务器需求代理" }
+      ]
+    },
+    "opendart": {
+      "enabled": true,
+      "frequency": "weekly",
+      "requiresEnv": "OPENDART_API_KEY",
+      "companies": [
+        { "corpCode": "00126380", "name": "Samsung Electronics", "role": "DRAM/HBM/NAND供给" },
+        { "corpCode": "00164779", "name": "SK Hynix", "role": "DRAM/HBM/NAND供给" }
+      ]
+    },
+    "trendforce": {
+      "enabled": false,
+      "frequency": "monthly/quarterly",
+      "mode": "excel-import",
+      "note": "取得订阅Excel后，通过 scripts/import_trendforce_h12.py 导入。"
+    }
+  }
+}

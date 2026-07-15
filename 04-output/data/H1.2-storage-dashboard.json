@@ -1,0 +1,286 @@
+{
+  "meta": {
+    "hypothesis": "H1.2",
+    "title": "存储周期向成长转变",
+    "subtitle": "高端成长与消费周期并存的分层验证",
+    "asOf": "2026-07-14",
+    "generatedAt": "2026-07-15T01:10:06+00:00",
+    "certainty": 72,
+    "status": "持续观察",
+    "decision": "AI正在推动高端存储成长性，但没有消灭存储行业周期。",
+    "reviewPolicy": "自动数据不直接改变置信度，需在周度复盘中人工确认。"
+  },
+  "lanes": [
+    {
+      "id": "hbm",
+      "label": "HBM",
+      "status": "support",
+      "statusLabel": "支持假设",
+      "summary": "产能、良率、封装和认证共同形成系统约束。",
+      "metric": "2026产能 +37.5%"
+    },
+    {
+      "id": "server-dram",
+      "label": "服务器DRAM",
+      "status": "support",
+      "statusLabel": "结构性紧缺",
+      "summary": "HBM挤占先进制程，DDR5获得二级传导。",
+      "metric": "三星LTA约70%待核"
+    },
+    {
+      "id": "enterprise-nand",
+      "label": "企业级NAND",
+      "status": "watch",
+      "statusLabel": "验证中",
+      "summary": "AI SSD需求增强，但客户订单和2028扩产仍是变量。",
+      "metric": "2027E缺口约9%"
+    },
+    {
+      "id": "consumer-memory",
+      "label": "消费存储",
+      "status": "risk",
+      "statusLabel": "周期仍强",
+      "summary": "消费SSD涨价遇阻，库存和终端需求构成反证。",
+      "metric": "砍单与库存积压"
+    }
+  ],
+  "series": {
+    "capacity": [
+      {
+        "year": 2025,
+        "dram": 151,
+        "hbm": 35.5,
+        "nand": 990
+      },
+      {
+        "year": 2026,
+        "dram": 164,
+        "hbm": 48.8,
+        "nand": 958
+      },
+      {
+        "year": 2027,
+        "dram": 177,
+        "hbm": 59.3,
+        "nand": 1015
+      }
+    ],
+    "value": [
+      {
+        "year": 2025,
+        "hbm": 450,
+        "nand": 920
+      },
+      {
+        "year": 2026,
+        "hbm": 900,
+        "nand": 1360
+      },
+      {
+        "year": 2027,
+        "hbm": 1400,
+        "nand": 1510
+      }
+    ],
+    "nandGap2027": {
+      "supply": 1347,
+      "demand": 1484,
+      "unit": "EB",
+      "gapPct": 9.2
+    }
+  },
+  "triggers": [
+    {
+      "id": "hbm4-yield",
+      "label": "HBM4良率与认证",
+      "current": "领先厂商55%-60%，认证推进中",
+      "threshold": "良率>70%且价格回落",
+      "status": "watch",
+      "frequency": "月度/季度",
+      "updatedAt": "2026-07-12",
+      "source": "产业资料，人工确认",
+      "automation": "manual"
+    },
+    {
+      "id": "cowos-hbm-gap",
+      "label": "CoWoS与HBM产能增速差",
+      "current": "+17.5pct（55% vs 37.5%）",
+      "threshold": ">20pct",
+      "status": "watch",
+      "frequency": "月度",
+      "updatedAt": "2026-07-12",
+      "source": "吴梓豪产业研报",
+      "automation": "semi"
+    },
+    {
+      "id": "server-ddr5-price",
+      "label": "服务器DDR5合约价",
+      "current": "2026/2027继续上行",
+      "threshold": "环比<10%或转跌",
+      "status": "support",
+      "frequency": "季度",
+      "updatedAt": "2026-07-12",
+      "source": "待接TrendForce Excel",
+      "automation": "excel"
+    },
+    {
+      "id": "lta-coverage",
+      "label": "CSP与存储厂LTA覆盖",
+      "current": "Kioxia 2027E>50%；三星约70%待核",
+      "threshold": "覆盖率>60%且口径确认",
+      "status": "watch",
+      "frequency": "季度",
+      "updatedAt": "2026-07-14",
+      "source": "卖方研究+专家访谈",
+      "automation": "manual"
+    },
+    {
+      "id": "enterprise-ssd-orders",
+      "label": "企业SSD / AI SSD订单",
+      "current": "2027E AI NAND需求609EB",
+      "threshold": "主要CSP连续两季上修/下修",
+      "status": "support",
+      "frequency": "月度/季度",
+      "updatedAt": "2026-07-14",
+      "source": "Morgan Stanley模型",
+      "automation": "semi"
+    },
+    {
+      "id": "consumer-inventory",
+      "label": "消费SSD / 手机 / PC库存",
+      "current": "涨价后出现砍单、库存积压",
+      "threshold": "库存持续升高或出货受压",
+      "status": "risk",
+      "frequency": "月度",
+      "updatedAt": "2026-07-14",
+      "source": "渠道检查+专家访谈",
+      "automation": "manual"
+    },
+    {
+      "id": "bit-growth",
+      "label": "DRAM bit growth（含HBM）",
+      "current": "2026E 18%-20%",
+      "threshold": "连续两季超预期且价格回落",
+      "status": "watch",
+      "frequency": "季度",
+      "updatedAt": "2026-07-12",
+      "source": "吴梓豪产业研报",
+      "automation": "semi"
+    }
+  ],
+  "evidence": [
+    {
+      "date": "2026-07-14",
+      "direction": "support",
+      "title": "AI NAND成为主要增量",
+      "detail": "2027E AI NAND需求609EB，占总需求41%。",
+      "confidence": "高",
+      "source": "Morgan Stanley署名模型"
+    },
+    {
+      "date": "2026-07-14",
+      "direction": "watch",
+      "title": "2028供给弹性仍未解决",
+      "detail": "AI SSD增速与长江存储新产能决定NAND是否重新过剩。",
+      "confidence": "高",
+      "source": "Morgan Stanley情景模型"
+    },
+    {
+      "date": "2026-07-14",
+      "direction": "support",
+      "title": "高端与消费存储继续分化",
+      "detail": "服务器/eSSD保持强势，消费NAND涨价遇阻。",
+      "confidence": "中高",
+      "source": "渠道检查+专家访谈"
+    },
+    {
+      "date": "2026-07-12",
+      "direction": "support",
+      "title": "HBM产值增速显著高于产能",
+      "detail": "2026E产能增长37.5%，产值增长100%。",
+      "confidence": "最高",
+      "source": "吴梓豪产业研报"
+    }
+  ],
+  "sourceStatus": [
+    {
+      "id": "sec",
+      "label": "SEC EDGAR",
+      "status": "error",
+      "updatedAt": null,
+      "note": "当前网络被官方接口限制，采集器已保留"
+    },
+    {
+      "id": "twse",
+      "label": "TWSE OpenAPI",
+      "status": "connected",
+      "updatedAt": "2026-07-14T16:01:41+00:00",
+      "note": "已读取3家公司，资料年月2026-06"
+    },
+    {
+      "id": "opendart",
+      "label": "OpenDART",
+      "status": "unconfigured",
+      "updatedAt": null,
+      "note": "需要OPENDART_API_KEY"
+    },
+    {
+      "id": "trendforce",
+      "label": "TrendForce Excel",
+      "status": "unconfigured",
+      "updatedAt": null,
+      "note": "等待Excel导入"
+    }
+  ],
+  "officialFeeds": {
+    "sec": {
+      "companies": []
+    },
+    "twse": {
+      "companies": [
+        {
+          "code": "2382",
+          "name": "广达",
+          "role": "AI服务器需求代理",
+          "dataMonth": "2026-06",
+          "monthlyRevenueTwdThousand": 385190820.0,
+          "monthlyYoYPct": 102.87247195164615,
+          "ytdRevenueTwdThousand": 1845814207.0,
+          "ytdYoYPct": 86.48475082849643
+        },
+        {
+          "code": "3711",
+          "name": "日月光投控",
+          "role": "封测需求代理",
+          "dataMonth": "2026-06",
+          "monthlyRevenueTwdThousand": 65783102.0,
+          "monthlyYoYPct": 32.861279955266355,
+          "ytdRevenueTwdThousand": 364725674.0,
+          "ytdYoYPct": 22.021177497754
+        },
+        {
+          "code": "6669",
+          "name": "纬颖",
+          "role": "云服务器需求代理",
+          "dataMonth": "2026-06",
+          "monthlyRevenueTwdThousand": 111371123.0,
+          "monthlyYoYPct": 29.790739162285384,
+          "ytdRevenueTwdThousand": 554660326.0,
+          "ytdYoYPct": 41.71232734335731
+        }
+      ]
+    },
+    "opendart": {
+      "companies": []
+    },
+    "trendforce": {
+      "metrics": []
+    }
+  },
+  "links": {
+    "hypothesis": "/ai-investing/kb/hypotheses/h1-2-f7cc1f2f/",
+    "tracking": "/ai-investing/outputs/tracking/h1-2-storage-tracking-a7a419e6/",
+    "report": "/ai-investing/outputs/reports/h1-2-storage-restructured-2026-07-12-1cdd92c8/",
+    "github": "https://github.com/Annettehub/ai-investing/blob/main/04-output/tracking/H1.2-storage-tracking.md"
+  }
+}

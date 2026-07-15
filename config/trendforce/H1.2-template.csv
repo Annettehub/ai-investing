@@ -1,0 +1,6 @@
+metric_id,as_of,value,unit,period,source_note
+server_ddr5_contract_qoq,2026-07-01,,%,2026Q3,Server DIMM contract price QoQ
+enterprise_ssd_contract_qoq,2026-07-01,,%,2026Q3,Enterprise SSD contract price QoQ
+consumer_ssd_contract_qoq,2026-07-01,,%,2026Q3,Client SSD contract price QoQ
+nand_wafer_contract_qoq,2026-07-01,,%,2026Q3,NAND wafer contract price QoQ
+hbm4_contract_price,2026-07-01,,USD/GB,2026,HMB4 contract price

@@ -47,3 +47,26 @@ MVP 阶段只使用三个动作：
 - 需要进入周度复盘。
 
 否则资料留在 `03-raw/`，不急着处理。
+
+## H1.2 存储研究驾驶舱
+
+驾驶舱把长期跟踪表拆成两层：底层保留具体指标和阈值，页面只显示结论、四条验证线、触发条件、数据新鲜度和最新证据。
+
+本地刷新并打开页面：
+
+```powershell
+python scripts\update_h12_dashboard_data.py
+cd site
+npm.cmd run dev
+```
+
+访问 `http://127.0.0.1:4321/ai-investing/dashboard/h1-2-storage/`。
+
+TrendForce 数据取得后，先按 `config/trendforce/H1.2-template.csv` 整理列名，再导入：
+
+```powershell
+python scripts\import_trendforce_h12.py "D:\path\TrendForce.xlsx"
+python scripts\update_h12_dashboard_data.py --offline
+```
+
+SEC、TWSE 和 OpenDART 采集结果只作为外部验证信号，不会自动修改 H1.2 的 `certainty`。OpenDART 需要在 `config/.env` 中配置 `OPENDART_API_KEY`。

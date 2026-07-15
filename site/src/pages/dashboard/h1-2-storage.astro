@@ -1,0 +1,285 @@
+---
+import StarlightPage from '@astrojs/starlight/components/StarlightPage.astro';
+import dashboard from '../../data/h12-dashboard.json';
+
+const base = `${import.meta.env.BASE_URL.replace(/\/?$/, '')}/`;
+const reportLink = `${base}outputs/reports-0b7ec688/h1-2-storage-restructured-2026-07-12-37efdc5d/`;
+const trackingLink = `${base}outputs/tracking-da4dfe3f/h1-2-storage-tracking-cb7dd53f/`;
+const hypothesisLink = `${base}kb/hypotheses/h1-2-57c2cbf4/`;
+const dashboardTopics = [
+  { code: 'H1.2', label: '存储', href: `${base}dashboard/h1-2-storage/`, current: true },
+  { code: 'H1.3', label: '待创建', disabled: true },
+  { code: 'H2.1', label: '待创建', disabled: true },
+];
+
+const statusText: Record<string, string> = {
+  connected: '已连接', pending: '待采集', unconfigured: '待配置', stale: '沿用上次数据', error: '连接异常',
+};
+const automationText: Record<string, string> = {
+  manual: '人工确认', semi: '半自动', excel: 'Excel导入', official: '官方API',
+};
+const formatUsd = (value?: number | null) => {
+  if (value == null) return '—';
+  if (value >= 1e9) return `$${(value / 1e9).toFixed(1)}B`;
+  if (value >= 1e6) return `$${(value / 1e6).toFixed(1)}M`;
+  return `$${value.toLocaleString('en-US')}`;
+};
+const formatTwdRevenue = (value?: number | null) => value == null ? '—' : `NT$${(value / 1e6).toFixed(1)}B`;
+const freshness = (updatedAt?: string | null) => {
+  if (!updatedAt) return { label: '未知', className: 'stale' };
+  const days = Math.max(0, Math.floor((new Date(`${dashboard.meta.asOf}T00:00:00Z`).getTime() - new Date(updatedAt).getTime()) / 86400000));
+  if (days <= 30) return { label: `${days}天`, className: 'fresh' };
+  if (days <= 90) return { label: `${days}天`, className: 'aging' };
+  return { label: `${days}天`, className: 'stale' };
+};
+const maxCapacity = Math.max(...dashboard.series.capacity.map((item) => item.dram));
+const maxValue = Math.max(...dashboard.series.value.map((item) => item.hbm));
+const nandMax = Math.max(dashboard.series.nandGap2027.supply, dashboard.series.nandGap2027.demand);
+const secCompanies = dashboard.officialFeeds.sec?.companies ?? [];
+const twseCompanies = dashboard.officialFeeds.twse?.companies ?? [];
+const trendforceMetrics = dashboard.officialFeeds.trendforce?.metrics ?? [];
+const trendforceLabels: Record<string, string> = {
+  server_ddr5_contract_qoq: '服务器DDR5合约价',
+  enterprise_ssd_contract_qoq: '企业SSD合约价',
+  consumer_ssd_contract_qoq: '消费SSD合约价',
+  nand_wafer_contract_qoq: 'NAND wafer合约价',
+  hbm4_contract_price: 'HBM4合约价',
+};
+const pageHeadings = [
+  { depth: 2, slug: 'lane-title', text: '行业状态' },
+  { depth: 2, slug: 'trend-title', text: '结构趋势' },
+  { depth: 2, slug: 'trigger-title', text: '触发条件' },
+  { depth: 2, slug: 'source-title', text: '自动数据源' },
+  { depth: 2, slug: 'evidence-title', text: '证据流' },
+];
+---
+
+<StarlightPage headings={pageHeadings} frontmatter={{ title: '投研驾驶舱', description: '研究主题的跟踪指标、触发条件与数据更新状态', pagefind: false }}>
+  <div class="h12-dashboard">
+    <nav class="topic-switcher" aria-label="投研题材切换">
+      <div class="topic-switcher-label">
+        <span class="topic-menu-icon" aria-hidden="true">☰</span>
+        <span>题材切换</span>
+      </div>
+      <div class="topic-tabs">
+        {dashboardTopics.map((topic) =>
+          topic.disabled ? (
+            <span class="topic-tab is-disabled" aria-disabled="true">
+              <b>{topic.code}</b>
+              <span>{topic.label}</span>
+            </span>
+          ) : (
+            <a
+              class:list={['topic-tab', { 'is-active': topic.current }]}
+              href={topic.href}
+              aria-current={topic.current ? 'page' : undefined}
+            >
+              <b>{topic.code}</b>
+              <span>{topic.label}</span>
+            </a>
+          )
+        )}
+      </div>
+    </nav>
+
+    <section class="dashboard-summary" aria-labelledby="current-decision">
+      <div class="summary-copy">
+        <p class="eyebrow">ACTIVE HYPOTHESIS · 更新至 {dashboard.meta.asOf}</p>
+        <h2 id="current-decision">{dashboard.meta.decision}</h2>
+        <p>{dashboard.meta.subtitle}</p>
+        <nav class="dashboard-links" aria-label="H1.2相关文档">
+          <a href={hypothesisLink}>查看假设</a><a href={trackingLink}>长期跟踪表</a><a href={reportLink}>正式研究报告</a>
+        </nav>
+      </div>
+      <div class="certainty-panel" aria-label={`当前置信度${dashboard.meta.certainty}%`}>
+        <div class="certainty-topline"><span>当前置信度</span><span class="status-chip status-watch">{dashboard.meta.status}</span></div>
+        <strong>{dashboard.meta.certainty}<small>%</small></strong>
+        <div class="certainty-track" aria-hidden="true"><span style={`width:${dashboard.meta.certainty}%`}></span></div>
+        <p>{dashboard.meta.reviewPolicy}</p>
+      </div>
+    </section>
+
+    <section aria-labelledby="lane-title">
+      <div class="section-heading"><div><p class="eyebrow">四条验证线</p><h2 id="lane-title">行业状态一眼看清</h2></div><p>高端存储与消费存储不能合并判断。</p></div>
+      <div class="lane-grid">
+        {dashboard.lanes.map((lane) => (
+          <article class={`lane-card state-${lane.status}`}>
+            <div class="lane-card-top"><h3>{lane.label}</h3><span class={`status-chip status-${lane.status}`}>{lane.statusLabel}</span></div>
+            <strong>{lane.metric}</strong><p>{lane.summary}</p>
+          </article>
+        ))}
+      </div>
+    </section>
+
+    <section aria-labelledby="trend-title">
+      <div class="section-heading"><div><p class="eyebrow">结构趋势</p><h2 id="trend-title">产能、产值与供需缺口</h2></div><p>单位不同的指标分开呈现，避免混淆wafer产能与bit需求。</p></div>
+      <div class="chart-grid">
+        <article class="chart-panel capacity-chart">
+          <header><div><h3>DRAM / HBM wafer产能</h3><p>万片/月，HBM为DRAM中的高端子集</p></div><div class="legend"><span class="legend-dram">DRAM</span><span class="legend-hbm">HBM</span></div></header>
+          <div class="bar-chart">
+            {dashboard.series.capacity.map((item) => (
+              <div class="bar-group"><span class="bar-year">{item.year}</span><div class="bar-stack">
+                <div class="bar-row"><div class="bar-track"><span class="bar-fill dram" style={`width:${(item.dram / maxCapacity) * 100}%`}></span></div><b>{item.dram}</b></div>
+                <div class="bar-row"><div class="bar-track"><span class="bar-fill hbm" style={`width:${(item.hbm / maxCapacity) * 100}%`}></span></div><b>{item.hbm}</b></div>
+              </div></div>
+            ))}
+          </div>
+        </article>
+        <article class="chart-panel value-chart">
+          <header><div><h3>HBM产值增长</h3><p>亿美元，价值量增速显著高于wafer产能</p></div><span class="delta-badge">2025-27 +211%</span></header>
+          <div class="vertical-chart">
+            {dashboard.series.value.map((item) => (
+              <div class="vertical-item"><b>{item.hbm}</b><div class="vertical-track"><span style={`height:${(item.hbm / maxValue) * 100}%`}></span></div><span>{item.year}</span></div>
+            ))}
+          </div>
+        </article>
+        <article class="chart-panel gap-chart">
+          <header><div><h3>2027E NAND供需</h3><p>EB，Morgan Stanley情景模型</p></div><span class="delta-badge risk">缺口约{dashboard.series.nandGap2027.gapPct}%</span></header>
+          <div class="gap-bars">
+            <div><span>供给</span><div class="gap-track"><span style={`width:${(dashboard.series.nandGap2027.supply / nandMax) * 100}%`}></span></div><b>{dashboard.series.nandGap2027.supply}</b></div>
+            <div><span>需求</span><div class="gap-track demand"><span style={`width:${(dashboard.series.nandGap2027.demand / nandMax) * 100}%`}></span></div><b>{dashboard.series.nandGap2027.demand}</b></div>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section aria-labelledby="trigger-title">
+      <div class="section-heading"><div><p class="eyebrow">触发条件</p><h2 id="trigger-title">哪些变化会改变判断</h2></div><p>新数据先更新观测值，周度复盘后再调整置信度。</p></div>
+      <div class="trigger-table-wrap"><table class="trigger-table"><thead><tr><th>指标</th><th>当前值</th><th>触发阈值</th><th>状态</th><th>更新</th><th>方式</th></tr></thead><tbody>
+        {dashboard.triggers.map((trigger) => {
+          const age = freshness(trigger.updatedAt);
+          return <tr><th scope="row">{trigger.label}<small>{trigger.source}</small></th><td>{trigger.current}</td><td>{trigger.threshold}</td><td><span class={`signal-dot signal-${trigger.status}`}></span>{trigger.status === 'support' ? '支持' : trigger.status === 'risk' ? '反证' : '观察'}</td><td><span class={`freshness ${age.className}`}>{age.label}</span></td><td>{automationText[trigger.automation] ?? trigger.automation}</td></tr>;
+        })}
+      </tbody></table></div>
+    </section>
+
+    <section aria-labelledby="source-title">
+      <div class="section-heading"><div><p class="eyebrow">自动数据源</p><h2 id="source-title">官方数据连接状态</h2></div><p>价格与产能数据库仍保留人工导入和复核。</p></div>
+      <div class="source-grid">
+        {dashboard.sourceStatus.map((source) => (
+          <article class={`source-card source-${source.status}`}><div><span class="source-pulse"></span><h3>{source.label}</h3></div><strong>{statusText[source.status] ?? source.status}</strong><p>{source.note}</p></article>
+        ))}
+      </div>
+      {(secCompanies.length > 0 || twseCompanies.length > 0 || trendforceMetrics.length > 0) && <div class="official-feed-grid">
+        {secCompanies.length > 0 && <article class="feed-panel"><header><h3>美国公司最新披露</h3><span>SEC XBRL</span></header><div class="company-feed-list">
+          {secCompanies.map((company) => <div class="company-feed-row"><div><strong>{company.ticker}</strong><small>{company.role}</small></div><div><b>{formatUsd(company.revenue?.value)}</b><small>收入 · {company.revenue?.periodEnd ?? '—'}</small></div><div><b>{formatUsd(company.capex?.value)}</b><small>资本开支披露值</small></div></div>)}
+        </div></article>}
+        {twseCompanies.length > 0 && <article class="feed-panel"><header><h3>中国台湾供应链月营收</h3><span>TWSE</span></header><div class="company-feed-list">
+          {twseCompanies.map((company) => <div class="company-feed-row"><div><strong>{company.name}</strong><small>{company.role}</small></div><div><b>{formatTwdRevenue(company.monthlyRevenueTwdThousand)}</b><small>当月营收 · {company.dataMonth ?? '—'}</small></div><div><b class={company.monthlyYoYPct != null && company.monthlyYoYPct < 0 ? 'negative' : 'positive'}>{company.monthlyYoYPct == null ? '—' : `${company.monthlyYoYPct.toFixed(1)}%`}</b><small>同比</small></div></div>)}
+        </div></article>}
+        {trendforceMetrics.length > 0 && <article class="feed-panel"><header><h3>存储价格指标</h3><span>TrendForce Excel</span></header><div class="company-feed-list">
+          {trendforceMetrics.map((metric) => <div class="company-feed-row trendforce-row"><div><strong>{trendforceLabels[metric.metricId] ?? metric.metricId}</strong><small>{metric.sourceNote}</small></div><div><b>{metric.value}{metric.unit}</b><small>{metric.period || metric.asOf}</small></div><div><b>{metric.asOf}</b><small>数据日期</small></div></div>)}
+        </div></article>}
+      </div>}
+    </section>
+
+    <section aria-labelledby="evidence-title">
+      <div class="section-heading"><div><p class="eyebrow">证据流</p><h2 id="evidence-title">最近进入循环的信息</h2></div><p>只显示会支持、反驳或限定H1.2的增量证据。</p></div>
+      <div class="evidence-list">
+        {dashboard.evidence.map((item) => <article class={`evidence-item evidence-${item.direction}`}><div class="evidence-marker"></div><time>{item.date}</time><div><h3>{item.title}</h3><p>{item.detail}</p><small>{item.source} · 置信度{item.confidence}</small></div></article>)}
+      </div>
+    </section>
+
+    <footer class="dashboard-footnote"><p>最后自动采集：{dashboard.meta.generatedAt ? new Date(dashboard.meta.generatedAt).toLocaleString('zh-CN', { timeZone: 'Asia/Shanghai' }) : '尚未运行'}</p><a href="https://github.com/Annettehub/ai-investing/blob/main/04-output/data/H1.2-storage-dashboard.json">查看底层数据</a></footer>
+  </div>
+</StarlightPage>
+
+<style is:global>
+  html:has(.h12-dashboard) { --sl-content-width: 76rem; }
+  html:has(.h12-dashboard) .content-panel { padding-inline: clamp(1rem, 3vw, 2.4rem); }
+  .h12-dashboard { display: grid; gap: 3.5rem; padding-bottom: 2rem; letter-spacing: 0; }
+  .h12-dashboard > * { min-width: 0; }
+  .h12-dashboard h2, .h12-dashboard h3, .h12-dashboard p { margin: 0; }
+  .h12-dashboard h2 { font-size: clamp(1.35rem, 2vw, 1.8rem); line-height: 1.28; }
+  .h12-dashboard h3 { font-size: 1rem; }
+  .topic-switcher { display: flex; align-items: center; gap: .75rem; min-width: 0; padding: .55rem .7rem; border: 1px solid var(--sl-color-gray-5); border-radius: 6px; background: var(--sl-color-gray-7); }
+  .topic-switcher-label { display: inline-flex; flex: 0 0 auto; align-items: center; gap: .4rem; color: var(--sl-color-gray-2); font-size: .76rem; font-weight: 700; white-space: nowrap; }
+  .topic-menu-icon { color: var(--sl-color-accent-high); font-size: 1rem; line-height: 1; }
+  .topic-tabs { display: flex; gap: .4rem; min-width: 0; overflow-x: auto; padding-bottom: .1rem; scrollbar-width: thin; }
+  .topic-tab { display: inline-flex; flex: 0 0 auto; align-items: baseline; gap: .35rem; min-height: 2.1rem; padding: .42rem .68rem; border: 1px solid transparent; border-radius: 4px; color: var(--sl-color-gray-2); text-decoration: none; white-space: nowrap; }
+  .topic-tab b { font-size: .84rem; }
+  .topic-tab span { color: var(--sl-color-gray-3); font-size: .76rem; }
+  .topic-tab.is-active { border-color: var(--sl-color-accent); background: color-mix(in srgb, var(--sl-color-accent) 12%, transparent); color: var(--sl-color-accent-high); }
+  .topic-tab.is-active span { color: var(--sl-color-accent-high); }
+  .topic-tab.is-disabled { opacity: .6; cursor: not-allowed; }
+  .eyebrow { color: var(--sl-color-accent-high); font-size: .72rem; font-weight: 750; letter-spacing: .08em !important; text-transform: uppercase; }
+  .dashboard-summary { display: grid; grid-template-columns: minmax(0, 1.65fr) minmax(16rem, .7fr); gap: 1.2rem; align-items: stretch; }
+  .summary-copy, .certainty-panel, .chart-panel, .feed-panel { border: 1px solid var(--sl-color-gray-5); border-radius: 8px; background: color-mix(in srgb, var(--sl-color-bg) 92%, var(--sl-color-gray-6)); }
+  .summary-copy { padding: clamp(1.3rem, 3vw, 2.2rem); display: grid; align-content: center; gap: .9rem; border-left: 4px solid var(--sl-color-accent); }
+  .summary-copy h2 { max-width: 30ch; font-size: clamp(1.55rem, 2.7vw, 2.35rem); }
+  .summary-copy > p:not(.eyebrow) { color: var(--sl-color-gray-2); }
+  .dashboard-links { display: flex; flex-wrap: wrap; gap: 1rem; margin-top: .45rem; }
+  .dashboard-links a { font-size: .88rem; font-weight: 700; text-decoration: none; border-bottom: 1px solid currentColor; }
+  .certainty-panel { padding: 1.25rem; display: grid; gap: .7rem; align-content: center; }
+  .certainty-topline { display: flex; align-items: center; justify-content: space-between; gap: .8rem; color: var(--sl-color-gray-2); font-size: .82rem; font-weight: 650; }
+  .certainty-panel > strong { font-size: clamp(3rem, 6vw, 4.5rem); line-height: 1; color: var(--sl-color-white); }
+  .certainty-panel strong small { font-size: .38em; margin-left: .12em; }
+  .certainty-track { height: .55rem; background: var(--sl-color-gray-6); border-radius: 4px; overflow: hidden; }
+  .certainty-track span { display: block; height: 100%; background: var(--sl-color-accent); }
+  .certainty-panel p { color: var(--sl-color-gray-3); font-size: .78rem; line-height: 1.5; }
+  .status-chip { display: inline-flex; align-items: center; min-height: 1.65rem; padding: .18rem .52rem; border-radius: 4px; font-size: .72rem; font-weight: 750; white-space: nowrap; }
+  .status-support { background: color-mix(in srgb, #2d8a67 16%, transparent); color: #4fb58d; }
+  .status-watch { background: color-mix(in srgb, #d49a35 18%, transparent); color: #d8a444; }
+  .status-risk { background: color-mix(in srgb, #c75c5c 17%, transparent); color: #df7777; }
+  [data-theme='light'] .status-support { color: #1d6f52; } [data-theme='light'] .status-watch { color: #8b5b08; } [data-theme='light'] .status-risk { color: #9f3636; }
+  .section-heading { display: flex; justify-content: space-between; align-items: end; gap: 1.5rem; margin-bottom: 1rem; }
+  .section-heading > div { display: grid; gap: .35rem; }
+  .section-heading > p { max-width: 31rem; color: var(--sl-color-gray-3); font-size: .83rem; text-align: right; }
+  .lane-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: .8rem; }
+  .lane-card { min-height: 10rem; padding: 1rem; border: 1px solid var(--sl-color-gray-5); border-top: 3px solid var(--sl-color-gray-4); border-radius: 6px; background: var(--sl-color-bg); display: grid; align-content: start; gap: .7rem; }
+  .lane-card.state-support { border-top-color: #2d8a67; } .lane-card.state-watch { border-top-color: #d49a35; } .lane-card.state-risk { border-top-color: #c75c5c; }
+  .lane-card-top { display: flex; justify-content: space-between; align-items: start; gap: .5rem; }
+  .lane-card > strong { font-size: 1.07rem; } .lane-card > p { color: var(--sl-color-gray-3); font-size: .82rem; line-height: 1.55; }
+  .chart-grid { display: grid; grid-template-columns: 1.35fr .75fr; gap: .8rem; }
+  .chart-panel { padding: 1.05rem; min-width: 0; } .capacity-chart { grid-row: span 2; }
+  .chart-panel header, .feed-panel header { display: flex; justify-content: space-between; align-items: start; gap: 1rem; margin-bottom: 1.3rem; }
+  .chart-panel header p { color: var(--sl-color-gray-3); font-size: .76rem; margin-top: .2rem; }
+  .legend { display: flex; gap: .7rem; font-size: .72rem; }
+  .legend span::before { content: ''; display: inline-block; width: .58rem; height: .58rem; margin-right: .3rem; border-radius: 2px; }
+  .legend-dram::before { background: var(--sl-color-accent); } .legend-hbm::before { background: #d49a35; }
+  .bar-chart { display: grid; gap: 1.3rem; } .bar-group { display: grid; grid-template-columns: 3rem 1fr; gap: .75rem; align-items: center; }
+  .bar-year { color: var(--sl-color-gray-3); font-size: .78rem; font-weight: 700; }
+  .bar-stack { display: grid; gap: .45rem; } .bar-row { display: grid; grid-template-columns: 1fr 3.2rem; gap: .6rem; align-items: center; }
+  .bar-row b { font-size: .75rem; font-variant-numeric: tabular-nums; } .bar-track { height: 1rem; background: var(--sl-color-gray-6); overflow: hidden; border-radius: 3px; }
+  .bar-fill { display: block; height: 100%; min-width: 2px; } .bar-fill.dram { background: var(--sl-color-accent); } .bar-fill.hbm { background: #d49a35; }
+  .delta-badge { color: #4fb58d; background: color-mix(in srgb, #2d8a67 14%, transparent); border-radius: 4px; padding: .25rem .45rem; font-size: .72rem; font-weight: 750; white-space: nowrap; }
+  .delta-badge.risk { color: #df7777; background: color-mix(in srgb, #c75c5c 14%, transparent); }
+  .vertical-chart { height: 8rem; display: flex; align-items: end; justify-content: space-around; gap: 1rem; }
+  .vertical-item { height: 100%; flex: 1; display: grid; grid-template-rows: auto 1fr auto; justify-items: center; gap: .35rem; }
+  .vertical-item b, .vertical-item > span { font-size: .72rem; } .vertical-item > span { color: var(--sl-color-gray-3); }
+  .vertical-track { height: 100%; width: min(2.4rem, 65%); display: flex; align-items: end; background: var(--sl-color-gray-6); border-radius: 3px 3px 0 0; overflow: hidden; }
+  .vertical-track span { display: block; width: 100%; background: #d49a35; }
+  .gap-bars { display: grid; gap: .7rem; } .gap-bars > div { display: grid; grid-template-columns: 2.5rem 1fr 3rem; align-items: center; gap: .6rem; font-size: .75rem; }
+  .gap-track { height: 1.15rem; background: var(--sl-color-gray-6); border-radius: 3px; overflow: hidden; } .gap-track span { display: block; height: 100%; background: var(--sl-color-accent); } .gap-track.demand span { background: #c75c5c; }
+  .trigger-table-wrap { overflow-x: auto; border: 1px solid var(--sl-color-gray-5); border-radius: 6px; }
+  .trigger-table { width: 100%; min-width: 62rem; margin: 0 !important; border: 0 !important; font-size: .78rem !important; }
+  .trigger-table th, .trigger-table td { padding: .75rem .7rem; vertical-align: middle; border-bottom: 1px solid var(--sl-color-gray-6); }
+  .trigger-table thead th { color: var(--sl-color-gray-2); background: var(--sl-color-gray-6); font-size: .7rem; text-transform: uppercase; }
+  .trigger-table tbody th { min-width: 11rem; text-align: left; } .trigger-table tbody th small { display: block; color: var(--sl-color-gray-3); font-weight: 400; margin-top: .2rem; }
+  .signal-dot { display: inline-block; width: .52rem; height: .52rem; border-radius: 50%; margin-right: .35rem; } .signal-support { background: #2d8a67; } .signal-watch { background: #d49a35; } .signal-risk { background: #c75c5c; }
+  .freshness { display: inline-flex; min-width: 2.5rem; justify-content: center; padding: .18rem .35rem; border-radius: 3px; font-size: .68rem; font-weight: 750; }
+  .freshness.fresh { background: color-mix(in srgb, #2d8a67 14%, transparent); color: #4fb58d; } .freshness.aging { background: color-mix(in srgb, #d49a35 14%, transparent); color: #d8a444; } .freshness.stale { background: var(--sl-color-gray-6); color: var(--sl-color-gray-3); }
+  .source-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: .8rem; }
+  .source-card { padding: .9rem; border: 1px solid var(--sl-color-gray-5); border-radius: 6px; min-width: 0; }
+  .source-card > div { display: flex; align-items: center; gap: .45rem; } .source-card strong { display: block; margin-top: .7rem; font-size: .85rem; }
+  .source-card p { margin-top: .25rem; color: var(--sl-color-gray-3); font-size: .72rem; line-height: 1.45; overflow-wrap: anywhere; }
+  .source-pulse { width: .55rem; height: .55rem; border-radius: 50%; background: var(--sl-color-gray-4); flex: 0 0 auto; }
+  .source-connected .source-pulse { background: #2d8a67; box-shadow: 0 0 0 3px color-mix(in srgb, #2d8a67 16%, transparent); } .source-error .source-pulse { background: #c75c5c; }
+  .source-stale .source-pulse { background: #d49a35; box-shadow: 0 0 0 3px color-mix(in srgb, #d49a35 16%, transparent); }
+  .official-feed-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .8rem; margin-top: .8rem; }
+  .feed-panel { padding: 1rem; min-width: 0; } .feed-panel header { margin-bottom: .65rem; } .feed-panel header span { color: var(--sl-color-gray-3); font-size: .7rem; font-weight: 700; }
+  .company-feed-list { display: grid; } .company-feed-row { display: grid; grid-template-columns: 1.1fr .85fr .85fr; gap: .7rem; align-items: center; padding: .65rem 0; border-top: 1px solid var(--sl-color-gray-6); }
+  .company-feed-row > div { min-width: 0; display: grid; } .company-feed-row strong, .company-feed-row b { font-size: .78rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .company-feed-row small { color: var(--sl-color-gray-3); font-size: .63rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .company-feed-row .positive { color: #4fb58d; } .company-feed-row .negative { color: #df7777; }
+  .evidence-list { position: relative; display: grid; gap: .8rem; } .evidence-list::before { content: ''; position: absolute; left: 5.65rem; top: .7rem; bottom: .7rem; width: 1px; background: var(--sl-color-gray-5); }
+  .evidence-item { display: grid; grid-template-columns: 4.8rem .9rem 1fr; gap: .45rem; align-items: start; } .evidence-item time { color: var(--sl-color-gray-3); font-size: .72rem; padding-top: .2rem; }
+  .evidence-marker { width: .65rem; height: .65rem; margin-top: .25rem; border-radius: 50%; background: var(--sl-color-gray-4); z-index: 1; }
+  .evidence-support .evidence-marker { background: #2d8a67; } .evidence-watch .evidence-marker { background: #d49a35; } .evidence-risk .evidence-marker { background: #c75c5c; }
+  .evidence-item > div:last-child { padding: 0 0 .8rem .35rem; } .evidence-item h3 { margin-bottom: .2rem; } .evidence-item p { color: var(--sl-color-gray-2); font-size: .82rem; }
+  .evidence-item small { display: block; color: var(--sl-color-gray-3); margin-top: .25rem; font-size: .7rem; }
+  .dashboard-footnote { display: flex; justify-content: space-between; gap: 1rem; padding-top: 1rem; border-top: 1px solid var(--sl-color-gray-5); color: var(--sl-color-gray-3); font-size: .72rem; } .dashboard-footnote a { color: inherit; }
+  @media (max-width: 72rem) { .lane-grid, .source-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } .official-feed-grid { grid-template-columns: 1fr; } }
+  @media (max-width: 50rem) { .h12-dashboard { gap: 2.7rem; } .dashboard-summary, .chart-grid { grid-template-columns: 1fr; } .capacity-chart { grid-row: auto; } .section-heading { align-items: start; } .section-heading > p { display: none; } }
+  @media (max-width: 34rem) { .topic-switcher { gap: .45rem; padding-inline: .5rem; } .topic-switcher-label > span:last-child { display: none; } .topic-tab { padding-inline: .55rem; } .lane-grid, .source-grid { grid-template-columns: 1fr; } .summary-copy, .certainty-panel { padding: 1rem; } .company-feed-row { grid-template-columns: 1fr 1fr; } .company-feed-row > div:first-child { grid-column: 1 / -1; } .evidence-list::before { left: .32rem; } .evidence-item { grid-template-columns: .9rem 1fr; } .evidence-item time { grid-column: 2; grid-row: 1; } .evidence-item > div:last-child { grid-column: 2; } .dashboard-footnote { flex-direction: column; } }
+</style>

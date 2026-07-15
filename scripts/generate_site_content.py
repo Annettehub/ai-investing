@@ -22,6 +22,8 @@ OUTPUT_SRC = ROOT / "04-output"
 KB_DEST = DOCS_ROOT / "kb"
 OUTPUT_DEST = DOCS_ROOT / "outputs"
 SIDEBAR_DEST = ROOT / "site" / "sidebar.generated.mjs"
+DASHBOARD_SRC = OUTPUT_SRC / "data" / "H1.2-storage-dashboard.json"
+DASHBOARD_DEST = ROOT / "site" / "src" / "data" / "h12-dashboard.json"
 GITHUB_BLOB = "https://github.com/Annettehub/ai-investing/blob/main"
 
 CATEGORY_LABELS = {
@@ -30,6 +32,8 @@ CATEGORY_LABELS = {
     "hypotheses": "投资假设",
     "sources": "来源摘要",
     "research": "研究报告",
+    "reports": "研究报告",
+    "tracking": "长期跟踪",
     "today": "每日跟踪",
     "weekly": "周度复盘",
 }
@@ -448,14 +452,14 @@ def write_generated_sidebar() -> None:
             "items": [
                 {"label": "输出总览", "slug": "outputs"},
                 {
-                    "label": CATEGORY_LABELS["research"],
+                    "label": CATEGORY_LABELS["reports"],
                     "collapsed": True,
-                    "items": build_output_sidebar("research"),
+                    "items": build_output_sidebar("reports"),
                 },
                 {
-                    "label": CATEGORY_LABELS["today"],
+                    "label": CATEGORY_LABELS["tracking"],
                     "collapsed": True,
-                    "items": build_output_sidebar("today"),
+                    "items": build_output_sidebar("tracking"),
                 },
                 {
                     "label": CATEGORY_LABELS["weekly"],
@@ -493,12 +497,15 @@ def generate() -> None:
     write_directory_overviews(KB_SRC, KB_DEST)
 
     output_links = []
-    for key in ("research", "today", "weekly"):
+    for key in ("reports", "tracking", "weekly"):
         href = f"/ai-investing/outputs/{slugify(key)}/"
         output_links.append((CATEGORY_LABELS[key], href))
     write_index(OUTPUT_DEST / "index.md", "04-output 输出区", "04-output generated entry", output_links)
     write_directory_overviews(OUTPUT_SRC, OUTPUT_DEST)
     write_generated_sidebar()
+
+    DASHBOARD_DEST.parent.mkdir(parents=True, exist_ok=True)
+    shutil.copyfile(DASHBOARD_SRC, DASHBOARD_DEST)
 
     print("Generated Starlight content from 02-kb and 04-output.")
 

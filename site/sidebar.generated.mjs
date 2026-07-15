@@ -331,7 +331,7 @@ export default [
             "slug": "kb/hypotheses/h1-1-f26496a5"
           },
           {
-            "label": "H1.2 [D1-Trend] 存储周期特性向成长特性转变，HBM+DDR5结构性紧缺长期化",
+            "label": "H1.2 [D1-Trend] 存储周期特性是否向成长特性转变",
             "slug": "kb/hypotheses/h1-2-57c2cbf4"
           },
           {
@@ -449,7 +449,43 @@ export default [
             "slug": "kb/sources/2026-07-05-wechat-ymtc-outlook-2db18772"
           },
           {
-            "label": "IMA 知识库 — 来源索引",
+            "label": "来源卡片：吴梓豪 - 2025Q3 存储复盘",
+            "slug": "kb/sources/2026-07-11-wuzihao-hbm-q3-review-57b5fb78"
+          },
+          {
+            "label": "来源卡片：吴梓豪 - 海力士篇与 HBM/DDR5 传导链",
+            "slug": "kb/sources/2026-07-11-wuzihao-hynix-hbm-ddr5-6112dd48"
+          },
+          {
+            "label": "来源卡片：吴梓豪 - 存储是否改变周期特性",
+            "slug": "kb/sources/2026-07-11-wuzihao-storage-cycle-08e3366e"
+          },
+          {
+            "label": "2026-2029 DRAM/NAND 研报与访谈交叉验证",
+            "slug": "kb/sources/2026-07-12-dram-nand-cross-check-69cf40a1"
+          },
+          {
+            "label": "Morgan Stanley：NAND Industry Outlook - Diverging Trends",
+            "slug": "kb/sources/2026-07-12-ms-nand-diverging-trends-427bc1ac"
+          },
+          {
+            "label": "三星存储与晶圆代工业务分析笔记",
+            "slug": "kb/sources/2026-07-12-samsung-memory-foundry-note-9936f196"
+          },
+          {
+            "label": "吴梓豪：2026 全球半导体展望 - 存储产能与价格",
+            "slug": "kb/sources/2026-07-12-wuzihao-global-memory-capacity-89ae9ae9"
+          },
+          {
+            "label": "三星 HBM 与存储市场展望：专家访谈纪要",
+            "slug": "kb/sources/2026-07-14-samsung-hbm-memory-interview-cd1cc0c5"
+          },
+          {
+            "label": "2026Q2 存储市场更新：DRAM 与 NAND 价格分化",
+            "slug": "kb/sources/2026-07-14-storage-q2-pricing-update-4feb2b13"
+          },
+          {
+            "label": "IMA 知识库来源索引",
             "slug": "kb/sources/index-ima-6461bcd4"
           },
           {
@@ -557,41 +593,33 @@ export default [
         "items": [
           {
             "label": "总览",
-            "slug": "outputs/research"
+            "slug": "outputs/reports-0b7ec688"
           },
           {
-            "label": "YMTC 长江存储 深度研究 — 进口种子与国产设备阶梯扩产路径",
-            "slug": "outputs/research/2026-07-04-ymtc-62e43162"
+            "label": "H1.2 存储产业链深度研究：HBM、DRAM、NAND 的分层供需与周期重构",
+            "slug": "outputs/reports-0b7ec688/h1-2-storage-restructured-2026-07-12-37efdc5d"
           },
           {
-            "label": "系统体检报告 — 2026-06",
-            "slug": "outputs/research/system-check-2026-06-30e59dc7"
+            "label": "产业深度研究报告模板",
+            "slug": "outputs/reports-0b7ec688/p-13b60a3a"
+          },
+          {
+            "label": "产业深度研究改稿通用检查清单",
+            "slug": "outputs/reports-0b7ec688/p-3feb32a0"
           }
         ]
       },
       {
-        "label": "每日跟踪",
+        "label": "长期跟踪",
         "collapsed": true,
         "items": [
           {
             "label": "总览",
-            "slug": "outputs/today"
+            "slug": "outputs/tracking-da4dfe3f"
           },
           {
-            "label": "2026-07-04 每日信号扫描",
-            "slug": "outputs/today/2026-07-04-67de87b0"
-          },
-          {
-            "label": "Annette投研系统 /today 每日检查 — 00981 中芯国际",
-            "slug": "outputs/today/today-2026-07-01-d54da38d"
-          },
-          {
-            "label": "Annette投研系统 /today 每日检查 — 00981 中芯国际",
-            "slug": "outputs/today/today-2026-07-02-7046d99c"
-          },
-          {
-            "label": "每日检查报告 2026-06-30",
-            "slug": "outputs/today/today-2026-06-30-b0ed278a"
+            "label": "H1.2 存储周期成长性长期跟踪表",
+            "slug": "outputs/tracking-da4dfe3f/h1-2-storage-tracking-cb7dd53f"
           }
         ]
       },
@@ -608,8 +636,12 @@ export default [
             "slug": "outputs/weekly/2026-w27-264a99e7"
           },
           {
-            "label": "Annette投研系统 周度复盘报告 — 2026 W27",
-            "slug": "outputs/weekly/2026-w27-c3b6cb1e"
+            "label": "2026-W28 H1.2 存储周期更新",
+            "slug": "outputs/weekly/2026-w28-h1-2-storage-cycle-366fd330"
+          },
+          {
+            "label": "2026-W29 H1.2 存储周期更新",
+            "slug": "outputs/weekly/2026-w29-h1-2-storage-cycle-775c957d"
           }
         ]
       }

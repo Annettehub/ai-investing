@@ -37,6 +37,7 @@ export default defineConfig({
           items: [
             { label: '首页', slug: '' },
             { label: '知识地图', slug: 'ai-map' },
+            { label: '投研驾驶舱', link: '/dashboard/h1-2-storage/' },
           ],
         },
         {
