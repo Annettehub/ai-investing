@@ -117,3 +117,13 @@ R2 同时检查两本账，但不能混为一谈：
 - `02-kb/sources/2026-07-15-dots-tencent-agent-os.md`
 - `03-raw/feishu/2026-05-29 - The a16z Show - 为什么 10 亿美元退出已成过去式...md`
 - IMA/微信中的 20VC 企业 AI 支出材料
+
+## 2026-07-15 IMA 批次补充
+
+| 来源 | 新增判断 | 对 R2 的影响 |
+|---|---|---|
+| `02-kb/sources/2026-07-15-ima-sequoia-engram-memory.md` | 组织记忆和持续学习若能减少重复上下文、降低 token 成本、提高任务质量，可能成为企业 ROI 路径 | 增加“记忆层带来的全成本下降”作为 R2 正向证据候选 |
+| `02-kb/sources/2026-07-15-ima-lenny-ai-workforce-sentiment.md` | 同薪酬更高产出预期、倦怠和 cognitive rot 会抵消 AI 工具效率收益 | 增加组织成本、质量成本和员工可持续性为 R2 负向或约束指标 |
+| `02-kb/sources/2026-07-15-ima-a16z-nvidia-infra-future.md` | router 和 agentic commerce 可能改善免费用户变现，但生成式 AI 创造的社会价值未必被模型/应用提供者捕获 | 将“价值创造”和“价值捕获”分开验证 |
+
+**更新后的判断**：R2 不能只回答“AI 有没有提高生产力”，还要回答“提高的生产力被谁捕获、扣除推理和组织成本后是否为正”。采用者 ROI、应用供应商收入和模型/云供应商毛利三者需要分开记录。

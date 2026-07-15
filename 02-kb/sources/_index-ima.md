@@ -29,3 +29,23 @@
 - `02-kb/hypotheses/G-需求与周期/G2-storage-growth-and-cycle.md`
 - `04-output/tracking/H1.2-storage-tracking.md`
 - `04-output/weekly/2026-W29-H1.2-storage-cycle.md`
+
+## 2026-07-15 批次
+
+- 同步提交：`bb0b44c`
+- 新增载体：6 个 raw 文件；其中 2 组重复，实际唯一资料 4 篇
+- 当前主动主题：AI 基础设施、芯片/加速器竞争、应用层价值捕获、下游 ROI
+
+| 资料 | 价值 | 处理 |
+| --- | --- | --- |
+| Sequoia / Engram 记忆与持续学习 | A- | 新建来源卡；进入 G3、S3、R2；用于企业记忆层、RAG 局限和持续学习观察 |
+| Sequoia / Dylan Patel 软硬件协同设计 | A | 新建来源卡；进入 G1、S1、S2、R1；用于推理供给、NeoCloud、revenue per GW 和协同设计 |
+| Lenny Podcast 2026 AI 工作情绪调查 | B+ | 新建来源卡；进入 G3、R2；用于组织摩擦、倦怠和认知衰退 |
+| a16z / 谁能追上 NVIDIA | A- | 新建来源卡；进入 G1、S1、S3、R1、R2，并更新 NVIDIA 实体档案 |
+
+## 本批次沉淀
+
+- `02-kb/sources/2026-07-15-ima-sequoia-engram-memory.md`
+- `02-kb/sources/2026-07-15-ima-sequoia-dylanpatel-codesign.md`
+- `02-kb/sources/2026-07-15-ima-lenny-ai-workforce-sentiment.md`
+- `02-kb/sources/2026-07-15-ima-a16z-nvidia-infra-future.md`

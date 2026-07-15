@@ -507,6 +507,22 @@ export default [
             "slug": "kb/sources/2026-07-15-dots-tencent-agent-os-0a184c36"
           },
           {
+            "label": "IMA: a16z 还有谁能追上 NVIDIA",
+            "slug": "kb/sources/2026-07-15-ima-a16z-nvidia-infra-future-08d79be4"
+          },
+          {
+            "label": "IMA: Lenny Podcast 2026 AI 工作情绪调查",
+            "slug": "kb/sources/2026-07-15-ima-lenny-ai-workforce-sentimen-a04eb18f"
+          },
+          {
+            "label": "IMA: Sequoia Dylan Patel 软硬件协同设计",
+            "slug": "kb/sources/2026-07-15-ima-sequoia-dylanpatel-codesign-3bb37176"
+          },
+          {
+            "label": "IMA: Sequoia Engram 记忆与持续学习",
+            "slug": "kb/sources/2026-07-15-ima-sequoia-engram-memory-d6e22a2b"
+          },
+          {
             "label": "IMA 知识库来源索引",
             "slug": "kb/sources/index-ima-6461bcd4"
           },
