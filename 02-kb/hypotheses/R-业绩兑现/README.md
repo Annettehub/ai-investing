@@ -1,11 +1,23 @@
-# R 判断范围
+# R 业绩兑现
 
-R 回答“拿到的蛋糕是否真正进入财务报表”：产业优势是否转化为收入、毛利率、自由现金流和资本回报。
+R 回答“拿到的蛋糕是否真正进入报表，以及这种收入是否有可持续支付来源”。它分成上下游两次兑现：
+
+```text
+R1 上游：AI 基础设施需求 -> 供应链订单 -> 收入 -> 利润 -> 现金流
+R2 下游：AI 能力进入工作流 -> 最终采用者净收益 -> 持续付费 -> 应用层业绩
+```
 
 | 内容 | 功能 |
 |---|---|
-| [R0 公司业绩兑现检查清单](/ai-investing/kb/hypotheses/r-866fb3b7/r0-company-earnings-checklist-b90e6b50/) | 不再作为宽泛假设，用于逐家公司检查订单、收入、利润和现金流 |
-| [R1.1 AI 相关收入占比提升](/ai-investing/kb/hypotheses/r-866fb3b7/r1-1-ai-revenue-share-c2c7663a/) | 验证 AI 需求是否进入半导体设备、代工和设计公司的收入 |
-| [R1.2 AI 价值迁移与产业链业绩兑现](/ai-investing/kb/hypotheses/r-866fb3b7/r1-2-value-migration-to-earnings-5f352663/) | 验证训练、推理、应用、代工和设备环节的价值变化是否兑现 |
+| [R0 公司业绩兑现检查清单](/ai-investing/kb/hypotheses/r-866fb3b7/r0-company-earnings-checklist-b90e6b50/) | 用于逐家公司检查订单、收入、利润、现金流和资本回报，不作为宽泛行业假设 |
+| [R1 上游兑现：AI 基础设施需求进入产业链的业绩](/ai-investing/kb/hypotheses/r-866fb3b7/r1-upstream-ai-infrastructure-earnings-cbff56ef/) | 验证 AI CAPEX 是否进入芯片、存储、代工、封装、设备和基础设施公司的财务报表 |
+| [R2 下游兑现：最终采用者是否获得可持续回报](/ai-investing/kb/hypotheses/r-866fb3b7/r2-end-user-sustainable-roi-6d68bd49/) | 验证企业和个人采用者是否获得净 ROI，并支撑应用、模型和云厂商持续收入 |
+
+## 边界
+
+- 需求量、Token、出货和 CAPEX 增长属于 **G**。
+- 技术路线、瓶颈、份额和定价权属于 **S**。
+- 订单转收入、收入转利润和现金流属于 **R1**。
+- 最终采用者净收益、续费扩容及应用层财务结果属于 **R2**。
 
 R 必须使用公司或行业可观测数据，不用“基本面向好”这类无法明确证伪的表述。

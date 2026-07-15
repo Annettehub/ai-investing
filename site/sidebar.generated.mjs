@@ -419,15 +419,15 @@ export default [
                 "slug": "kb/hypotheses/r-866fb3b7/r0-company-earnings-checklist-b90e6b50"
               },
               {
-                "label": "R1.1 AI 相关收入占比提升",
-                "slug": "kb/hypotheses/r-866fb3b7/r1-1-ai-revenue-share-c2c7663a"
+                "label": "R1 上游兑现：AI 基础设施需求进入产业链的业绩",
+                "slug": "kb/hypotheses/r-866fb3b7/r1-upstream-ai-infrastructure-earnings-cbff56ef"
               },
               {
-                "label": "R1.2 AI 价值迁移与产业链业绩兑现",
-                "slug": "kb/hypotheses/r-866fb3b7/r1-2-value-migration-to-earnings-5f352663"
+                "label": "R2 下游兑现：最终采用者是否获得可持续回报",
+                "slug": "kb/hypotheses/r-866fb3b7/r2-end-user-sustainable-roi-6d68bd49"
               },
               {
-                "label": "R 判断范围",
+                "label": "R 业绩兑现",
                 "slug": "kb/hypotheses/r-866fb3b7/readme-69e27356"
               }
             ]
