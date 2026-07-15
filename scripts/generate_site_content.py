@@ -318,6 +318,25 @@ def write_index(dest: Path, title: str, description: str, links: list[tuple[str,
     dest.write_text("\n".join(lines).rstrip() + "\n", encoding="utf-8")
 
 
+def write_404_page() -> None:
+    content = (
+        "---\n"
+        'title: "404"\n'
+        "template: splash\n"
+        "editUrl: false\n"
+        "pagefind: false\n"
+        "hero:\n"
+        '  tagline: "这个页面不存在，可能是链接已更新。"\n'
+        "  actions:\n"
+        "    - text: 返回首页\n"
+        "      link: /ai-investing/\n"
+        "      icon: right-arrow\n"
+        "      variant: primary\n"
+        "---\n"
+    )
+    (DOCS_ROOT / "404.md").write_text(content, encoding="utf-8")
+
+
 def directory_sort_key(item: Path) -> tuple[int, str]:
     if item.parent == KB_SRC / "hypotheses":
         prefix = item.name.split("-", 1)[0].upper()
@@ -487,6 +506,7 @@ def write_generated_sidebar() -> None:
 def generate() -> None:
     reset_dir(KB_DEST)
     reset_dir(OUTPUT_DEST)
+    write_404_page()
     path_map, basename_map = build_maps()
 
     for source_root, dest_root in ((KB_SRC, KB_DEST), (OUTPUT_SRC, OUTPUT_DEST)):

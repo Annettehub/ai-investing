@@ -10,6 +10,7 @@ export default defineConfig({
     starlight({
       title: 'AI Investing',
       description: 'Annette 的 AI 投研知识库',
+      disable404Route: true,
       logo: {
         src: './src/assets/logo.svg',
         alt: 'AI Investing',
