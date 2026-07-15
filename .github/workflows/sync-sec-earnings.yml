@@ -28,12 +28,12 @@ jobs:
 
       - name: Commit changed SEC data
         run: |
-          if git diff --quiet -- 03-raw/sec 04-output/data/us-equity-earnings-dashboard.json 04-output/data/R1-upstream-dashboard.json 04-output/data/R2-downstream-dashboard.json 04-output/tracking/us-equity-earnings-tracking.md 05-meta/sec-earnings-state.json; then
+          if git diff --quiet -- 03-raw/sec 04-output/data/us-equity-earnings-dashboard.json 04-output/data/R1-upstream-dashboard.json 04-output/data/R2-downstream-dashboard.json 05-meta/sec-earnings-state.json; then
             echo "No SEC earnings changes"
             exit 0
           fi
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add 03-raw/sec 04-output/data/us-equity-earnings-dashboard.json 04-output/data/R1-upstream-dashboard.json 04-output/data/R2-downstream-dashboard.json 04-output/tracking/us-equity-earnings-tracking.md 05-meta/sec-earnings-state.json
+          git add 03-raw/sec 04-output/data/us-equity-earnings-dashboard.json 04-output/data/R1-upstream-dashboard.json 04-output/data/R2-downstream-dashboard.json 05-meta/sec-earnings-state.json
           git commit -m "data: sync SEC earnings feed"
           git push

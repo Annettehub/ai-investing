@@ -27,7 +27,6 @@ CONFIG_PATH = ROOT / "config" / "us-equity-watchlist.json"
 STATE_PATH = ROOT / "05-meta" / "sec-earnings-state.json"
 RAW_DIR = ROOT / "03-raw" / "sec" / "us-equity-earnings"
 OUTPUT_DATA = ROOT / "04-output" / "data" / "us-equity-earnings-dashboard.json"
-OUTPUT_TRACKING = ROOT / "04-output" / "tracking" / "us-equity-earnings-tracking.md"
 R1_DASHBOARD = ROOT / "04-output" / "data" / "R1-upstream-dashboard.json"
 R2_DASHBOARD = ROOT / "04-output" / "data" / "R2-downstream-dashboard.json"
 
@@ -446,62 +445,6 @@ def markdown_report(snapshot: dict[str, Any]) -> str:
     return "\n".join(lines)
 
 
-def tracking_markdown(snapshot: dict[str, Any]) -> str:
-    lines = [
-        "---",
-        'title: "美股财报长期跟踪表"',
-        'description: "半导体与云/应用公司 SEC 官方财报指标跟踪"',
-        "---",
-        "",
-        "# 美股财报长期跟踪表",
-        "",
-        f"最近更新：{snapshot['asOf']}  ",
-        "数据源：SEC EDGAR 官方 filings 与 XBRL companyfacts。",
-        "",
-        "## 最新指标",
-        "",
-        "| ticker | 组别 | 角色 | 收入 | 毛利率 | 营业利润率 | CapEx | FCF | 期末 | 最新披露 |",
-        "|---|---|---|---:|---:|---:|---:|---:|---|---|",
-    ]
-    latest_by_ticker: dict[str, dict[str, Any]] = {}
-    for filing in snapshot["filings"]:
-        current = latest_by_ticker.get(filing["ticker"])
-        if not current or filing["filingDate"] > current["filingDate"]:
-            latest_by_ticker[filing["ticker"]] = filing
-
-    for company in snapshot["companies"]:
-        facts = company["facts"]
-        derived = company["derived"]
-        filing = latest_by_ticker.get(company["ticker"], {})
-        filing_link = f"[{filing.get('form', 'SEC')}]({filing.get('filingUrl')})" if filing else "—"
-        lines.append(
-            "| {ticker} | {group} | {role} | {revenue} | {gm} | {om} | {capex} | {fcf} | {period} | {filing} |".format(
-                ticker=company["ticker"],
-                group=company["group"],
-                role=company["role"],
-                revenue=money(facts.get("revenue", {}).get("value") if facts.get("revenue") else None),
-                gm=f"{derived['grossMarginPct']:.1f}%" if derived.get("grossMarginPct") is not None else "—",
-                om=f"{derived['operatingMarginPct']:.1f}%" if derived.get("operatingMarginPct") is not None else "—",
-                capex=money(facts.get("capex", {}).get("value") if facts.get("capex") else None),
-                fcf=money(derived.get("freeCashFlow")),
-                period=facts.get("revenue", {}).get("periodEnd") if facts.get("revenue") else "—",
-                filing=filing_link,
-            )
-        )
-    lines.extend(
-        [
-            "",
-            "## 待人工补充",
-            "",
-            "- AI 相关收入口径：多数公司不会在 XBRL 中直接结构化披露，需要从 earnings release、10-Q MD&A 或法说会摘录。",
-            "- 电话会全文：只收录公司官方披露或用户提供材料，不抓取不稳定的第三方免费网页。",
-            "- R1/R2 判断：本表只更新事实，不自动改变假设置信度。",
-            "",
-        ]
-    )
-    return "\n".join(lines)
-
-
 def build_dashboard(snapshot: dict[str, Any]) -> dict[str, Any]:
     companies = []
     for company in snapshot["companies"]:
@@ -739,7 +682,6 @@ def sync(args: argparse.Namespace) -> dict[str, Any]:
     write_json(raw_base.with_suffix(".json"), snapshot)
     raw_base.with_suffix(".md").write_text(markdown_report(snapshot), encoding="utf-8", newline="\n")
     write_json(OUTPUT_DATA, build_dashboard(snapshot))
-    OUTPUT_TRACKING.write_text(tracking_markdown(snapshot), encoding="utf-8", newline="\n")
     update_research_dashboards(snapshot)
     save_state(state, filings)
     return snapshot
@@ -763,7 +705,6 @@ def main() -> None:
                 "filings": len(snapshot["filings"]),
                 "newFilings": sum(1 for filing in snapshot["filings"] if filing.get("isNew")),
                 "raw": str((RAW_DIR / f"{snapshot['asOf']}-sec-earnings-update.md").relative_to(ROOT)),
-                "tracking": str(OUTPUT_TRACKING.relative_to(ROOT)),
                 "dashboardData": str(OUTPUT_DATA.relative_to(ROOT)),
             },
             ensure_ascii=False,
