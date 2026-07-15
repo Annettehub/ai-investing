@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 """
-飞书云盘 docx 文件 → 下载 → markitdown 转 Markdown → 03-raw/feishu/
+飞书云盘 docx 在线文档 → raw_content API → 保存为 Markdown → 03-raw/feishu/
 """
-import os, json, hashlib, sys, subprocess, tempfile
+import os, json, hashlib, sys, re
 import requests
 
 FEISHU_APP_ID = os.environ.get("FEISHU_APP_ID")
@@ -11,9 +11,6 @@ FOLDER_TOKEN = os.environ.get("FEISHU_FOLDER_TOKEN")
 
 RAW_DIR = "03-raw/feishu"
 HASH_FILE = "03-raw/.synced_docx_hashes.json"
-
-# markitdown executable path
-MARKITDOWN_PYTHON = r"C:\Users\Annette Zhang\.workbuddy\binaries\python\versions\3.13.12\python.exe"
 
 def get_token():
     missing = [name for name, value in (
@@ -54,23 +51,19 @@ def list_files(token):
         page_token = data.get("data", {}).get("next_page_token")
     return files
 
-def download_file(token, file_token, file_type):
+def get_docx_content(token, file_token):
+    """Get raw content from feishu online docx"""
+    url = f"https://open.feishu.cn/open-apis/docx/v1/documents/{file_token}/raw_content"
     headers = {"Authorization": f"Bearer {token}"}
-    if file_type == "docx":
-        url = f"https://open.feishu.cn/open-apis/drive/v1/files/{file_token}/export"
-        resp = requests.post(url, headers=headers, params={"file_extension": "docx"})
-    else:
-        url = f"https://open.feishu.cn/open-apis/drive/v1/files/{file_token}/download"
-        resp = requests.get(url, headers=headers)
-    if resp.status_code == 200:
-        return resp.content
-    print(f"  Download failed: {resp.status_code}")
-    try:
-        err = resp.json()
-        print(f"  Error: code={err.get('code')}, msg={err.get('msg')}")
-    except:
-        print(f"  Body: {resp.text[:300]}")
-    return None
+    resp = requests.get(url, headers=headers, timeout=60)
+    if resp.status_code != 200:
+        print(f"  HTTP {resp.status_code}")
+        return None
+    data = resp.json()
+    if data.get("code") != 0:
+        print(f"  API error: code={data.get('code')}, msg={data.get('msg')}")
+        return None
+    return data.get("data", {}).get("content", "")
 
 def load_hashes():
     if os.path.exists(HASH_FILE):
@@ -83,32 +76,12 @@ def save_hashes(hashes):
     with open(HASH_FILE, 'w', encoding='utf-8') as f:
         json.dump(sorted(hashes), f, ensure_ascii=False)
 
-def docx_to_md(docx_bytes, title):
-    """Convert docx bytes to markdown using markitdown"""
-    with tempfile.NamedTemporaryFile(suffix='.docx', delete=False) as tmp:
-        tmp.write(docx_bytes)
-        tmp_path = tmp.name
-
-    try:
-        result = subprocess.run(
-            [MARKITDOWN_PYTHON, "-m", "markitdown", tmp_path],
-            capture_output=True, text=True, timeout=120,
-            encoding='utf-8', errors='replace'
-        )
-        if result.returncode == 0 and result.stdout.strip():
-            md = result.stdout.strip()
-        else:
-            # If markitdown fails, save the docx file directly and note it
-            print(f"  markitdown conversion failed: {result.stderr[:200]}")
-            return None
-    finally:
-        os.unlink(tmp_path)
-
-    return md
-
 def make_safe_filename(name):
     safe = name.replace('/', '_').replace('\\', '_').replace(':', '_').replace('*', '_')
     safe = safe.replace('?', '_').replace('"', '_').replace('<', '_').replace('>', '_').replace('|', '_')
+    # Truncate very long names
+    if len(safe) > 120:
+        safe = safe[:120]
     return safe
 
 def main():
@@ -121,14 +94,14 @@ def main():
     all_files = list_files(token)
     print(f"Found {len(all_files)} files total")
 
-    # Filter for docx type documents, skip "本文档勿同步"
+    # Filter for docx type, skip "本文档勿同步"
     docx_files = [f for f in all_files
                   if f["type"] == "docx"
                   and "勿同步" not in f["name"]]
     print(f"DOCX files to process: {len(docx_files)}")
 
     if not docx_files:
-        print("No new .docx files to process")
+        print("No docx files to process")
         return 0
 
     for f in docx_files:
@@ -143,24 +116,18 @@ def main():
             file_name = file_info["name"]
 
             print(f"\nDownloading: {file_name}")
-            content = download_file(token, file_token, file_info["type"])
+            content = get_docx_content(token, file_token)
             if not content:
                 continue
 
             # Use content hash for dedup
-            content_hash = hashlib.md5(content).hexdigest()[:16]
+            content_hash = hashlib.md5(content.encode('utf-8')).hexdigest()[:16]
             if content_hash in synced_hashes:
                 print(f"  Already synced (hash: {content_hash})")
                 continue
 
-            # Convert to markdown
-            md_content = docx_to_md(content, file_name)
-            if md_content is None:
-                print(f"  Conversion failed, skipping")
-                continue
-
-            # Generate output filename
-            base_name = os.path.splitext(file_name)[0]
+            # Build output filename
+            base_name = file_name
             safe_name = make_safe_filename(base_name)
             out_name = f"{safe_name}.md"
             out_path = os.path.join(RAW_DIR, out_name)
@@ -169,16 +136,16 @@ def main():
             counter = 1
             original = out_path
             while os.path.exists(out_path):
-                name_part, _ = os.path.splitext(original)
-                out_path = f"{name_part}_{counter}.md"
+                name_part, ext = os.path.splitext(original)
+                out_path = f"{name_part}_{counter}{ext}"
                 counter += 1
 
             with open(out_path, 'w', encoding='utf-8') as f:
-                f.write(md_content)
+                f.write(content)
 
             synced_hashes.add(content_hash)
             new_count += 1
-            print(f"  Saved: {os.path.basename(out_path)} ({len(md_content)} chars)")
+            print(f"  Saved: {os.path.basename(out_path)} ({len(content)} chars)")
 
         except Exception as e:
             print(f"  Error: {e}")
