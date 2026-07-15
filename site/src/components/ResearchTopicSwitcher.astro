@@ -32,19 +32,25 @@ const topics = [
 </nav>
 
 <style>
-  .topic-switcher { display: flex; align-items: center; gap: .75rem; min-width: 0; padding: .55rem .7rem; border: 1px solid var(--sl-color-gray-5); border-radius: 6px; background: var(--sl-color-gray-7); }
-  .topic-switcher-label { display: inline-flex; flex: 0 0 auto; align-items: center; gap: .4rem; color: var(--sl-color-gray-2); font-size: .76rem; font-weight: 700; white-space: nowrap; }
-  .topic-menu-icon { color: var(--sl-color-accent-high); font-size: 1rem; line-height: 1; }
-  .topic-tabs { display: flex; gap: .4rem; min-width: 0; overflow-x: auto; padding-bottom: .1rem; scrollbar-width: thin; }
-  .topic-tab { display: inline-flex; flex: 0 0 auto; align-items: baseline; gap: .35rem; min-height: 2.1rem; padding: .42rem .68rem; border: 1px solid transparent; border-radius: 4px; color: var(--sl-color-gray-2); text-decoration: none; white-space: nowrap; }
-  .topic-tab b { font-size: .84rem; }
-  .topic-tab span { color: var(--sl-color-gray-3); font-size: .76rem; }
+  .topic-switcher { display: flex; align-items: center; justify-content: center; gap: .75rem; min-width: 0; min-height: 3.5rem; padding: .55rem .7rem; border: 1px solid var(--sl-color-gray-5); border-radius: 6px; background: var(--sl-color-gray-7); }
+  .topic-switcher-label { display: inline-flex; flex: 0 0 auto; align-items: center; justify-content: center; gap: .4rem; height: 2.2rem; color: var(--sl-color-white); font-size: .78rem; font-weight: 750; line-height: 1; white-space: nowrap; }
+  .topic-menu-icon { display: inline-flex; align-items: center; justify-content: center; width: 1rem; height: 1rem; color: var(--sl-color-accent-high); font-size: 1rem; line-height: 1; }
+  .topic-tabs { display: flex; align-items: center; gap: .4rem; min-width: 0; margin: 0; overflow-x: auto; scrollbar-width: thin; }
+  .topic-tab { display: inline-flex; flex: 0 0 auto; align-items: center; justify-content: center; gap: .35rem; height: 2.2rem; padding: 0 .72rem; border: 1px solid transparent; border-radius: 4px; color: var(--sl-color-white); font-weight: 650; line-height: 1; text-decoration: none; white-space: nowrap; }
+  .topic-tab b { color: inherit; font-size: .84rem; }
+  .topic-tab span { color: var(--sl-color-gray-1); font-size: .78rem; }
   .topic-tab:hover { border-color: var(--sl-color-gray-4); }
   .topic-tab.is-active { border-color: var(--sl-color-accent); background: color-mix(in srgb, var(--sl-color-accent) 12%, transparent); color: var(--sl-color-accent-high); }
   .topic-tab.is-active span { color: var(--sl-color-accent-high); }
-  [data-theme='light'] .topic-tab span { color: #625a6b; }
+  :global([data-theme='light']) .topic-switcher-label { color: #4f4864; }
+  :global([data-theme='light']) .topic-menu-icon { color: #18708a; }
+  :global([data-theme='light']) .topic-tab,
+  :global([data-theme='light']) .topic-tab span { color: #5b526d; }
+  :global([data-theme='light']) .topic-tab:hover { border-color: #8c849b; color: #302b3d; }
+  :global([data-theme='light']) .topic-tab.is-active { border-color: #166b83; background: #e0f0f3; color: #105b70; }
+  :global([data-theme='light']) .topic-tab.is-active span { color: #105b70; }
   @media (max-width: 34rem) {
-    .topic-switcher { gap: .45rem; padding-inline: .5rem; }
+    .topic-switcher { justify-content: flex-start; gap: .45rem; padding-inline: .5rem; }
     .topic-switcher-label > span:last-child { display: none; }
     .topic-tab { padding-inline: .55rem; }
   }
