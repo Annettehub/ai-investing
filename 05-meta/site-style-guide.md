@@ -65,9 +65,20 @@ This file records the website rules that should be followed before changing page
 - `02-kb` and `04-output` should be structured for reading and navigation.
 - Long research filenames can remain in the repository, but website labels should use shorter titles.
 
-## 8. Source Links
+## 8. Source Links And Source Cards
 
 - When a knowledge page uses raw material, preserve provenance.
+- Source summary pages must show source provenance in the rendered page, not only in frontmatter.
+- Every new `02-kb/sources` page should include a visible `信源信息` section near the top.
+- Required source-card fields:
+  - source platform or channel, such as IMA, Feishu, ZSXQ, WeRead, Podwise, WeChat, Gmail, or manual import.
+  - source type, such as raw extraction, report, podcast, note, API sync, or article.
+  - raw repository path, usually under `03-raw/...`.
+  - original title, author or institution if known, original publish date if known, and ingest date.
+  - original URL when available.
+  - confidence level and whether external fact verification was performed.
+- If multiple raw files are duplicate or same-source variants, list all relevant raw paths.
+- If the content is only organized from source material, clearly say: `结构化整理，不等同于外部事实核验`.
 - Source summary pages should link back to the original repository source when possible.
 - If `02-kb` content relates to `03-raw`, show a small source-reference area rather than publishing all raw content.
 
