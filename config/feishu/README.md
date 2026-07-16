@@ -67,8 +67,15 @@ Register-ScheduledTask -TaskName "Feishu-GitHub-Sync" `
 
 | 飞书文件类型 | 处理方式 | GitHub 文件 |
 |-------------|---------|------------|
-| 云文档（docx） | 导出为 markdown | 保留原文件名 + `.md` |
+| 云文档（docx） | 读取 `docx/raw_content` 并保存为 Markdown 文本 | 保留原文件名 + `.md` |
 | Markdown（.md） | 直接下载 | 保留原文件名 |
+
+## 当前同步边界
+
+- 会递归扫描 `FEISHU_FOLDER_TOKEN` 对应文件夹下的子文件夹。
+- 文件名包含 `勿同步` 的文档会跳过。
+- 如果某篇 docx 无法读取 `raw_content`，本次 Action 会失败，避免“显示成功但实际漏同步”。
+- 该流程不是飞书官方 Markdown 导出；它使用在线文档正文接口，适合保存文字资料。复杂表格、图片和附件仍可能需要人工补充。
 
 ## 故障排查
 
