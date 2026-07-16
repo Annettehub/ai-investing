@@ -1,14 +1,14 @@
 #!/usr/bin/env python3
 """
 飞书云盘文件夹 → GitHub 03-raw/ 同步
-直接下载 .md 文件，无需转换
+支持 .md 直接下载 + .docx 导出为 markdown
 """
 import os
 import json
 import hashlib
 import sys
+import time
 import requests
-from datetime import datetime
 
 FEISHU_APP_ID = os.environ.get("FEISHU_APP_ID")
 FEISHU_APP_SECRET = os.environ.get("FEISHU_APP_SECRET")
@@ -16,6 +16,7 @@ FOLDER_TOKEN = os.environ.get("FEISHU_FOLDER_TOKEN")
 
 RAW_DIR = "03-raw/feishu"
 HASH_FILE = "03-raw/.synced_hashes.json"
+
 
 def get_token():
     missing = [
@@ -28,17 +29,17 @@ def get_token():
         if not value
     ]
     if missing:
-        raise RuntimeError(f"Missing required environment variables: {', '.join(missing)}")
+        raise RuntimeError(f"Missing env vars: {', '.join(missing)}")
 
     url = "https://open.feishu.cn/open-apis/auth/v3/tenant_access_token/internal"
     resp = requests.post(url, json={"app_id": FEISHU_APP_ID, "app_secret": FEISHU_APP_SECRET}, timeout=30)
     data = resp.json()
     if resp.status_code != 200 or data.get("code") != 0:
-        raise RuntimeError(f"Failed to get tenant token: {data.get('msg') or resp.status_code}")
-    return data.get("tenant_access_token")
+        raise RuntimeError(f"Auth failed: {data.get('msg') or resp.status_code}")
+    return data["tenant_access_token"]
+
 
 def list_files(token):
-    """列出文件夹内所有文件"""
     url = "https://open.feishu.cn/open-apis/drive/v1/files"
     headers = {"Authorization": f"Bearer {token}"}
     files = []
@@ -53,57 +54,101 @@ def list_files(token):
         data = resp.json()
 
         if data.get("code") != 0:
-            msg = data.get("msg") or "unknown error"
-            code = data.get("code")
-            hint = ""
-            if code == 1061002:
-                hint = " 请检查 FEISHU_FOLDER_TOKEN 是否为云盘文件夹 token，而不是 Wiki/文档页面 token。"
-            raise RuntimeError(f"列出文件失败: code={code}, msg={msg}.{hint}")
+            raise RuntimeError(f"List files failed: code={data.get('code')}, msg={data.get('msg')}")
 
-        items = data.get("data", {}).get("files", [])
-        print(f"API 返回 {len(items)} 个 items")
-
-        for item in items:
-            file_type = item.get("type")
-            file_name = item.get("name", "")
-            print(f"  文件: {file_name} | type: {file_type}")
-
-            # 跳过文件夹(type=1)，其他全部保留
-            if file_type != "1" and file_type != 1:
+        for item in data.get("data", {}).get("files", []):
+            if item.get("type") != "folder":
                 files.append({
-                    "token": item.get("token"),
-                    "name": file_name,
-                    "size": item.get("size", 0)
+                    "token": item["token"],
+                    "name": item.get("name", ""),
+                    "type": item.get("type"),
                 })
 
         if not data.get("data", {}).get("has_more"):
             break
-        page_token = data.get("data", {}).get("next_page_token")
+        page_token = data["data"]["next_page_token"]
 
     return files
 
-def download_file(token, file_token):
-    """下载文件内容"""
+
+def download_md(token, file_token):
+    """直接下载 .md 文件"""
     url = f"https://open.feishu.cn/open-apis/drive/v1/files/{file_token}/download"
     headers = {"Authorization": f"Bearer {token}"}
-    resp = requests.get(url, headers=headers)
-
+    resp = requests.get(url, headers=headers, timeout=60)
     if resp.status_code == 200:
         return resp.content
-    else:
-        print(f"下载失败: {resp.status_code} {resp.text[:200]}")
+    print(f"  Download failed: {resp.status_code} {resp.text[:200]}")
+    return None
+
+
+def export_docx_to_md(token, doc_token):
+    """将 docx 导出为 markdown，返回导出后的 file_token"""
+    export_url = "https://open.feishu.cn/open-apis/drive/v1/export_tasks"
+    headers = {
+        "Authorization": f"Bearer {token}",
+        "Content-Type": "application/json",
+    }
+    body = {
+        "file_extension": "md",
+        "token": doc_token,
+        "type": "docx",
+    }
+    resp = requests.post(export_url, headers=headers, json=body, timeout=30)
+    data = resp.json()
+    if data.get("code") != 0:
+        print(f"  Export task creation failed: {data.get('msg')}")
         return None
+
+    ticket = data["data"]["ticket"]
+
+    # 轮询等待导出完成（最多 60 秒）
+    status_url = f"https://open.feishu.cn/open-apis/drive/v1/export_tasks/{ticket}"
+    for _ in range(30):
+        time.sleep(2)
+        resp = requests.get(status_url, headers={"Authorization": f"Bearer {token}"}, timeout=30)
+        result = resp.json()
+        if result.get("code") != 0:
+            print(f"  Export status check failed: {result.get('msg')}")
+            return None
+        task_result = result.get("data", {}).get("result", {})
+        if task_result.get("file_token"):
+            return task_result["file_token"]
+
+    print("  Export timeout")
+    return None
+
+
+def download_exported_file(token, file_token):
+    """下载导出后的文件"""
+    url = f"https://open.feishu.cn/open-apis/drive/v1/export_tasks/download?file_token={file_token}"
+    headers = {"Authorization": f"Bearer {token}"}
+    resp = requests.get(url, headers=headers, timeout=60)
+    if resp.status_code == 200:
+        return resp.content
+    print(f"  Download exported file failed: {resp.status_code}")
+    return None
+
 
 def load_hashes():
     if os.path.exists(HASH_FILE):
-        with open(HASH_FILE, 'r', encoding='utf-8') as f:
+        with open(HASH_FILE, "r", encoding="utf-8") as f:
             return set(json.load(f))
     return set()
 
+
 def save_hashes(hashes):
     os.makedirs(os.path.dirname(HASH_FILE), exist_ok=True)
-    with open(HASH_FILE, 'w', encoding='utf-8') as f:
+    with open(HASH_FILE, "w", encoding="utf-8") as f:
         json.dump(sorted(hashes), f, ensure_ascii=False)
+
+
+def safe_filename(name):
+    invalid = '<>:"/\\|?*'
+    for ch in invalid:
+        name = name.replace(ch, "_")
+    return name
+
 
 def main():
     os.makedirs(RAW_DIR, exist_ok=True)
@@ -113,58 +158,76 @@ def main():
 
     print("Listing files...")
     files = list_files(token)
-    print(f"Found {len(files)} files total")
+    print(f"Total files: {len(files)}")
 
-    # 只处理 .md 文件
     md_files = [f for f in files if f["name"].endswith(".md")]
-    print(f"Markdown files: {len(md_files)}")
+    docx_files = [f for f in files if f["type"] == "docx"]
+    other_files = [f for f in files if f not in md_files and f not in docx_files]
 
-    if not md_files:
-        print("No .md files found")
-        return 0
+    print(f"  .md files: {len(md_files)}")
+    print(f"  .docx files: {len(docx_files)}")
+    if other_files:
+        print(f"  Other (skipped): {len(other_files)}")
 
     synced_hashes = load_hashes()
     new_count = 0
 
+    # 处理 .md 文件
     for file_info in md_files:
         try:
             file_token = file_info["token"]
-            file_name = file_info["name"]
+            file_name = safe_filename(file_info["name"])
+            print(f"\n[MD] {file_name}")
 
-            print(f"\nDownloading: {file_name}")
-            content = download_file(token, file_token)
-
+            content = download_md(token, file_token)
             if not content:
                 continue
 
-            # 用内容哈希去重
             content_hash = hashlib.md5(content).hexdigest()[:16]
             if content_hash in synced_hashes:
-                print(f"  Already synced")
+                print("  Already synced")
                 continue
 
-            # 保存文件
             filepath = os.path.join(RAW_DIR, file_name)
-            if os.path.exists(filepath):
-                with open(filepath, "rb") as existing:
-                    existing_hash = hashlib.md5(existing.read()).hexdigest()[:16]
-                if existing_hash == content_hash:
-                    synced_hashes.add(content_hash)
-                    print(f"  Already exists")
-                    continue
-            counter = 1
-            original = filepath
-            while os.path.exists(filepath):
-                name, ext = os.path.splitext(original)
-                filepath = f"{name}_{counter}{ext}"
-                counter += 1
-
             with open(filepath, "wb") as f:
                 f.write(content)
 
             synced_hashes.add(content_hash)
             new_count += 1
-            print(f"  Saved: {os.path.basename(filepath)}")
+            print("  Saved")
+
+        except Exception as e:
+            print(f"  Error: {e}")
+            continue
+
+    # 处理 .docx 文件 → 导出为 .md
+    for file_info in docx_files:
+        try:
+            doc_token = file_info["token"]
+            original_name = file_info["name"]
+            md_name = safe_filename(os.path.splitext(original_name)[0] + ".md")
+            print(f"\n[DOCX→MD] {original_name} → {md_name}")
+
+            exported_token = export_docx_to_md(token, doc_token)
+            if not exported_token:
+                continue
+
+            content = download_exported_file(token, exported_token)
+            if not content:
+                continue
+
+            content_hash = hashlib.md5(content).hexdigest()[:16]
+            if content_hash in synced_hashes:
+                print("  Already synced")
+                continue
+
+            filepath = os.path.join(RAW_DIR, md_name)
+            with open(filepath, "wb") as f:
+                f.write(content)
+
+            synced_hashes.add(content_hash)
+            new_count += 1
+            print("  Saved")
 
         except Exception as e:
             print(f"  Error: {e}")
@@ -172,9 +235,10 @@ def main():
 
     save_hashes(synced_hashes)
     print(f"\n{'='*50}")
-    print(f"Total: {len(md_files)}, New: {new_count}")
+    print(f"Processed: {len(md_files)} md + {len(docx_files)} docx, New: {new_count}")
     print(f"{'='*50}")
     return 0
+
 
 if __name__ == "__main__":
     try:
