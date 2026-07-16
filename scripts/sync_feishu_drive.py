@@ -21,6 +21,11 @@ FOLDER_TOKEN = os.environ.get("FEISHU_FOLDER_TOKEN")
 RAW_DIR = Path("03-raw/feishu")
 HASH_FILE = Path("03-raw/.synced_hashes.json")
 SKIP_MARKER = "勿同步"
+DOCX_PERMISSION_CODE = 99991672
+
+
+class FeishuPermissionError(RuntimeError):
+    pass
 
 
 def get_token():
@@ -125,11 +130,25 @@ def fetch_docx_raw_content(token, doc_token):
     headers = {"Authorization": f"Bearer {token}"}
     resp = requests.get(url, headers=headers, timeout=60)
     if resp.status_code != 200:
+        if resp.status_code == 400 and (
+            "docx:document" in resp.text or "docx:document:readonly" in resp.text
+        ):
+            raise FeishuPermissionError(
+                "Feishu app is missing docx read permissions. "
+                "Enable scopes `docx:document` and `docx:document:readonly` in Feishu Developer Console, "
+                "publish the app version, then rerun this workflow."
+            )
         print(f"  Docx raw_content HTTP failed: {resp.status_code} {resp.text[:200]}")
         return None
 
     data = resp.json()
     if data.get("code") != 0:
+        if data.get("code") == DOCX_PERMISSION_CODE:
+            raise FeishuPermissionError(
+                "Feishu app is missing docx read permissions. "
+                "Enable scopes `docx:document` and `docx:document:readonly` in Feishu Developer Console, "
+                "publish the app version, then rerun this workflow."
+            )
         print(f"  Docx raw_content API failed: code={data.get('code')}, msg={data.get('msg')}")
         return None
 
@@ -251,6 +270,8 @@ def main():
                 skipped += 1
                 print("  Already exists; hash state updated")
 
+        except FeishuPermissionError:
+            raise
         except Exception as exc:
             failed += 1
             print(f"  Error: {exc}")

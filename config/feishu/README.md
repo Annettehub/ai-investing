@@ -77,6 +77,16 @@ Register-ScheduledTask -TaskName "Feishu-GitHub-Sync" `
 - 如果某篇 docx 无法读取 `raw_content`，本次 Action 会失败，避免“显示成功但实际漏同步”。
 - 该流程不是飞书官方 Markdown 导出；它使用在线文档正文接口，适合保存文字资料。复杂表格、图片和附件仍可能需要人工补充。
 
+## GitHub Action 权限要求
+
+如果 Action 日志出现 `Access denied`，并提示需要 `docx:document` 或 `docx:document:readonly`，需要在飞书开放平台给同步应用补充权限：
+
+1. 打开飞书开放平台中的同步应用。
+2. 进入权限管理，添加 `docx:document` 和 `docx:document:readonly`。
+3. 发布或重新发布应用版本，使权限生效。
+4. 确认该应用仍是同步文件夹的协作者。
+5. 回到 GitHub Actions，重新运行 `Sync Feishu Drive Files`。
+
 ## 故障排查
 
 | 问题 | 解决 |
