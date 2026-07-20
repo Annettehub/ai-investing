@@ -5,7 +5,7 @@
     "title": "存储成长与周期分层",
     "subtitle": "高端成长与消费周期并存的分层验证",
     "asOf": "2026-07-14",
-    "generatedAt": "2026-07-15T01:10:06+00:00",
+    "generatedAt": "2026-07-20T11:30:37+00:00",
     "certainty": 72,
     "status": "持续观察",
     "decision": "AI正在推动高端存储成长性，但没有消灭存储行业周期。",
@@ -215,8 +215,8 @@
       "id": "twse",
       "label": "TWSE OpenAPI",
       "status": "connected",
-      "updatedAt": "2026-07-14T16:01:41+00:00",
-      "note": "已读取3家公司，资料年月2026-06"
+      "updatedAt": "2026-07-20T11:30:37+00:00",
+      "note": "已读取4家公司，资料年月2026-06"
     },
     {
       "id": "opendart",
@@ -239,6 +239,16 @@
     },
     "twse": {
       "companies": [
+        {
+          "code": "2330",
+          "name": "台积电",
+          "role": "CoWoS与AI芯片需求代理",
+          "dataMonth": "2026-06",
+          "monthlyRevenueTwdThousand": 442679969.0,
+          "monthlyYoYPct": 67.86685548491262,
+          "ytdRevenueTwdThousand": 2404483690.0,
+          "ytdYoYPct": 35.613194655616326
+        },
         {
           "code": "2382",
           "name": "广达",
