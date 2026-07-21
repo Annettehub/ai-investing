@@ -89,6 +89,10 @@ export default [
           {
             "label": "昆仑芯 — 实体档案",
             "slug": "kb/entities/p-6c56ba6d"
+          },
+          {
+            "label": "智谱 — 实体档案",
+            "slug": "kb/entities/p-90fd8f04"
           }
         ]
       },
@@ -347,8 +351,8 @@ export default [
                 "slug": "kb/hypotheses/g-d2af53a1/g2-storage-growth-and-cycle-770b88bf"
               },
               {
-                "label": "G3 AI 应用与制造升级需求",
-                "slug": "kb/hypotheses/g-d2af53a1/g3-ai-adoption-and-industrial-demand-7c0972cd"
+                "label": "G3 AI 推理需求规模验证",
+                "slug": "kb/hypotheses/g-d2af53a1/g3-inference-demand-scale-a7d0a99c"
               },
               {
                 "label": "G 判断范围",
@@ -521,6 +525,18 @@ export default [
           {
             "label": "IMA: Sequoia Engram 记忆与持续学习",
             "slug": "kb/sources/2026-07-15-ima-sequoia-engram-memory-d6e22a2b"
+          },
+          {
+            "label": "来源摘要：东山精密光模块与硅光调研会",
+            "slug": "kb/sources/2026-07-21-feishu-dsbj-optical-module-qa-287299aa"
+          },
+          {
+            "label": "来源摘要：摩根大通中国 AI 行业与智谱估值框架",
+            "slug": "kb/sources/2026-07-21-feishu-jpm-china-ai-zhipu-kimi-ff2568c9"
+          },
+          {
+            "label": "来源摘要：NVIDIA 暗光纤与 AI 网络基础设施",
+            "slug": "kb/sources/2026-07-21-feishu-nvidia-dark-fiber-6123de27"
           },
           {
             "label": "IMA 知识库来源索引",

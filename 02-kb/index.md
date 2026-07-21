@@ -29,6 +29,7 @@
 | 东山精密 | [[entities/东山精密.md]] | 电子-光模块/PCB | 观察 |
 | 中际旭创 | [[entities/中际旭创.md]] | 电子-光模块 | 观察 |
 | NVDA NVIDIA | [[entities/NVDA-NVIDIA.md]] | 半导体-AI芯片/GPU | 观察 |
+| 智谱 | [[entities/智谱.md]] | AI模型/企业AI服务 | 观察 |
 
 ## 二、Concepts（知识/行业框架）
 
@@ -90,7 +91,7 @@
 |------|------|---------|------|
 | 知识星球 | 751 topics + 139 专栏 | [[sources/_index-zsxq.md]] | 吴梓豪「半导体大佬的会议室」全量导入 |
 | 微信读书 | 78 本 | [[sources/_index-weread.md]] | ~4900 条划线+想法 |
-| 飞书播客 | 26 篇 | [[sources/_index.md]] | NVIDIA/Balaji/All-In 等 |
+| 飞书播客/研究资料 | 持续同步 | [[sources/_index.md]] | 播客、研报、调研纪要和 Feishu raw 同步资料 |
 | Podwise | 持续同步 | [[sources/_index-podwise.md]] | GitHub 自动推送 |
 | IMA 知识库 | 持续同步 | [[sources/_index-ima.md]] | 腾讯 IMA 知识库，经 ima-sync-ingest 入库；原「临时来源」已并入此管道 |
 
