@@ -527,6 +527,10 @@ export default [
             "slug": "kb/sources/2026-07-15-ima-sequoia-engram-memory-d6e22a2b"
           },
           {
+            "label": "来源摘要：瑞芯微与端侧 AI 的概念边界",
+            "slug": "kb/sources/2026-07-20-feishu-rockchip-edge-ai-boundar-27f1783d"
+          },
+          {
             "label": "来源摘要：东山精密光模块与硅光调研会",
             "slug": "kb/sources/2026-07-21-feishu-dsbj-optical-module-qa-287299aa"
           },
@@ -537,6 +541,26 @@ export default [
           {
             "label": "来源摘要：NVIDIA 暗光纤与 AI 网络基础设施",
             "slug": "kb/sources/2026-07-21-feishu-nvidia-dark-fiber-6123de27"
+          },
+          {
+            "label": "IMA: 20VC 与 Glean Arvind Jain - 企业 AI 应用与 ROI",
+            "slug": "kb/sources/2026-07-21-ima-20vc-glean-arvind-jain-78a61ad1"
+          },
+          {
+            "label": "来源摘要：字节 2030FY CAPEX 上修原因",
+            "slug": "kb/sources/2026-07-22-feishu-bytedance-capex-revision-363fd5a2"
+          },
+          {
+            "label": "来源摘要：GPU 可租用率与 B200 on-demand 供给",
+            "slug": "kb/sources/2026-07-22-feishu-gpu-availability-b200-b65dec5b"
+          },
+          {
+            "label": "来源摘要：黄仁勋一兆瓦电生产多少智能",
+            "slug": "kb/sources/2026-07-22-feishu-jensen-mw-intelligence-12320d53"
+          },
+          {
+            "label": "来源摘要：SK 海力士收购 Intel 俄亥俄工厂传闻与否认",
+            "slug": "kb/sources/2026-07-22-feishu-sk-hynix-intel-ohio-rumo-67b652c6"
           },
           {
             "label": "IMA 知识库来源索引",

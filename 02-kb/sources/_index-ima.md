@@ -49,3 +49,17 @@
 - `02-kb/sources/2026-07-15-ima-sequoia-dylanpatel-codesign.md`
 - `02-kb/sources/2026-07-15-ima-lenny-ai-workforce-sentiment.md`
 - `02-kb/sources/2026-07-15-ima-a16z-nvidia-infra-future.md`
+
+## 2026-07-21 补录：20VC / Glean
+
+- 原 raw 占位文件：`03-raw/wechat/20260711-NOTE-2026-07-11-20VC-Glean-ArvindJain.md`
+- 清洗依据：`D:/WorkBuddy/Claw/ima-inbox/IMA-2026-07-11 20VC 为何无法赢得应用层 - AI.md`
+- 处理说明：IMA 导出文件前半段混入脚本残留，本次只保留正文标题后的清洗摘录，并新建来源卡。
+
+| 资料 | 价值 | 处理 |
+| --- | --- | --- |
+| 20VC / Glean Arvind Jain 企业 AI 应用访谈 | B+ | 新建来源卡；只作为 L5 应用层概念补充，不新增实体卡 |
+
+## 本批次沉淀
+
+- `02-kb/sources/2026-07-21-ima-20vc-glean-arvind-jain.md`

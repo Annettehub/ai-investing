@@ -16,3 +16,20 @@
 **来源**：
 - `02-kb/sources/2026-07-15-ima-sequoia-dylanpatel-codesign.md`
 - `02-kb/sources/2026-07-15-ima-a16z-nvidia-infra-future.md`
+
+## 2026-07-22 Feishu 补充：CAPEX 上修的三条拆解线
+
+云厂商算力采购节奏不能只看“预算是否上修”，还要拆成：
+
+| 拆解线 | 观察问题 | 对应信号 |
+|---|---|---|
+| 价格线 | HBM/DRAM、GPU、光模块、液冷、电源、PCB 等组件是否涨价 | CAPEX 上修但 GPU 数量不一定同比例增加 |
+| 数量线 | 训练、推理、视频生成、Agent 等真实 token / workload 是否增长 | GPU、HBM、eSSD、网络和机柜需求同步增加 |
+| 架构线 | 是否从普通 8 卡服务器升级到 NVL72、supernode、高密度液冷机柜 | 单机柜价格上升，系统集成和基础设施占比提高 |
+| 可用线 | 新卡是否能在云端现货租到，还是被长约、自用和预订锁定 | on-demand GPU availability 低，说明现货紧缺但不等于总供给为零 |
+
+**新增判断**：B200 可租用率 0% 应被理解为云端 on-demand 现货紧缺信号，而不是“B200 没有出货”。后续分析云厂商采购时，需要区分自用训练、长期客户、reserved/spot/on-demand、预订集群和第三方云租赁五种路径。
+
+**来源**：
+- `02-kb/sources/2026-07-22-feishu-bytedance-capex-revision.md`
+- `02-kb/sources/2026-07-22-feishu-gpu-availability-b200.md`

@@ -77,3 +77,17 @@
 ---
 
 *下次 /ingest 新文件时更新本索引*
+
+---
+
+## 2026-07-22 Feishu 批次：AI CAPEX、GPU 现货、能源效率、端侧 AI、SK Hynix 传闻
+
+| 来源卡 | 价值 | 处理 |
+|---|---|---|
+| [[sources/2026-07-22-feishu-bytedance-capex-revision|字节 2030FY CAPEX 上修原因]] | A- | 回写 G1/G2/G3、字节实体、云厂商采购节奏 |
+| [[sources/2026-07-22-feishu-gpu-availability-b200|GPU 可租用率与 B200 on-demand 供给]] | A- | 回写 G1/G3、云厂商采购节奏；提示原图缺失需补源 |
+| [[sources/2026-07-22-feishu-jensen-mw-intelligence|黄仁勋一兆瓦电生产多少智能]] | A- | 回写 L1/L3/G3；新增 tokens per MW 触发器 |
+| [[sources/2026-07-20-feishu-rockchip-edge-ai-boundary|瑞芯微与端侧 AI 的概念边界]] | B+ | 只回写 L2 国产替代概念和 G3 边缘 AI 指标边界，不新增实体 |
+| [[sources/2026-07-22-feishu-sk-hynix-intel-ohio-rumor|SK 海力士收购 Intel 俄亥俄工厂传闻与否认]] | B/待核验 | 降级为传闻/反证线索，回写 G2 和 SK Hynix 事件日志 |
+
+**本批次原则**：只沉淀可复用的判断框架和跟踪指标；社区观点和新闻传闻不直接升级为事实。
