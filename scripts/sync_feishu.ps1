@@ -4,7 +4,7 @@
     飞书云文档 → GitHub 自动同步脚本
 .DESCRIPTION
     扫描飞书指定文件夹中的 docx 和 md 文件，导出/下载为 markdown，
-    推送到 GitHub 仓库的 02-kb/sources/feishu/ 目录。
+    推送到 GitHub 仓库的 03-raw/feishu/ 目录。
     增量模式：只同步新增或修改过的文件。
 .PARAMETER DryRun
     预览模式：显示将要同步的文件但不执行实际操作

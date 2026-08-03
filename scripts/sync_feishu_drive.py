@@ -10,6 +10,7 @@ import hashlib
 import json
 import os
 import sys
+from datetime import datetime, timezone
 from pathlib import Path
 
 import requests
@@ -17,6 +18,7 @@ import requests
 FEISHU_APP_ID = os.environ.get("FEISHU_APP_ID")
 FEISHU_APP_SECRET = os.environ.get("FEISHU_APP_SECRET")
 FOLDER_TOKEN = os.environ.get("FEISHU_FOLDER_TOKEN")
+MANIFEST_FILE = os.environ.get("FEISHU_SYNC_MANIFEST")
 
 RAW_DIR = Path("03-raw/feishu")
 HASH_FILE = Path("03-raw/.synced_hashes.json")
@@ -172,6 +174,16 @@ def save_hashes(hashes):
         json.dump(sorted(hashes), f, ensure_ascii=False)
 
 
+def save_manifest(path, payload):
+    if not path:
+        return
+    manifest_path = Path(path)
+    if manifest_path.parent != Path("."):
+        manifest_path.parent.mkdir(parents=True, exist_ok=True)
+    with manifest_path.open("w", encoding="utf-8") as f:
+        json.dump(payload, f, ensure_ascii=False, indent=2)
+
+
 def safe_path_part(name, max_len=120):
     invalid = '<>:"/\\|?*'
     safe = name.strip()
@@ -235,6 +247,8 @@ def main():
     new_or_changed = 0
     skipped = 0
     failed = 0
+    saved_files = []
+    failed_files = []
 
     for file_info in candidates:
         try:
@@ -251,6 +265,7 @@ def main():
 
             if not content:
                 failed += 1
+                failed_files.append(display_path)
                 continue
 
             digest = content_hash(content)
@@ -265,6 +280,7 @@ def main():
             synced_hashes.add(digest)
             if changed:
                 new_or_changed += 1
+                saved_files.append(path.as_posix())
                 print(f"  Saved: {path}")
             else:
                 skipped += 1
@@ -274,9 +290,24 @@ def main():
             raise
         except Exception as exc:
             failed += 1
+            failed_files.append(join_display_path(file_info.get("folder_path", ""), file_info["name"]))
             print(f"  Error: {exc}")
 
     save_hashes(synced_hashes)
+    save_manifest(
+        MANIFEST_FILE,
+        {
+            "generated_at": datetime.now(timezone.utc).isoformat(),
+            "folder_token": FOLDER_TOKEN,
+            "total_files_found": len(files),
+            "candidates": len(candidates),
+            "saved_count": new_or_changed,
+            "skipped_count": skipped,
+            "failed_count": failed,
+            "saved_files": saved_files,
+            "failed_files": failed_files,
+        },
+    )
 
     print(f"\n{'=' * 50}")
     print(f"Processed: {len(candidates)}, Saved: {new_or_changed}, Skipped: {skipped}, Failed: {failed}")

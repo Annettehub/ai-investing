@@ -1,4 +1,4 @@
-# 飞书 → GitHub 同步配置
+# 飞书 → GitHub 同步与入库评审配置
 
 ## 前置要求
 
@@ -6,7 +6,90 @@
 - Git 已安装并能 push 到 GitHub
 - 飞书开发者平台已创建自建应用
 
-## 首次设置（一次性）
+## GitHub Actions 设置（推荐）
+
+### 1. 配置 GitHub Secrets
+
+在 GitHub 仓库 `Settings -> Secrets and variables -> Actions -> New repository secret` 中新增：
+
+| Secret | 用途 |
+|---|---|
+| `FEISHU_APP_ID` | 飞书自建应用 App ID |
+| `FEISHU_APP_SECRET` | 飞书自建应用 App Secret |
+| `FEISHU_FOLDER_TOKEN` | 飞书资料库文件夹 token：`LsWZfobhDlImj0dEm47cJGFmn0Z` |
+| `PAT` | 可选。默认 `GITHUB_TOKEN` 已可提交；如果 main 分支保护导致推送失败，再配置有 repo 写权限的 GitHub token |
+
+不要把 App Secret、GitHub token 或 `.env` 提交进仓库。
+
+### 2. 给飞书应用授权
+
+打开飞书同步文件夹 → 设置 → 协作者 → 添加同步用的飞书自建应用。
+
+飞书开放平台中至少需要：
+
+- Drive 文件列表/下载相关权限。
+- `docx:document` 和 `docx:document:readonly`，用于读取在线文档正文。
+
+添加权限后需要发布或重新发布应用版本。
+
+### 3. 运行方式
+
+`.github/workflows/sync-feishu.yml` 已配置：
+
+- 每天 UTC 08:00 自动运行。
+- 支持在 GitHub Actions 页面手动 `Run workflow`。
+
+运行链路：
+
+```text
+Feishu folder
+  -> scripts/sync_feishu_drive.py
+  -> 03-raw/feishu/
+  -> scripts/review_feishu_ingest.py
+  -> 05-meta/ingest-reviews/
+  -> 02-kb/sources/（仅 G2 存储相关候选来源卡）
+  -> 02-kb/log.md
+  -> git commit + push
+```
+
+评审脚本只做“机器预筛”。它不会自动修改 G2 假设、概念页、实体页或 certainty。
+
+本地路径链路：
+
+```text
+D:\WorkBuddy\Claw
+  -> scripts/sync_workbuddy_local.py
+  -> 03-raw/feishu/local-workbuddy/
+  -> scripts/review_feishu_ingest.py
+  -> 05-meta/ingest-reviews/
+  -> 02-kb/sources/（仅 G2 存储相关候选来源卡）
+  -> 02-kb/log.md
+```
+
+## 本地首次设置（可选）
+
+你当前的本地资料根目录是：
+
+```text
+D:\WorkBuddy\Claw
+```
+
+如果飞书 API 权限还没配好，可以先走本地导入：
+
+```powershell
+cd ai-investing
+
+# 从本地 WorkBuddy 资料目录导入近 30 天 Markdown/TXT/HTML 到 03-raw/feishu/local-workbuddy/
+python scripts\sync_workbuddy_local.py --source "D:\WorkBuddy\Claw"
+
+# 对本次导入资料执行同一套入库评审
+python scripts\review_feishu_ingest.py --from-manifest .workbuddy-local-sync-manifest.json --write-source-cards --write-log
+
+# 检查变更后再提交
+git status
+```
+
+本地导入默认只抓近 30 天资料，并跳过 `.git`、`.workbuddy`、`.cache`、`node_modules`、`site/dist`、`_archive`、`99-backup` 等系统/备份目录，也会跳过 `README.md`、`requirements.txt`、`index.html` 和行情日志，避免把工作区缓存或网站产物当作研究资料。需要全量扫描时加 `--since-days 0`，需要导入工具说明文件时加 `--include-boilerplate`。PDF、DOCX、PPTX、XLSX 默认跳过；如需生成“待人工转换”占位卡，可加 `--include-unsupported`。
 
 ### 1. 配置飞书凭证
 
@@ -31,37 +114,40 @@ notepad .env
 ### 3. 测试运行
 
 ```powershell
-# 预览模式（不实际推送）
+# 仅拉取飞书资料到 03-raw/feishu/
+cd ai-investing
+$env:FEISHU_APP_ID="cli_xxxxxxxxxxxxxxxx"
+$env:FEISHU_APP_SECRET="xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+$env:FEISHU_FOLDER_TOKEN="LsWZfobhDlImj0dEm47cJGFmn0Z"
+$env:FEISHU_SYNC_MANIFEST=".feishu-sync-manifest.json"
+python scripts\sync_feishu_drive.py
+
+# 对本次新增/更新 raw 做入库评审
+python scripts\review_feishu_ingest.py --from-manifest .feishu-sync-manifest.json --write-source-cards --write-log
+
+# 提交前检查变更
+git status
+```
+
+如继续使用旧 PowerShell 包装脚本：
+
+```powershell
 cd ai-investing\scripts
 .\sync_feishu.ps1 -DryRun
-
-# 正式运行
 .\sync_feishu.ps1
 ```
 
-### 4. 设置定时任务（每天自动运行）
-
-```powershell
-# 以管理员身份运行 PowerShell，执行以下命令：
-$action = New-ScheduledTaskAction -Execute "powershell.exe" `
-    -Argument "-ExecutionPolicy Bypass -File D:\your\path\ai-investing\scripts\sync_feishu.ps1" `
-    -WorkingDirectory "D:\your\path\ai-investing\scripts"
-
-$trigger = New-ScheduledTaskTrigger -Daily -At 23:00
-$settings = New-ScheduledTaskSettingsSet -StartWhenAvailable
-
-Register-ScheduledTask -TaskName "Feishu-GitHub-Sync" `
-    -Action $action -Trigger $trigger -Settings $settings
-```
-
-> 注意：将 `D:\your\path` 替换为你本地仓库的实际路径
+旧脚本主要用于本地同步和 push；GitHub Actions 以 Python 脚本为准。
 
 ## 同步行为
 
 | 模式 | 行为 |
 |------|------|
-| 增量（默认） | 只同步新增或修改过的文件 |
-| 全量 | 同步所有文件（修改 `.env` 中 `SYNC_MODE=full`） |
+| 飞书拉取 | 递归扫描 `FEISHU_FOLDER_TOKEN` 下的子文件夹 |
+| 本地导入 | 从 `D:\WorkBuddy\Claw` 导入 Markdown/TXT/HTML |
+| 增量 | 通过内容 hash 判断新增/更新，只保存变更文件 |
+| 跳过 | 文件名包含 `勿同步` 的文档不会同步 |
+| 入库评审 | 只评审本次同步新增/更新的 raw 文件 |
 
 ## 支持的文件类型
 
@@ -76,6 +162,8 @@ Register-ScheduledTask -TaskName "Feishu-GitHub-Sync" `
 - 文件名包含 `勿同步` 的文档会跳过。
 - 如果某篇 docx 无法读取 `raw_content`，本次 Action 会失败，避免“显示成功但实际漏同步”。
 - 该流程不是飞书官方 Markdown 导出；它使用在线文档正文接口，适合保存文字资料。复杂表格、图片和附件仍可能需要人工补充。
+- 自动入库评审目前只按 `CURRENT-FOCUS.md` 中的 G2 存储小循环判断：HBM、DDR5、DRAM、NAND/SSD、SK Hynix、Micron、Samsung、TSMC、CoWoS、CAPEX 等。
+- 符合门槛的资料会生成 `02-kb/sources/` 来源卡草稿；是否回写 G2、概念页、实体页，仍需要人工或 Codex 进一步 distill。
 
 ## GitHub Action 权限要求
 

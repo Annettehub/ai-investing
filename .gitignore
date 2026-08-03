@@ -9,6 +9,8 @@
 
 # WorkBuddy local state
 .workbuddy/
+.feishu-sync-manifest.json
+.workbuddy-local-sync-manifest.json
 
 # Temporary/system files
 *.tmp
