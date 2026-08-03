@@ -41,17 +41,15 @@ jobs:
         run: >
           python scripts/review_feishu_ingest.py
           --from-manifest .feishu-sync-manifest.json
-          --write-source-cards
-          --write-log
 
       - name: Commit and push
         run: |
           git config user.name "github-actions"
           git config user.email "actions@github.com"
-          git add 03-raw/feishu 03-raw/.synced_hashes.json 02-kb/sources 02-kb/log.md 05-meta/ingest-reviews
+          git add 03-raw/feishu 03-raw/.synced_hashes.json 05-meta/ingest-reviews
           if git diff --cached --quiet; then
             echo "No Feishu changes to commit."
           else
-            git commit -m "Sync feishu drive and review ingest: $(date +%Y-%m-%d-%H:%M)"
+            git commit -m "Sync feishu drive and review report: $(date +%Y-%m-%d-%H:%M)"
             git push
           fi

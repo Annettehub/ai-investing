@@ -47,8 +47,6 @@ Feishu folder
   -> 03-raw/feishu/
   -> scripts/review_feishu_ingest.py
   -> 05-meta/ingest-reviews/
-  -> 02-kb/sources/（仅 G2 存储相关候选来源卡）
-  -> 02-kb/log.md
   -> git commit + push
 ```
 
@@ -62,8 +60,6 @@ D:\WorkBuddy\Claw
   -> 03-raw/feishu/local-workbuddy/
   -> scripts/review_feishu_ingest.py
   -> 05-meta/ingest-reviews/
-  -> 02-kb/sources/（仅 G2 存储相关候选来源卡）
-  -> 02-kb/log.md
 ```
 
 ## 本地首次设置（可选）
@@ -83,7 +79,7 @@ cd ai-investing
 python scripts\sync_workbuddy_local.py --source "D:\WorkBuddy\Claw"
 
 # 对本次导入资料执行同一套入库评审
-python scripts\review_feishu_ingest.py --from-manifest .workbuddy-local-sync-manifest.json --write-source-cards --write-log
+python scripts\review_feishu_ingest.py --from-manifest .workbuddy-local-sync-manifest.json
 
 # 检查变更后再提交
 git status
@@ -123,7 +119,7 @@ $env:FEISHU_SYNC_MANIFEST=".feishu-sync-manifest.json"
 python scripts\sync_feishu_drive.py
 
 # 对本次新增/更新 raw 做入库评审
-python scripts\review_feishu_ingest.py --from-manifest .feishu-sync-manifest.json --write-source-cards --write-log
+python scripts\review_feishu_ingest.py --from-manifest .feishu-sync-manifest.json
 
 # 提交前检查变更
 git status
@@ -163,7 +159,7 @@ cd ai-investing\scripts
 - 如果某篇 docx 无法读取 `raw_content`，本次 Action 会失败，避免“显示成功但实际漏同步”。
 - 该流程不是飞书官方 Markdown 导出；它使用在线文档正文接口，适合保存文字资料。复杂表格、图片和附件仍可能需要人工补充。
 - 自动入库评审目前只按 `CURRENT-FOCUS.md` 中的 G2 存储小循环判断：HBM、DDR5、DRAM、NAND/SSD、SK Hynix、Micron、Samsung、TSMC、CoWoS、CAPEX 等。
-- 符合门槛的资料会生成 `02-kb/sources/` 来源卡草稿；是否回写 G2、概念页、实体页，仍需要人工或 Codex 进一步 distill。
+- 符合门槛的资料只会进入 `05-meta/ingest-reviews/` 审查报告；是否新建 `02-kb/sources/` 来源卡、写入 `02-kb/log.md`、回写 G2、概念页或实体页，必须先人工确认，再由 Codex 进一步 distill。
 
 ## GitHub Action 权限要求
 
