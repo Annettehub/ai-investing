@@ -84,6 +84,8 @@ R1 只有在“收入”以后才正式成立；订单和产能主要用于解�
 | 日期 | 证据 | 判断 | 来源与置信度 |
 |---|---|---|---|
 | 2026-07-21 | 东山精密调研会给出 AI 光模块产量、1.6T 产能、DSP 锁单、泰国/台湾产能和硅光成本等具体上游指标 | 支持 R1 的“AI 基础设施需求进入上游订单与产能”路径，但尚未完成收入、毛利率、现金流验证 | `02-kb/sources/2026-07-21-feishu-dsbj-optical-module-qa.md`；中高 |
+| 2026-08-08 | Coherent 专家 Q&A 给出 2025 数通短距光模块约 30 亿美元收入、1.6T 2026 年出货 300-350 万只、ELS 模组单价约 500 美元、OCS 2026 年目标约 1400 台等指标 | 支持 R1：AI 基础设施需求已经进入光模块/光器件订单与收入线索，但还需公司财报验证毛利和现金流 | `02-kb/sources/2026-08-04-feishu-coherent-optical-module-qa.md`；中 |
+| 2026-08-08 | Microsoft 专家访谈显示智能云 OPM 受 LTA、传统云 capacity 释放和租赁会计影响，IaaS/PaaS/SaaS 毛利率分层明显 | 支持 R1 对云业务“收入、利润和会计口径”分层验证，不能只看 AI CAPEX | `02-kb/sources/2026-08-06-feishu-microsoft-cloud-copilot.md`；中 |
 | 2026-07-21 | Wolfe Research 摘要称 NVIDIA 可能采购暗光纤解决 GPU 生态瓶颈，面向 NeoCloud 或 GPU-as-a-Service 交付 | 提醒 R1 不能只看芯片/机柜出货，还要看网络、上电和跨 DC 互联是否使 GPU 资产转化为可售算力 | `02-kb/sources/2026-07-21-feishu-nvidia-dark-fiber.md`；中 |
 | 2026-07-15 | IBM 相关材料显示企业 IT 预算可能出现“基础设施优先、应用后置”的重排，但目前只有单一大型厂商信号 | 支持上游先兑现，尚不能升级为产业结论 | `03-raw/feishu/Dots投资者社区观点-IBM企业IT预算重要性重置：AI预算优先级提升 vs IT软件优先级下降.md`；中低 |
 | 2026-07-15 | G1 已建立“CAPEX -> AI 硬件支出 -> 供应商份额 -> 收入确认”的资金流公式，并用台积电、CoWoS、NVIDIA/Broadcom 交叉验证 | 支持传导框架，不替代公司财报 | `../G-需求与周期/G1-ai-capex-and-capacity.md`；高 |
@@ -119,6 +121,8 @@ R1 只有在“收入”以后才正式成立；订单和产能主要用于解�
 - `02-kb/hypotheses/G-需求与周期/G1-ai-capex-and-capacity.md`
 - `03-raw/feishu/Dots投资者社区观点-IBM企业IT预算重要性重置：AI预算优先级提升 vs IT软件优先级下降.md`
 - 吴梓豪知识星球“半导体大佬的会议室”相关台积电、NVIDIA、Broadcom 与 CoWoS 资料
+- `02-kb/sources/2026-08-04-feishu-coherent-optical-module-qa.md`
+- `02-kb/sources/2026-08-06-feishu-microsoft-cloud-copilot.md`
 
 ## 2026-07-15 IMA 批次补充
 

@@ -91,3 +91,20 @@
 | [[sources/2026-07-22-feishu-sk-hynix-intel-ohio-rumor|SK 海力士收购 Intel 俄亥俄工厂传闻与否认]] | B/待核验 | 降级为传闻/反证线索，回写 G2 和 SK Hynix 事件日志 |
 
 **本批次原则**：只沉淀可复用的判断框架和跟踪指标；社区观点和新闻传闻不直接升级为事实。
+
+---
+
+## 2026-08-08 Feishu 批次：云厂商 CAPEX、光互连、存储、应用兑现和 AI 科学
+
+| 来源卡 | 价值 | 处理 |
+|---|---|---|
+| [[sources/2026-08-04-feishu-amazon-aws-2027-capex|亚马逊专家 Q&A - 2027 AWS 数据中心与 CAPEX]] | A- | 新增 AWS 实体；回写 G1/G2/S1 和云厂商采购节奏 |
+| [[sources/2026-08-06-feishu-microsoft-cloud-copilot|微软云与 Copilot 专家访谈]] | A- | 新增 Microsoft 实体；回写 G1/R1/R2/S3 和应用商业模式 |
+| [[sources/2026-08-04-feishu-coherent-optical-module-qa|Coherent 专家深度 Q&A]] | A- | 新增 Coherent 实体；回写 S2/R1/G1、中际旭创/NVIDIA 和基础设施触发器 |
+| [[sources/2026-08-03-feishu-sk-hynix-memory-expert|海力士专家调研]] | A- | 回写 G2、SK Hynix 实体和存储概念；加入 2028H2 反证窗口 |
+| [[sources/2026-08-03-feishu-bytedance-tencent-workbuddy-r2|字节专家评价腾讯 WorkBuddy]] | B+ | 回写 R2/S3/G3、腾讯/字节实体和应用渗透率；关键数字待核验 |
+| [[sources/2026-08-05-feishu-agi-economics-alex-imas-phil-trammell|AGI 经济学：AI 越强，占经济份额未必越大]] | B+ | 回写 R2/S3 和跨层投资框架，作为“能力提升不等于利润兑现”的反证框架 |
+| [[sources/2026-08-02-feishu-ai-math-science-astra-grant|AI 数学/科学推理：Astra、Grant Sanderson 与 Symborg]] | B+ | 回写 G3 和模型架构概念，作为科学推理需求扩散线索 |
+| [[sources/2026-08-03-feishu-leopold-ai-volatility|Leopold 致投资人的信：AI 波动率与市场结构]] | B | 只作为 G1/G2 市场风险旁证，不直接升级为产业事实 |
+
+**本批次原则**：高优先级进入 G/S/R 假设、实体和概念；专家访谈中的数量、价格和客户结构全部保留“需外部核验”边界。

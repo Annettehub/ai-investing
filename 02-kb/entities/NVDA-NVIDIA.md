@@ -1,6 +1,6 @@
 # NVDA — NVIDIA
 
-> 仓位：🟢观察 | 最后更新：2026-07-21
+> 仓位：🟢观察 | 最后更新：2026-08-08
 
 ## 持仓情况
 
@@ -32,6 +32,7 @@ IMA/a16z 资料提出一个可跟踪判断：新硬件进入者可能需要约 5
 
 | 日期 | 类型 | 事件 | 影响 |
 |------|------|------|------|
+| 2026-08-08 | Feishu 入库 | AWS 专家口径称 2027 年 AWS Trainium 采购量可能显著高于 NVIDIA GPU，Rubin 在新增 7GW 容量中的功耗占比约 1-2GW；Coherent 专家口径同时显示 NVIDIA CPO/ELS/Rubin Ultra 节奏会影响光互连订单 | 更新 S1/G1/S2：NVIDIA 仍是系统级核心，但自研 ASIC 与网络/光互连节奏需要同步跟踪；来源 `02-kb/sources/2026-08-04-feishu-amazon-aws-2027-capex.md`、`02-kb/sources/2026-08-04-feishu-coherent-optical-module-qa.md` |
 | 2026-07-21 | Feishu 入库 | Wolfe Research 摘要称 NVIDIA 大规模铺设/采购美国长途暗光纤项目属实，可能用于解决 GPU 生态瓶颈、支持 NeoCloud 客户或探索 GPU-as-a-Service；涉及 Lumentum、Coherent、Corning、Ciena、Cisco 等网络/光互连链条 | 更新 G1/R1/S2：NVIDIA 系统级控制力可能从 GPU/机柜进一步延伸到网络基础设施；来源 `02-kb/sources/2026-07-21-feishu-nvidia-dark-fiber.md` |
 | 2026-07-15 | IMA 入库 | a16z/Dylan Patel 访谈提出 NVIDIA 护城河来自网络、HBM、制程、供应链、软件和系统交付，新进入者需要显著性能优势；同时 hyperscaler 自研 ASIC 是长期利润率威胁 | 更新 S1 结构判断；来源 `02-kb/sources/2026-07-15-ima-a16z-nvidia-infra-future.md` |
 | 2026-07-15 | IMA 入库 | Sequoia/Dylan Patel 访谈强调模型、软件、硬件和数据中心运营协同设计，推理供给增长和 NeoCloud 多极生态影响 NVIDIA 定价权 | 更新 G1/R1；来源 `02-kb/sources/2026-07-15-ima-sequoia-dylanpatel-codesign.md` |

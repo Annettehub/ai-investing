@@ -343,6 +343,17 @@ AI CAPEX 不是只由“买更多 GPU”推动，也由单位系统成本上升�
 
 **更新后的观察口径**：headline CAPEX 仍是需求强度信号，但要再拆成三步验证：钱是否进入 AI 硬件，硬件是否完成上电/并网，算力是否以足够高的利用率和价格转化为收入。
 
+## 2026-08-08 Feishu 批次补充
+
+| 来源 | 新增判断 | 对 G1 的影响 |
+|---|---|---|
+| `02-kb/sources/2026-08-04-feishu-amazon-aws-2027-capex.md` | AWS 2027 年规划可通电并产生经济效益的新增容量约 7GW，其中自建约 5GW、租赁约 1.8-2GW；Trainium 会使单 GW 硬件 CAPEX 显著低于纯 NVIDIA/Rubin 口径 | 强化 G1 的“headline CAPEX 必须拆路径”原则：自研 ASIC、租赁容量、存储 LTA 和数据中心可用性会改变资金流向 |
+| `02-kb/sources/2026-08-06-feishu-microsoft-cloud-copilot.md` | Microsoft 智能云受 OAI/MaaS、传统云 capacity 释放、租赁会计和 Nebius 等外部资源共同影响 | 支持 G1 对云厂商 CAPEX 的会计口径拆分：融资租赁转经营租赁可能降低 headline CAPEX，但不必然代表 AI 需求下降 |
+| `02-kb/sources/2026-08-04-feishu-coherent-optical-module-qa.md` | 1.6T、CPO/NPO、OCS 和 EML/CW 激光器成为 AI 数据中心交付的新瓶颈；2027-2028 年光互连物料锁量周期显著拉长 | 将 G1 从“芯片/机柜/上电”进一步延伸到光互连交付条件；若光模块、CPO/NPO、OCS 供给不足，CAPEX 也无法完全转化为可用算力 |
+| `02-kb/sources/2026-08-03-feishu-leopold-ai-volatility.md` | AI 基本面改善和 AI 资产价格下跌可能同时发生，杠杆、流动性和集中持仓会放大风险 | 仅作为市场风险旁证：G1 判断产业需求，不直接解释股价表现 |
+
+**本轮结论**：海外 CSP CAPEX 仍支持 G1，但验证口径继续细化。AWS 资料说明单 GW 成本不能只按 NVIDIA/Rubin 估算；Microsoft 资料说明租赁会计和 OAI RPO 会影响 CAPEX/收入节奏；Coherent 资料说明光互连也可能成为 AI 数据中心可上线容量的瓶颈。certainty 暂不调整。
+
 ## 2026-07-22 Feishu 批次补充
 
 | 来源 | 新增判断 | 对 G1 的影响 |
@@ -380,6 +391,7 @@ CAPEX 上修 = 组件价格上涨 + 采购数量增加 + 系统架构复杂度�
 | 日期 | 证据 | 影响 | 来源标签 |
 |------|------|------|----------|
 | 2026-07-22 | Feishu 新资料显示，字节 CAPEX 上修可拆为组件涨价、真实训练/推理需求、超级节点/高密度机柜升级；B200 现货可租用率为 0%；NVIDIA 叙事强调 tokens per MW | 🟢 支持 AI CAPEX 仍紧，但把验证口径从“预算总额”推进到“价格/数量/系统复杂度/上电效率”四项拆解 | `02-kb/sources/2026-07-22-feishu-bytedance-capex-revision.md` + `02-kb/sources/2026-07-22-feishu-gpu-availability-b200.md` + `02-kb/sources/2026-07-22-feishu-jensen-mw-intelligence.md` |
+| 2026-08-08 | Feishu 批次中 AWS、Microsoft、Coherent 三篇资料分别补充 CSP 上线 GW、租赁/会计口径、Trainium 自研芯片、传统云 capacity、光互连/CPO/NPO/OCS 交付瓶颈 | 🟢 支持 G1，但要求把 CAPEX 拆成自研 ASIC、NVIDIA GPU、存储、租赁容量、传统云、光互连和数据中心可用性 | `02-kb/sources/2026-08-04-feishu-amazon-aws-2027-capex.md` + `02-kb/sources/2026-08-06-feishu-microsoft-cloud-copilot.md` + `02-kb/sources/2026-08-04-feishu-coherent-optical-module-qa.md` |
 | 2026-07-21 | Wolfe Research 摘要称 NVIDIA 大规模采购美国长途暗光纤项目属实，可能用于解决 GPU 生态系统瓶颈、支持 NeoCloud 客户或探索 GPU-as-a-Service | 🟡 将 CAPEX 验证从“芯片/机柜”扩展到“跨数据中心网络与可上线算力条件”；该证据不是 NVIDIA 官方公告，需后续验证 | `02-kb/sources/2026-07-21-feishu-nvidia-dark-fiber.md` |
 | 2026-07-11 | 将国内 headline CAPEX 拆成六条资金流向：海外 DC、租赁、合规 NVIDIA、国产卡、海外 ASIC、本土先进制程；并增加三层收入镜像：国内品牌/整机、国内制造环节、国内先进制程 | 🟡 | `03-raw/zsxq/id_028w0on3dpau_中芯国际2025Q2财报.md` + `03-raw/zsxq/id_2jtlu2przfrp_针对Nikkei国内先进制程提高五倍以满足AI报导的解读.md` |
 | 2026-07-10 | 增加国内厂商 CAPEX 支出与国产制造产业链收入的镜像比对：总 CAPEX -> AI CAPEX -> 芯片+机柜硬件 -> 国内制造链收入，并用 GB200 NVL72 作为机架案例 | 🟡 | `03-raw/zsxq/id_zqh9ckitmc17_2026投资建议- 谷歌篇.md` + NVIDIA |

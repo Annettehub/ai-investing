@@ -118,6 +118,7 @@ G3 只追踪前半段：从模型能力到推理使用量再到基础设施配�
 | 日期 | 证据 | 影响 | 来源标签 |
 |------|------|------|----------|
 | 2026-07-22 | Feishu 社区观点称豆包 daily token consumption 达 180 万亿，Agent、视频生成和国内模型集群扩张继续推高 GPU/内存/机柜需求 | 🟡 支持推理需求扩散，但该数字需字节披露、第三方流量和芯片采购数据交叉验证 | `02-kb/sources/2026-07-22-feishu-bytedance-capex-revision.md` |
+| 2026-08-08 | Grant Sanderson 访谈与 Didier/Astra 资料提示，数学、形式化证明和科学研究 Agent 可能形成新的高价值推理场景；但 Astra 相关成果仍需独立同行审查 | 🟡 扩展 G3 的推理需求边界：从聊天/API/Agent 工作流扩展到可验证科学研究任务，但不提高 certainty | `02-kb/sources/2026-08-02-feishu-ai-math-science-astra-grant.md` |
 | 2026-07-22 | B200 on-demand 可租用率为 0%，说明新一代 GPU 现货资源可能被长期订单、自用训练和预订集群锁定 | 🟢 支持推理/训练合计需求仍紧，但该指标衡量现货可租用性，不代表总供给 | `02-kb/sources/2026-07-22-feishu-gpu-availability-b200.md` |
 | 2026-07-22 | NVIDIA 叙事强调 tokens per MW / intelligence per MW，单位电力推理产出成为 AI 工厂效率指标 | 🟡 提醒 G3 不只看 token 总量，也要看单位电力 token 产出是否改善推理成本曲线 | `02-kb/sources/2026-07-22-feishu-jensen-mw-intelligence.md` |
 | 2026-07-21 | 东山精密调研会称 AI 光模块产量从 2026Q1 约 30 万只、Q2 接近 100 万只，提升到 2026Q4 目标 400-500 万只、2027Q1 目标 600 万只以上；客户反馈核心矛盾是产能爬坡能否满足需求 | 🟢 支持推理/AI 数据中心需求正在扩散到低延迟网络和光互连配套，但仍需用实际出货和财务确认验证 | `02-kb/sources/2026-07-21-feishu-dsbj-optical-module-qa.md` |
@@ -170,3 +171,4 @@ G3 只追踪前半段：从模型能力到推理使用量再到基础设施配�
 - G1 数据源：`02-kb/hypotheses/G-需求与周期/G1-ai-capex-and-capacity.md`
 - G2 数据源：`02-kb/hypotheses/G-需求与周期/G2-storage-growth-and-cycle.md`
 - 2026-07-22 Feishu 批次：`02-kb/sources/2026-07-22-feishu-bytedance-capex-revision.md`、`02-kb/sources/2026-07-22-feishu-gpu-availability-b200.md`、`02-kb/sources/2026-07-22-feishu-jensen-mw-intelligence.md`、`02-kb/sources/2026-07-20-feishu-rockchip-edge-ai-boundary.md`
+- 2026-08-08 Feishu 批次：`02-kb/sources/2026-08-02-feishu-ai-math-science-astra-grant.md`

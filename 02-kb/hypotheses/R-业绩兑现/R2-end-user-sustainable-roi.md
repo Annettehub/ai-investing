@@ -78,6 +78,9 @@ R2 同时检查两本账，但不能混为一谈：
 
 | 日期 | 证据 | 判断 | 来源与置信度 |
 |---|---|---|---|
+| 2026-08-03 | 字节专家评价腾讯 WorkBuddy 资料提到，WorkBuddy 短期承接 OpenClaw 热潮后的用户需求，可能已有百万级付费用户；但市场天花板、Trae Work/QoderWork 低价竞争、推理成本、订阅与电商服务费能否覆盖成本，是判断可持续兑现的关键 | 支持 R2 的“应用层不能只看用户数，要看付费、留存、推理成本和场景绑定”的框架；对 WorkBuddy/豆包形成正负并存的观察素材，但具体付费用户数和成本打平判断需要外部核验 | `02-kb/sources/2026-08-03-feishu-bytedance-tencent-workbuddy-r2.md`；中 |
+| 2026-08-08 | Microsoft 专家访谈明确提出 Copilot 付费 seat 不等于实际 revenue，客户不仅要买，还要用，还要收；未来可能从 seat 转向 API token 与行业工作流收费 | 强化 R2 的“两本账”框架：企业 AI 应用必须验证实际收入、活跃使用、续费、工作流 ROI 和单位推理经济 | `02-kb/sources/2026-08-06-feishu-microsoft-cloud-copilot.md`；中 |
+| 2026-08-08 | Alex Imas / Phil Trammell 访谈提出 AGI 更像“电力”还是“社交媒体平台”决定价值扩散还是集中，开源模型若接近前沿可能抑制永久平台租 | 为 R2 提供长期理论边界：最终采用者是否获得可持续回报，取决于 AI 能力是否商品化并广泛扩散 | `02-kb/sources/2026-08-05-feishu-agi-economics-alex-imas-phil-trammell.md`；中 |
 | 2026-07-21 | JPM 中国 AI 行业资料估计智谱、DeepSeek、MiniMax、Kimi 等中国独立模型商已经形成可观察 ARR，并认为模型市场更像供给受限而非需求不足 | 支持 R2 的“模型供应商变现账”正在形成，但仍不能证明最终采用者 ROI，ARR 数字需公司披露和第三方监测交叉验证 | `02-kb/sources/2026-07-21-feishu-jpm-china-ai-zhipu-kimi.md`；中 |
 | 2026-07-15 | Dots 腾讯资料提出 AIM+ 广告 ROI、WorkBuddy/CodeBuddy 付费转化、小程序智能体调用、外部 AI token 毛利和 FCF 稳定性才是腾讯 AI 财务拐点的关键，而不是元宝日活或内部 token 消耗 | 支持 R2 的“两本账”框架：广告 AI 已有局部财务兑现，但 Agent OS、生产力智能体和小程序 AI Skills 尚未完成财务验证 | `02-kb/sources/2026-07-15-dots-tencent-agent-os.md`；中 |
 | 2026-07-15 | IBM 相关材料提出企业 IT 预算可能先转向算力、存储、网络和数据基础设施，应用与咨询预算后置；目前仅为单一公司先行信号 | 削弱近期应用层兑现，但尚未构成产业结论 | `03-raw/feishu/Dots投资者社区观点-IBM企业IT预算重要性重置：AI预算优先级提升 vs IT软件优先级下降.md`；中低 |
@@ -116,6 +119,9 @@ R2 同时检查两本账，但不能混为一谈：
 - `03-raw/feishu/SaaStr 863 The Enterprise AI Reality Check From Dashboard Graveyards to 30-Day Migrations with Databricks' Co-Founder and SVP of Field Engineering.md`
 - `03-raw/feishu/Dots投资者社区观点-IBM企业IT预算重要性重置：AI预算优先级提升 vs IT软件优先级下降.md`
 - `02-kb/sources/2026-07-15-dots-tencent-agent-os.md`
+- `02-kb/sources/2026-08-03-feishu-bytedance-tencent-workbuddy-r2.md`
+- `02-kb/sources/2026-08-06-feishu-microsoft-cloud-copilot.md`
+- `02-kb/sources/2026-08-05-feishu-agi-economics-alex-imas-phil-trammell.md`
 - `03-raw/feishu/2026-05-29 - The a16z Show - 为什么 10 亿美元退出已成过去式...md`
 - IMA/微信中的 20VC 企业 AI 支出材料
 

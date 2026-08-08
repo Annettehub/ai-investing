@@ -172,3 +172,20 @@ AI应用的发展和商业模式探讨的是：当大模型能力趋于商品化
   3. 单任务 token 成本与节省人力成本的比例。
   4. ARR、续费、扩容和毛利率是否同步改善。
 - **来源**: `02-kb/sources/2026-07-21-ima-20vc-glean-arvind-jain.md`
+
+### 2026-08-08 Feishu 批次更新：Copilot、WorkBuddy 与 C 端 AI 兑现
+
+- **触发**: Microsoft 云专家访谈、字节专家评价腾讯 WorkBuddy、Alex Imas/Phil Trammell AGI 经济学资料入库。
+- **新增框架**:
+  - Microsoft 资料提示：Copilot 不能只看付费 seat，必须看实际 revenue、AI token 用量、客户活跃率、续约率和 workflow 绑定。
+  - WorkBuddy/豆包资料提示：C 端 AI 商业化需要同时验证付费、推理成本、价格战和场景绑定；“有热度”不能等同于 R2 下游兑现。
+  - AGI 经济学资料提示：即便 AI 能力提升，若供给快速扩张、价格下降或价值被用户/平台竞争分走，AI 应用未必能自动形成高利润池。
+- **新增跟踪指标**:
+  1. Copilot / WorkBuddy / 豆包的实际收入、ARPU、留存率和活跃使用率。
+  2. 单任务 token 成本、成功率、人工复核率和客户可量化 ROI。
+  3. 价格战或促销补贴是否压低应用层毛利。
+  4. 应用是否进入企业 workflow、交易、电商、广告或内容消费闭环。
+- **来源**:
+  - `02-kb/sources/2026-08-06-feishu-microsoft-cloud-copilot.md`
+  - `02-kb/sources/2026-08-03-feishu-bytedance-tencent-workbuddy-r2.md`
+  - `02-kb/sources/2026-08-05-feishu-agi-economics-alex-imas-phil-trammell.md`

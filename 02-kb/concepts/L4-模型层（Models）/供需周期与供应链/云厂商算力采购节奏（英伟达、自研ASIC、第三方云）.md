@@ -33,3 +33,18 @@
 **来源**：
 - `02-kb/sources/2026-07-22-feishu-bytedance-capex-revision.md`
 - `02-kb/sources/2026-07-22-feishu-gpu-availability-b200.md`
+
+## 2026-08-08 Feishu 补充：AWS/Microsoft 的采购节奏拆分
+
+本批资料把云厂商算力采购进一步拆成“自建容量、租赁容量、自研芯片、NVIDIA GPU、传统云释放、AI token 使用和收入确认”几条线：
+
+| 云厂商 | 新增观察 | 对框架的修正 |
+|---|---|---|
+| AWS | 2027 年上线容量口径约 7GW，其中自建约 5GW、租赁约 1.8-2GW；Trainium 采购量可能显著高于 NVIDIA GPU | 不能用 NVIDIA Rubin 单 GW 成本直接外推 AWS headline CAPEX，必须区分 Trainium、自研芯片、NVIDIA GPU 与存储价值量 |
+| Microsoft | MaaS 收入高度依赖 OpenAI GPT API；传统云 DC capacity 释放、租赁会计和 Nebius 合作会影响 headline CAPEX 与真实算力供给 | CAPEX、RPO、token revenue、Copilot revenue 和云毛利率要分开看，不能用“买了 seat”替代“实际使用和收入确认” |
+
+**新增判断**：云厂商 AI CAPEX 进入产业链的路径不止 GPU 一条。自研 ASIC 可能降低单位 GW 芯片成本，但不一定降低存储、网络、电力、数据中心和软件生态成本；因此 G1/S1/R1 需要联动验证。
+
+**来源**：
+- `02-kb/sources/2026-08-04-feishu-amazon-aws-2027-capex.md`
+- `02-kb/sources/2026-08-06-feishu-microsoft-cloud-copilot.md`
