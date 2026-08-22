@@ -4,7 +4,7 @@ Review newly synced Feishu raw files against the current knowledge-ingest rules.
 
 The script is intentionally conservative:
 - it writes raw sync review reports under 05-meta/ingest-reviews;
-- it can create source-card drafts for G2 storage-relevant files;
+- it classifies material across G/S/R routes before recommending distill;
 - it does not update hypotheses, concepts, entities, or certainty automatically.
 """
 import argparse
@@ -60,6 +60,67 @@ QUESTION_RULES = [
     ("SK Hynix、Micron、Samsung、TSMC 与 HBM 供应链关系", {"海力士", "hynix", "美光", "micron", "三星", "samsung", "台积电", "tsmc", "cowos", "hbm"}),
 ]
 
+# Review routing is deliberately broader than the current G2 storage loop.
+# A document may have one primary route and several cross-routes.
+ROUTE_RULES = [
+    {
+        "route": "G1",
+        "label": "需求与资本开支",
+        "keywords": {"capex", "资本开支", "资本支出", "算力需求", "数据中心", "电力"},
+        "targets": ["02-kb/hypotheses/G-需求与周期/G1-ai-capex-and-capacity.md"],
+    },
+    {
+        "route": "G2",
+        "label": "存储成长与周期",
+        "keywords": {"hbm", "dram", "ddr5", "nand", "ssd", "qlc", "存储", "内存", "产能", "价格", "涨价", "长约", "lta"},
+        "targets": ["02-kb/hypotheses/G-需求与周期/G2-storage-growth-and-cycle.md"],
+    },
+    {
+        "route": "G3",
+        "label": "推理需求与规模",
+        "keywords": {"推理", "inference", "token", "agent", "模型调用", "用户量", "算力规模"},
+        "targets": ["02-kb/hypotheses/G-需求与周期/G3-inference-demand-scale.md"],
+    },
+    {
+        "route": "S1",
+        "label": "芯片与加速器竞争结构",
+        "keywords": {"gpu", "asic", "加速器", "cuda", "nvidia", "英伟达", "博通", "主权ai"},
+        "targets": ["02-kb/hypotheses/S-产业结构与价值捕获/S1.1-chip-accelerator-competition.md"],
+    },
+    {
+        "route": "S2",
+        "label": "先进制造、封装与国产替代",
+        "keywords": {
+            "光刻", "光刻机", "全息光刻", "euv", "duv", "asml", "stepper", "scanner",
+            "投影物镜", "先进封装", "曝光设备", "光刻胶", "纳米压印", "国产替代",
+            "overlay", "throughput", "mask aligner", "芯碁微装", "上海微电子", "制程节点",
+        },
+        "targets": [
+            "02-kb/hypotheses/S-产业结构与价值捕获/S2.1-advanced-manufacturing-packaging-localization.md",
+            "02-kb/concepts/L2-芯片层（Chips）/技术路线/国产光刻机突围路线.md",
+            "02-kb/concepts/L2-芯片层（Chips）/供需周期与供应链/先进封装生态（CoWoS、2.5D、3D封装）.md",
+        ],
+    },
+    {
+        "route": "S3",
+        "label": "应用层价值捕获",
+        "keywords": {"应用层", "roi", "回报", "商业化", "收入兑现", "价值捕获", "广告", "软件收入"},
+        "targets": ["02-kb/hypotheses/S-产业结构与价值捕获/S3.1-application-value-capture.md"],
+    },
+    {
+        "route": "R1",
+        "label": "上游业绩兑现",
+        "keywords": {"ai收入", "营收增长", "毛利率", "订单", "backlog", "业绩", "财报", "盈利"},
+        "targets": ["02-kb/hypotheses/R-业绩兑现/R1-upstream-ai-infrastructure-earnings.md"],
+    },
+    {
+        "route": "R2",
+        "label": "下游回报兑现",
+        "keywords": {"客户roi", "客户回报", "最终用户", "采用者", "留存率", "arr", "付费", "现金流"},
+        "targets": ["02-kb/hypotheses/R-业绩兑现/R2-end-user-sustainable-roi.md"],
+    },
+]
+
 
 @dataclass
 class ReviewItem:
@@ -69,6 +130,9 @@ class ReviewItem:
     score: int
     matched_terms: list[str]
     matched_questions: list[str]
+    routes: list[str]
+    primary_route: str | None
+    route_targets: list[str]
     should_distill: bool
     reason: str
     source_card: Path | None = None
@@ -116,15 +180,34 @@ def classify(path, min_score):
             matched_questions.append(question)
 
     score = len(set(matched)) + len(matched_questions)
-    has_core_memory_term = bool({"HBM", "DRAM", "DDR5", "NAND", "SSD", "SK Hynix", "Micron", "Samsung"} & set(matched))
-    should_distill = score >= min_score and has_core_memory_term
+    route_scores = {}
+    route_labels = {}
+    route_targets = {}
+    for rule in ROUTE_RULES:
+        hits = sorted({keyword for keyword in rule["keywords"] if keyword.lower() in haystack})
+        if hits:
+            route = rule["route"]
+            route_scores[route] = len(hits)
+            route_labels[route] = rule["label"]
+            route_targets[route] = rule["targets"]
+
+    # One isolated word such as "收入" or "产能" is not enough to classify
+    # a document. Keep only routes with at least two independent signals.
+    routes = sorted(
+        (route for route, route_score in route_scores.items() if route_score >= 2),
+        key=lambda route: (-route_scores[route], route),
+    )
+    primary_route = routes[0] if routes else None
+    primary_score = route_scores.get(primary_route, 0)
+    should_distill = bool(primary_route and (primary_score >= 2 or score >= min_score))
 
     if should_distill:
-        reason = "命中当前 G2 存储小循环，建议进入 distill 人工复核。"
-    elif matched:
-        reason = "有弱相关信号，但未达到当前 G2 入库门槛，保留在 raw。"
+        route_text = ", ".join(f"{route} {route_labels[route]}" for route in routes)
+        reason = f"主路由为 {primary_route} {route_labels[primary_route]}；交叉命中：{route_text}，建议进入 distill 人工复核。"
+    elif routes:
+        reason = f"命中 {', '.join(routes)}，但证据密度不足，暂保留 raw。"
     else:
-        reason = "未命中当前 G2 入库关键词，保留在 raw。"
+        reason = "未命中 G/S/R 入库路由，保留在 raw。"
 
     return ReviewItem(
         path=path,
@@ -133,6 +216,9 @@ def classify(path, min_score):
         score=score,
         matched_terms=sorted(set(matched)),
         matched_questions=matched_questions,
+        routes=routes,
+        primary_route=primary_route,
+        route_targets=route_targets.get(primary_route, []),
         should_distill=should_distill,
         reason=reason,
     )
@@ -317,35 +403,37 @@ def write_review(items, created_cards):
         f"- 仅保留 raw：{len(raw_only)} 个",
         f"- 新建来源卡片：{len(created_cards)} 个",
         "",
-        "本报告由脚本按当前 G2 存储小循环规则生成；它只做预筛，不代表事实核验，也不自动更新假设 certainty。",
+        "本报告按 G/S/R 多维路由规则生成；每个路由至少需要两个主题信号。它只做预筛，不代表事实核验，也不自动更新假设 certainty。",
         "",
         "## 建议进入 distill",
         "",
     ]
 
     if candidates:
-        lines.extend(["| raw 文件 | 分数 | 命中项 | 来源卡 | 判断 |", "|---|---:|---|---|---|"])
+        lines.extend(["| raw 文件 | 分数 | 主路由 | 交叉路由 | 建议目标 | 命中项 | 来源卡 | 判断 |", "|---|---:|---|---|---|---|---|---|"])
         for item in candidates:
             source = normalize_rel(item.source_card) if item.source_card else "未创建"
-            lines.append(f"| `{normalize_rel(item.path)}` | {item.score} | {', '.join(item.matched_terms)} | `{source}` | {item.reason} |")
+            targets = "<br>".join(f"`{target}`" for target in item.route_targets) or "待人工判断"
+            lines.append(f"| `{normalize_rel(item.path)}` | {item.score} | {item.primary_route or '无'} | {', '.join(item.routes) or '无'} | {targets} | {', '.join(item.matched_terms)} | `{source}` | {item.reason} |")
     else:
         lines.append("无。")
 
     lines.extend(["", "## 仅保留 raw", ""])
     if raw_only:
-        lines.extend(["| raw 文件 | 分数 | 命中项 | 判断 |", "|---|---:|---|---|"])
+        lines.extend(["| raw 文件 | 分数 | 主路由 | 交叉路由 | 建议目标 | 命中项 | 判断 |", "|---|---:|---|---|---|---|---|"])
         for item in raw_only:
             terms = ", ".join(item.matched_terms) if item.matched_terms else "无"
-            lines.append(f"| `{normalize_rel(item.path)}` | {item.score} | {terms} | {item.reason} |")
+            targets = "<br>".join(f"`{target}`" for target in item.route_targets) or "无"
+            lines.append(f"| `{normalize_rel(item.path)}` | {item.score} | {item.primary_route or '无'} | {', '.join(item.routes) or '无'} | {targets} | {terms} | {item.reason} |")
     else:
         lines.append("无。")
 
     lines.extend(["", "## 当前入库门槛", ""])
     lines.extend([
-        "- 是否改变 G2 的判断方向或 certainty。",
-        "- 是否补强或反驳 G2 的关键证据链。",
-        "- 是否更新存储产业链与周期概念框架。",
-        "- 是否需要进入周度复盘。",
+        "- 先判断 G/S/R 主路由，再判断是否存在交叉证据。",
+        "- 是否改变主路由对应假设的判断方向或 certainty。",
+        "- 是否补强或反驳对应假设、概念框架或公司档案。",
+        "- 涉及多个路由时，分别记录证据，不把偶然关键词当作主题归类。",
     ])
 
     out.write_text("\n".join(lines) + "\n", encoding="utf-8")
