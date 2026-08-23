@@ -173,7 +173,8 @@ def sidebar_slug_for_source_dir(source_dir: Path, source_root: Path, dest_root: 
 
 
 def sidebar_link_for_route(route: str) -> str:
-    return f"/ai-investing/{route}/"
+    # Starlight adds Astro's configured base path when it normalizes sidebar links.
+    return f"/{route}/"
 
 
 def normalize_rel(source_path: Path, source_root: Path) -> Path:
@@ -503,8 +504,8 @@ def write_generated_sidebar() -> None:
                     "collapsed": True,
                     "items": build_flat_sidebar(KB_SRC / "sources", KB_SRC, KB_DEST),
                 },
-                {"label": "原始资料入口", "link": "/ai-investing/pipeline/raw-sources/"},
-                {"label": "自动同步", "link": "/ai-investing/pipeline/automation/"},
+                {"label": "原始资料入口", "link": sidebar_link_for_route("pipeline/raw-sources")},
+                {"label": "自动同步", "link": sidebar_link_for_route("pipeline/automation")},
             ],
         },
     ]
