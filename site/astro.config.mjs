@@ -34,23 +34,16 @@ export default defineConfig({
       ],
       sidebar: [
         {
-          label: '开始',
+          label: '今日',
           items: [
-            { label: '首页', slug: '' },
-            { label: '知识地图', slug: 'ai-map' },
+            { label: '首页看板', slug: '' },
+            { label: '待评审', link: '/reviews/' },
             { label: '投研驾驶舱', link: '/dashboard/h1-2-storage/' },
           ],
         },
         {
-          label: '投资框架',
+          label: '价投框架',
           items: [{ label: '价值投资框架', slug: 'investing/value-framework' }],
-        },
-        {
-          label: '内容管线',
-          items: [
-            { label: '原始资料库', slug: 'pipeline/raw-sources' },
-            { label: '自动同步', slug: 'pipeline/automation' },
-          ],
         },
         ...generatedSidebar,
       ],

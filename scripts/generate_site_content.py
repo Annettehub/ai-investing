@@ -172,6 +172,10 @@ def sidebar_slug_for_source_dir(source_dir: Path, source_root: Path, dest_root: 
     return route
 
 
+def sidebar_link_for_route(route: str) -> str:
+    return f"/ai-investing/{route}/"
+
+
 def normalize_rel(source_path: Path, source_root: Path) -> Path:
     rel = source_path.relative_to(source_root)
     if source_root != OUTPUT_SRC or rel.parent != Path(".") or rel.name.lower() == "index.md":
@@ -383,10 +387,11 @@ def write_directory_overviews(source_root: Path, dest_root: Path) -> None:
 
 
 def sidebar_link(source_path: Path, source_root: Path, dest_root: Path) -> dict[str, str]:
+    route = sidebar_slug_for(source_path, source_root, dest_root)
     text = read_text(source_path)
     return {
         "label": get_title(source_path, text),
-        "slug": sidebar_slug_for(source_path, source_root, dest_root),
+        "link": sidebar_link_for_route(route),
     }
 
 
@@ -401,7 +406,7 @@ def build_tree_sidebar(path: Path, source_root: Path, dest_root: Path) -> list[d
     items: list[dict[str, object]] = [
         {
             "label": "总览",
-            "slug": sidebar_slug_for_source_dir(path, source_root, dest_root),
+            "link": sidebar_link_for_route(sidebar_slug_for_source_dir(path, source_root, dest_root)),
         },
     ]
     items.extend(
@@ -426,7 +431,7 @@ def build_flat_sidebar(path: Path, source_root: Path, dest_root: Path) -> list[d
     return [
         {
             "label": "总览",
-            "slug": sidebar_slug_for_source_dir(path, source_root, dest_root),
+            "link": sidebar_link_for_route(sidebar_slug_for_source_dir(path, source_root, dest_root)),
         },
         *[sidebar_link(source_path, source_root, dest_root) for source_path in markdown_files(path)],
     ]
@@ -443,7 +448,7 @@ def build_output_sidebar(category: str) -> list[dict[str, str]]:
     source_dir = OUTPUT_SRC / category
     overview = {
         "label": "总览",
-        "slug": sidebar_slug_for_source_dir(source_dir, OUTPUT_SRC, OUTPUT_DEST),
+        "link": sidebar_link_for_route(sidebar_slug_for_source_dir(source_dir, OUTPUT_SRC, OUTPUT_DEST)),
     }
     return [overview, *sorted(items, key=lambda item: item["label"])]
 
@@ -451,35 +456,28 @@ def build_output_sidebar(category: str) -> list[dict[str, str]]:
 def write_generated_sidebar() -> None:
     sidebar: list[dict[str, object]] = [
         {
-            "label": "02-kb 知识库",
+            "label": "知识",
             "items": [
-                {"label": "总索引", "slug": "kb"},
                 {
-                    "label": CATEGORY_LABELS["entities"],
+                    "label": "公司标的",
                     "collapsed": True,
                     "items": build_flat_sidebar(KB_SRC / "entities", KB_SRC, KB_DEST),
                 },
                 {
-                    "label": CATEGORY_LABELS["concepts"],
+                    "label": "五层框架",
                     "collapsed": True,
                     "items": build_tree_sidebar(KB_SRC / "concepts", KB_SRC, KB_DEST),
                 },
                 {
-                    "label": CATEGORY_LABELS["hypotheses"],
+                    "label": "投资假设",
                     "collapsed": True,
                     "items": build_tree_sidebar(KB_SRC / "hypotheses", KB_SRC, KB_DEST),
-                },
-                {
-                    "label": CATEGORY_LABELS["sources"],
-                    "collapsed": True,
-                    "items": build_flat_sidebar(KB_SRC / "sources", KB_SRC, KB_DEST),
                 },
             ],
         },
         {
-            "label": "04-output 输出",
+            "label": "输出",
             "items": [
-                {"label": "输出总览", "slug": "outputs"},
                 {
                     "label": CATEGORY_LABELS["reports"],
                     "collapsed": True,
@@ -495,6 +493,18 @@ def write_generated_sidebar() -> None:
                     "collapsed": True,
                     "items": build_output_sidebar("weekly"),
                 },
+            ],
+        },
+        {
+            "label": "资料",
+            "items": [
+                {
+                    "label": CATEGORY_LABELS["sources"],
+                    "collapsed": True,
+                    "items": build_flat_sidebar(KB_SRC / "sources", KB_SRC, KB_DEST),
+                },
+                {"label": "原始资料入口", "link": "/ai-investing/pipeline/raw-sources/"},
+                {"label": "自动同步", "link": "/ai-investing/pipeline/automation/"},
             ],
         },
     ]

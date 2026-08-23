@@ -1,0 +1,133 @@
+---
+import dashboard from '../data/home-dashboard.json';
+
+const shortDate = (value: string) => value.slice(5).replace('-', '.');
+const fullDate = (value: string) => value.replaceAll('-', '.');
+---
+
+<div class="home-dashboard">
+  <section class="recent-cycle" aria-labelledby="recent-cycle-heading">
+    <header class="section-heading">
+      <div>
+        <p class="eyebrow">KNOWLEDGE LOOP</p>
+        <h2 id="recent-cycle-heading">最近进入循环的内容</h2>
+        <p class="section-description">按时间展示最近 7 天新增的原料、评审和知识回写，重点看这次具体增加了什么。</p>
+      </div>
+      <div class="range-block">
+        <strong>{dashboard.recent.length}</strong>
+        <span>条记录</span>
+        <time datetime={dashboard.meta.end}>{fullDate(dashboard.meta.start)} — {fullDate(dashboard.meta.end)}</time>
+      </div>
+    </header>
+
+    <div class="recent-list">
+      {dashboard.recent.length ? dashboard.recent.map((item) => (
+        <article class="recent-item">
+          <div class="item-rail">
+            <time datetime={item.date}>{shortDate(item.date)}</time>
+            <span class={`type type-${item.kind}`}>{item.loopStage}</span>
+          </div>
+          <div class="item-content">
+            <div class="item-heading">
+              <div>
+                <p class="item-kicker">{item.location}</p>
+                <h3><a href={item.href}>{item.title}</a></h3>
+              </div>
+              <a class="open-link" href={item.href} aria-label={`${item.linkLabel}：${item.title}`}>{item.linkLabel} <span aria-hidden="true">→</span></a>
+            </div>
+            <div class="item-detail">
+              <span class="detail-label">具体内容</span>
+              <p>{item.excerpt}</p>
+            </div>
+            <div class="item-footer">
+              <span class="loop-detail">{item.loopDetail}</span>
+              {item.routes?.length ? <span class="route-list" aria-label="主题线索">{item.routes.map((route) => <b>{route}</b>)}</span> : null}
+            </div>
+          </div>
+        </article>
+      )) : <p class="empty-state">过去 7 天没有进入知识循环的新内容。</p>}
+    </div>
+  </section>
+</div>
+
+<style>
+  :global(html:has(.home-dashboard)) { --sl-content-width: 72rem; }
+  :global(html:has(.home-dashboard) .content-panel) { padding-inline: clamp(1rem, 3vw, 2.5rem); }
+  :global(html:has(.home-dashboard) .main-pane) { background: #fbf8f5; }
+  .home-dashboard {
+    --ink: #2d2540;
+    --muted: #655d6e;
+    --line: #d9d1cf;
+    --accent: #8f2e5f;
+    padding-bottom: 3rem;
+    color: var(--ink);
+    letter-spacing: 0;
+  }
+  .recent-cycle { border-top: 3px solid #247a86; }
+  .section-heading {
+    display: flex;
+    align-items: end;
+    justify-content: space-between;
+    gap: 1.5rem;
+    padding: 1.45rem 0 1.2rem;
+    border-bottom: 1px solid var(--line);
+  }
+  .section-heading > div { display: grid; gap: .35rem; min-width: 0; }
+  .section-heading h2 { margin: 0; color: var(--ink); font-size: clamp(1.45rem, 2.4vw, 2rem); line-height: 1.25; }
+  .section-description { max-width: 42rem; margin: .15rem 0 0; color: #4f4859; font-size: .82rem; line-height: 1.65; }
+  .eyebrow { margin: 0; color: var(--accent); font-size: .7rem; font-weight: 800; letter-spacing: .08em !important; }
+  .range-block { display: grid; grid-template-columns: auto auto; align-items: baseline; gap: 0 .35rem; color: var(--muted); white-space: nowrap; }
+  .range-block strong { color: var(--ink); font-size: 1.15rem; line-height: 1; }
+  .range-block span { font-size: .72rem; }
+  .range-block time { grid-column: 1 / -1; margin-top: .35rem; font-size: .72rem; font-variant-numeric: tabular-nums; }
+  .recent-list { display: grid; }
+  .recent-item {
+    display: grid;
+    grid-template-columns: 7.2rem minmax(0, 1fr);
+    gap: 1.25rem;
+    align-items: start;
+    padding: 1.3rem .2rem;
+    border-bottom: 1px solid var(--line);
+  }
+  .recent-item:hover { background: #f6f0ed; }
+  .item-rail { display: grid; justify-items: start; align-content: start; gap: .55rem; padding-top: .15rem; }
+  .item-rail time { color: var(--muted); font-size: .75rem; font-variant-numeric: tabular-nums; }
+  .type { display: inline-flex; padding: .23rem .5rem; border-radius: 3px; color: #4c3943; background: #ece4e5; font-size: .68rem; font-weight: 750; white-space: nowrap; }
+  .type-raw { color: #752842; background: #f3dce4; }
+  .type-review { color: #513081; background: #e9def4; }
+  .type-concept, .type-entity, .type-hypothesis, .type-source { color: #70400e; background: #f4e3cc; }
+  .type-report, .type-output, .type-tracking, .type-weekly { color: #174c7e; background: #dce8f4; }
+  .item-content { display: grid; gap: .7rem; min-width: 0; }
+  .item-heading { display: flex; align-items: start; justify-content: space-between; gap: 1rem; min-width: 0; }
+  .item-kicker { margin: 0 0 .18rem; color: #706875; font-size: .68rem; font-weight: 750; }
+  .item-content h3 { margin: 0; font-size: 1rem; line-height: 1.4; }
+  .item-content h3 a { color: var(--ink); text-decoration: none; }
+  .item-content h3 a:hover { color: #7e2451; text-decoration: underline; text-underline-offset: .18rem; }
+  .item-detail { display: grid; gap: .25rem; padding: .65rem .75rem; background: #f4efec; border-left: 3px solid #e08a37; }
+  .detail-label { color: #8f2e5f; font-size: .68rem; font-weight: 800; letter-spacing: .04em; }
+  .item-detail p { margin: 0; color: #40384b; font-size: .84rem; line-height: 1.72; }
+  .item-footer { display: flex; align-items: center; justify-content: space-between; gap: 1rem; min-width: 0; color: var(--muted); font-size: .72rem; line-height: 1.5; }
+  .loop-detail { min-width: 0; }
+  .route-list { display: inline-flex; flex: none; flex-wrap: wrap; justify-content: end; gap: .3rem; }
+  .route-list b { padding: .18rem .4rem; color: #176b77; background: #deeff0; border-radius: 3px; font-size: .67rem; font-weight: 800; }
+  .open-link { display: inline-flex; gap: .35rem; padding-top: .12rem; color: #7e2451; font-size: .75rem; font-weight: 750; text-decoration: none; white-space: nowrap; }
+  .open-link:hover { text-decoration: underline; text-underline-offset: .18rem; }
+  .empty-state { padding: 2rem 0; color: var(--muted); font-size: .84rem; }
+  :global([data-theme='dark']) .home-dashboard { --ink: #f2edf4; --muted: #c8bdca; --line: #554b59; --accent: #f08eb6; }
+  :global(html[data-theme='dark']:has(.home-dashboard) .main-pane) { background: #19161d; }
+  :global([data-theme='dark']) .recent-item:hover { background: #262129; }
+  :global([data-theme='dark']) .section-description,
+  :global([data-theme='dark']) .item-detail p { color: #ddd4df; }
+  :global([data-theme='dark']) .item-detail { background: #2a242c; }
+  @media (max-width: 48rem) {
+    .section-heading { align-items: start; flex-direction: column; gap: .65rem; }
+    .recent-item { grid-template-columns: 5.8rem minmax(0, 1fr); gap: .7rem 1rem; }
+    .item-heading { display: grid; gap: .45rem; }
+    .item-footer { align-items: start; flex-direction: column; gap: .45rem; }
+    .route-list { justify-content: start; }
+  }
+  @media (max-width: 30rem) {
+    .recent-item { padding-block: 1.1rem; }
+    .open-link { display: none; }
+  }
+</style>

@@ -1,0 +1,44 @@
+---
+import StarlightPage from '@astrojs/starlight/components/StarlightPage.astro';
+import dashboard from '../data/home-dashboard.json';
+
+const shortDate = (value: string) => value.replaceAll('-', '.');
+---
+
+<StarlightPage frontmatter={{ title: '待评审', description: '最近七天的入库评审报告', pagefind: false, tableOfContents: false }}>
+  <div class="review-page">
+    <header>
+      <p>INGEST REVIEW · {shortDate(dashboard.meta.start)} — {shortDate(dashboard.meta.end)}</p>
+      <h2>最近七天的评审记录</h2>
+      <span>评审报告只提供入库建议，不代表已经批准或完成知识库写入。</span>
+    </header>
+    <div class="review-table">
+      <div class="review-head"><span>日期</span><span>评审报告</span><span>建议入库</span><span>仅保留原料</span></div>
+      {dashboard.reviews.length ? dashboard.reviews.map((item) => (
+        <a href={item.href}>
+          <time>{shortDate(item.date)}</time><strong>{item.title}</strong><b>{item.suggested}</b><b>{item.rawOnly}</b>
+        </a>
+      )) : <div class="empty">过去七天没有新的评审报告。</div>}
+    </div>
+  </div>
+</StarlightPage>
+
+<style>
+  :global(html:has(.review-page)) { --sl-content-width: 68rem; }
+  .review-page { display: grid; gap: 2rem; letter-spacing: 0; }
+  .review-page header { display: grid; gap: .45rem; padding-bottom: 1.5rem; border-bottom: 1px solid var(--sl-color-gray-5); }
+  .review-page header p { margin: 0; color: #8f2e5f; font-size: .7rem; font-weight: 800; letter-spacing: .08em; }
+  .review-page header h2 { margin: 0; font-size: 1.65rem; }
+  .review-page header span { color: #625a6b; font-size: .88rem; }
+  .review-table { border-block: 1px solid var(--sl-color-gray-5); }
+  .review-head, .review-table a { display: grid; grid-template-columns: 7rem minmax(0, 1fr) 7rem 7rem; gap: 1rem; align-items: center; padding: .8rem .7rem; }
+  .review-head { color: #625a6b; background: #f3ece9; font-size: .72rem; font-weight: 750; }
+  .review-table a { border-top: 1px solid var(--sl-color-gray-5); color: var(--sl-color-white); text-decoration: none; }
+  .review-table a:hover { background: var(--sl-color-gray-6); }
+  .review-table time { color: var(--sl-color-gray-2); font-size: .76rem; }
+  .review-table strong { overflow: hidden; font-size: .84rem; text-overflow: ellipsis; white-space: nowrap; }
+  .review-table b { color: #7d2450; font-size: .88rem; }
+  .empty { padding: 1.5rem .7rem; color: var(--sl-color-gray-2); }
+  :global([data-theme='light']) .review-table a { color: #2d2540; }
+  @media (max-width: 40rem) { .review-head { display: none; } .review-table a { grid-template-columns: 5rem 1fr; } .review-table a b { font-size: .72rem; } }
+</style>
