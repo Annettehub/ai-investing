@@ -19,7 +19,7 @@ export default [
             "link": "/kb/entities/06181-301dfca8/"
           },
           {
-            "label": "0700.HK 腾讯控股 — 实体档案",
+            "label": "0700.HK 腾讯控股 — 实体档案卡（价值投资跟踪版）",
             "link": "/kb/entities/0700-da695dbe/"
           },
           {
