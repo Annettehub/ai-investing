@@ -60,6 +60,10 @@ DIR_LABEL_OVERRIDES = {
     "跨层-方法论（Cross-Layer）": "跨层动态",
 }
 
+# 实体卡专属样式注入（实验期：仅老铺黄金；后续要全部实体卡生效，把集合扩为全部文件名或移除判断）
+ENTITY_STYLE_HREF = "/ai-investing/styles/entity.css"
+ENTITY_STYLE_FILES = {"06181-老铺黄金"}
+
 
 def is_within(path: Path, parent: Path) -> bool:
     path = path.resolve()
@@ -126,11 +130,21 @@ def get_title(path: Path, text: str) -> str:
     return path.stem
 
 
-def frontmatter(title: str, description: str) -> str:
+def frontmatter(title: str, description: str, entity_style: bool = False) -> str:
+    head_line = ""
+    if entity_style:
+        head_line = (
+            "head:\n"
+            "  - tag: link\n"
+            "    attrs:\n"
+            f"      href: {ENTITY_STYLE_HREF}\n"
+            "      rel: stylesheet\n"
+        )
     return (
         "---\n"
         f"title: {json.dumps(title, ensure_ascii=False)}\n"
         f"description: {json.dumps(description, ensure_ascii=False)}\n"
+        f"{head_line}"
         "---\n\n"
     )
 
@@ -312,7 +326,8 @@ def transform_markdown(
         f'<a href="{source_href}" target="_blank" rel="noreferrer">{source_rel}</a>'
         "</p>\n"
     )
-    return frontmatter(title, f"Generated from {source_rel}") + body
+    entity_style = source_path.stem in ENTITY_STYLE_FILES
+    return frontmatter(title, f"Generated from {source_rel}", entity_style) + body
 
 
 def write_index(dest: Path, title: str, description: str, links: list[tuple[str, str]]) -> None:

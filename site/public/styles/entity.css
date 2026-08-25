@@ -1,0 +1,112 @@
+/* 实体卡专属样式（实验期：仅老铺黄金页面注入）
+   薄荷青绿主题覆盖 + 实体卡排版增强。
+   用 !important 保证优先于全局 rose-pine 主题。 */
+:root {
+  --sl-content-width: 64rem !important;
+}
+
+[data-theme='light'] {
+  --sl-color-bg: #fbfdfc !important;
+  --sl-color-bg-nav: #eff8f4 !important;
+  --sl-color-bg-sidebar: #eff8f4 !important;
+  --sl-color-bg-hairline: #e2ece8 !important;
+  --sl-color-accent: #1fc49a !important;
+  --sl-color-accent-high: #0b5e3c !important;
+  --sl-color-accent-low: #def5ed !important;
+  --sl-color-text-accent: #0b5e3c !important;
+  --sl-color-white: #10221b !important;
+  --sl-color-black: #ffffff !important;
+  --sl-color-gray-1: #10221b !important;
+  --sl-color-gray-2: #4a5d54 !important;
+  --sl-color-gray-3: #8aa098 !important;
+  --sl-color-gray-4: #b5c8bf !important;
+  --sl-color-gray-5: #dce9e2 !important;
+  --sl-color-gray-6: #eff8f4 !important;
+  --sl-color-gray-7: #f6faf8 !important;
+}
+
+[data-theme='dark'] {
+  --sl-color-accent: #3edca6 !important;
+  --sl-color-accent-high: #3edca6 !important;
+  --sl-color-accent-low: #12352a !important;
+  --sl-color-text-accent: #3edca6 !important;
+}
+
+.sl-markdown-content {
+  line-height: 1.85;
+}
+
+.sl-markdown-content h2 {
+  margin-top: 2.6rem;
+  padding-bottom: 0.35rem;
+  border-bottom: 1px solid var(--sl-color-gray-5);
+}
+
+.sl-markdown-content h3 {
+  margin-top: 1.9rem;
+  color: var(--sl-color-accent-high);
+}
+
+.sl-markdown-content table {
+  width: 100%;
+  font-size: 0.92rem;
+  border-collapse: separate;
+  border-spacing: 0;
+  border: 1px solid var(--sl-color-gray-5);
+  border-radius: 12px;
+  overflow: hidden;
+  table-layout: auto;
+}
+
+.sl-markdown-content th {
+  background: var(--sl-color-gray-6);
+  text-align: left;
+  padding: 0.55rem 0.85rem;
+  white-space: nowrap;
+  font-weight: 650;
+}
+
+.sl-markdown-content td {
+  padding: 0.55rem 0.85rem;
+  border-top: 1px solid var(--sl-color-gray-5);
+  vertical-align: top;
+  line-height: 1.6;
+}
+
+.sl-markdown-content tbody tr:hover {
+  background: var(--sl-color-gray-7);
+}
+
+.sl-markdown-content blockquote {
+  border-left: 3px solid var(--sl-color-accent);
+  background: #f2faf7;
+  border-radius: 0 10px 10px 0;
+  padding: 0.75rem 1.1rem;
+  margin: 1.1rem 0;
+  color: var(--sl-color-gray-2);
+}
+
+.sl-markdown-content blockquote > p:first-child {
+  margin-top: 0;
+}
+
+.sl-markdown-content blockquote > p:last-child {
+  margin-bottom: 0;
+}
+
+.sl-markdown-content blockquote strong {
+  color: var(--sl-color-accent-high);
+}
+
+.sl-markdown-content :not(pre) > code {
+  background: var(--sl-color-accent-low);
+  color: var(--sl-color-accent-high);
+  border-radius: 6px;
+  padding: 0.15rem 0.4rem;
+  font-size: 0.88em;
+}
+
+.sl-markdown-content hr {
+  border-color: var(--sl-color-gray-5);
+  margin: 2rem 0;
+}
