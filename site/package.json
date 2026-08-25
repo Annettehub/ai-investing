@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "npm run generate && astro dev",
     "generate": "python ../scripts/generate_site_content.py && python ../scripts/generate_home_dashboard.py",
-    "build": "npm run generate && astro build",
+    "build": "npm run generate && astro build && node scripts/postbuild-entity-css.mjs",
     "preview": "npm run generate && astro preview"
   },
   "dependencies": {

@@ -60,9 +60,10 @@ DIR_LABEL_OVERRIDES = {
     "跨层-方法论（Cross-Layer）": "跨层动态",
 }
 
-# 实体卡专属样式注入（实验期：仅老铺黄金；后续要全部实体卡生效，把集合扩为全部文件名或移除判断）
-ENTITY_STYLE_HREF = "/ai-investing/styles/entity.css"
+# 实体卡专属样式注入：由 site/scripts/postbuild-entity-css.mjs 在 build 后处理
+# （在 dist HTML 的 </head> 前注入 entity.css link，位置晚于 Starlight 全局 CSS，确保覆盖 rose-pine 主题）
 ENTITY_STYLE_FILES = {"06181-老铺黄金"}
+ENTITY_CSS_PATH = ROOT / "site" / "public" / "styles" / "entity.css"
 
 
 def is_within(path: Path, parent: Path) -> bool:
@@ -130,21 +131,11 @@ def get_title(path: Path, text: str) -> str:
     return path.stem
 
 
-def frontmatter(title: str, description: str, entity_style: bool = False) -> str:
-    head_line = ""
-    if entity_style:
-        head_line = (
-            "head:\n"
-            "  - tag: link\n"
-            "    attrs:\n"
-            f"      href: {ENTITY_STYLE_HREF}\n"
-            "      rel: stylesheet\n"
-        )
+def frontmatter(title: str, description: str) -> str:
     return (
         "---\n"
         f"title: {json.dumps(title, ensure_ascii=False)}\n"
         f"description: {json.dumps(description, ensure_ascii=False)}\n"
-        f"{head_line}"
         "---\n\n"
     )
 
@@ -326,8 +317,7 @@ def transform_markdown(
         f'<a href="{source_href}" target="_blank" rel="noreferrer">{source_rel}</a>'
         "</p>\n"
     )
-    entity_style = source_path.stem in ENTITY_STYLE_FILES
-    return frontmatter(title, f"Generated from {source_rel}", entity_style) + body
+    return frontmatter(title, f"Generated from {source_rel}") + body
 
 
 def write_index(dest: Path, title: str, description: str, links: list[tuple[str, str]]) -> None:
