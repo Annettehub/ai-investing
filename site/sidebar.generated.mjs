@@ -15,7 +15,7 @@ export default [
             "link": "/kb/entities/00981-8b5fb491/"
           },
           {
-            "label": "06181.HK — 老铺黄金",
+            "label": "06181.HK 老铺黄金 — 实体档案卡（价值投资跟踪版）",
             "link": "/kb/entities/06181-301dfca8/"
           },
           {
@@ -23,7 +23,7 @@ export default [
             "link": "/kb/entities/0700-da695dbe/"
           },
           {
-            "label": "09992.HK — 泡泡玛特",
+            "label": "09992.HK 泡泡玛特 — 实体档案卡（价值投资跟踪版）",
             "link": "/kb/entities/09992-4857c5af/"
           },
           {
