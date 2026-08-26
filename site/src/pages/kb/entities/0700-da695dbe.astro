@@ -1,0 +1,6 @@
+---
+import markdown from '../../../../../02-kb/entities/0700-腾讯控股.md?raw';
+import { parseEntity } from '../../../lib/entity-document.mjs';
+import EntityPage from '../../../layouts/EntityPage.astro';
+---
+<EntityPage document={parseEntity(markdown)} sourcePath="02-kb/entities/0700-腾讯控股.md" originalHref={Astro.url.pathname} preview={false} />

@@ -35,6 +35,8 @@ let count = 0;
 walk(DIST, (file) => {
   if (!file.endsWith(".html")) return;
   const content = fs.readFileSync(file, "utf-8");
+  // Standalone entity pages import their own stylesheet during Astro rendering.
+  if (content.includes('data-entity-layout="v1"')) return;
   // 仅处理实体卡页面：通过 canonical href 路径段精确匹配（避免被 sidebar 链接误匹配）
   const canonicalMatch = content.match(/<link\s+rel="canonical"\s+href="([^"]+)"/);
   if (!canonicalMatch) return;

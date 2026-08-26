@@ -7,12 +7,20 @@
     "dev": "npm run generate && astro dev",
     "generate": "python ../scripts/generate_site_content.py && python ../scripts/generate_home_dashboard.py",
     "build": "npm run generate && astro build && node scripts/postbuild-entity-css.mjs",
-    "preview": "npm run generate && astro preview"
+    "preview": "npm run generate && astro preview",
+    "test:entity": "node --test src/lib/entity-document.test.mjs"
   },
   "dependencies": {
     "@astrojs/starlight": "^0.41.3",
     "astro": "^7.0.9",
-    "starlight-theme-rose-pine": "^0.2.0"
+    "github-slugger": "2.0.0",
+    "mdast-util-to-string": "4.0.0",
+    "rehype-stringify": "10.0.1",
+    "remark-gfm": "4.0.1",
+    "remark-parse": "11.0.0",
+    "remark-rehype": "11.1.2",
+    "starlight-theme-rose-pine": "^0.2.0",
+    "unified": "11.0.5"
   },
   "devDependencies": {
     "typescript": "^5.9.3"

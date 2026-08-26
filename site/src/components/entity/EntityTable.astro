@@ -1,0 +1,13 @@
+---
+import { tableColumnWidths } from '../../lib/entity-document.mjs';
+const { block } = Astro.props;
+const count = block.header.length;
+const widths = tableColumnWidths(block);
+---
+<div class:list={['table-scroll', { 'table-scroll--wide': count >= 5 }]} tabindex="0" role="region" aria-label="原文数据表">
+  <table style={`min-width:${count > 1 ? 280 + (count - 1) * 160 : 0}px`}>
+    <colgroup>{block.header.map((_: unknown, i: number) => <col style={`width:${widths[i]}`} />)}</colgroup>
+    <thead><tr>{block.header.map((cell: any) => <th scope="col" set:html={cell.html} />)}</tr></thead>
+    <tbody>{block.rows.map((row: any[]) => <tr>{row.map((cell, i) => i === 0 ? <th scope="row" set:html={cell.html} /> : <td set:html={cell.html} />)}</tr>)}</tbody>
+  </table>
+</div>

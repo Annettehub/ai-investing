@@ -1,0 +1,21 @@
+---
+const { chart, sourceId } = Astro.props;
+const scale = chart.signed ? Math.ceil(chart.max / 20) * 20 : chart.unit === '%' ? Math.ceil(chart.max / 10) * 10 : Math.ceil(chart.max / 50) * 50;
+---
+<figure class="entity-chart" aria-label={chart.title}>
+  <figcaption><strong>{chart.title}</strong><span>{chart.unit}</span></figcaption>
+  <div class:list={['chart-series', { 'chart-series--paired': chart.series.length > 1 }]}>
+    {chart.series.map((series: any) => <div class="chart-series-group">
+      <div class:list={['chart-legend', series.color]}><i></i>{series.label}</div>
+      <div class="chart-axis"><span>{chart.signed ? `-${scale}` : '0'}</span>{chart.signed && <span>0</span>}<span>{scale}</span></div>
+      {series.points.map((point: any) => <div class="chart-row">
+        <span class="chart-period">{point.label}</span>
+        <div class:list={['chart-track', { 'chart-track--signed': chart.signed }]}>
+          <div class:list={['chart-bar', series.color, { negative: point.value < 0 }]} style={`left:${chart.signed ? point.value < 0 ? 50 - Math.abs(point.value) / scale * 50 : 50 : 0}%;width:${Math.abs(point.value) / scale * (chart.signed ? 50 : 100)}%`} title={`${point.label} ${series.label} ${point.raw}`}></div>
+        </div>
+        <strong class="chart-number">{point.raw}</strong>
+      </div>)}
+    </div>)}
+  </div>
+  <p class="chart-note">{chart.note} <a href={`#${sourceId}`}>数据表</a></p>
+</figure>

@@ -1,0 +1,41 @@
+---
+import EntityTable from './EntityTable.astro';
+import EntityChart from './EntityChart.astro';
+import { statusOf } from '../../lib/entity-document.mjs';
+const { block } = Astro.props;
+const statuses = [{ id: 'all', label: '全部' }, { id: 'healthy', label: '健康' }, { id: 'watch', label: '关注' }, { id: 'danger', label: '预警' }];
+---
+{block.chart && <EntityChart chart={block.chart} sourceId={block.id} />}
+<div id={block.id} data-source-block={block.id} class:list={['source-block', `source-block--${block.kind}`]}>
+  {block.kind === 'table' && <EntityTable block={block} />}
+  {block.kind === 'prose' && <Fragment set:html={block.sourceHtml} />}
+  {block.kind === 'note' && <aside class="entity-note" set:html={block.sourceHtml} />}
+  {block.kind === 'duel' && <>
+    <div class="duel-heading" set:html={block.label} />
+    <div class="duel-grid">
+      <article class="duel-side duel-side--bull"><h4>多方观点</h4><div set:html={block.bull} /></article>
+      <article class="duel-side duel-side--bear"><h4>空方观点</h4><div set:html={block.bear} /></article>
+    </div>
+  </>}
+  {block.kind === 'hypotheses' && <div class="hypothesis-grid">{block.cards.map((card: any) => <article class="hypothesis-card">
+    <div class="hypothesis-heading"><span>{String(card.number).padStart(2, '0')}</span><h4 set:html={card.title} /></div>
+    <div class="hypothesis-body" set:html={card.body} />
+  </article>)}</div>}
+  {block.kind === 'moat' && <div class="moat-grid">{block.rows.map((row: any[], index: number) => <article class="moat-card">
+    <header><span class="item-index">{String(index + 1).padStart(2, '0')}</span><h4 set:html={row[0].html} /></header>
+    <div class="moat-description" set:html={row[1].html} />
+    <div class="moat-judgment"><span>{block.header[2].text}</span><p set:html={row[2].html} /></div>
+    <div class:list={['status-badge', statusOf(row[3].text)]} set:html={row[3].html} />
+  </article>)}</div>}
+  {block.kind === 'dashboard' && <div class="tracking-dashboard">
+    <div class="dashboard-toolbar" role="group" aria-label="按指标状态筛选">{statuses.map(status => <button type="button" data-status-filter={status.id} aria-pressed={status.id === 'all'}>{status.label}<span>{status.id === 'all' ? block.metrics.length : block.metrics.filter((m: any) => m.status === status.id).length}</span></button>)}</div>
+    <div class="metrics-grid">{block.metrics.map((metric: any) => <article class:list={['metric-card', metric.status]} data-metric-status={metric.status}>
+      <header><span class="item-index">{metric.row[0].text.padStart(2, '0')}</span><h4 set:html={metric.row[1].html} /></header>
+      {metric.headline && <div class="metric-headline">{metric.headline}</div>}
+      <div class="metric-detail" set:html={metric.row[2].html} />
+      <div class="metric-threshold"><span>{block.header[3].text}</span><strong set:html={metric.row[3].html} /></div>
+      <div class:list={['metric-state', metric.status]} set:html={metric.row[4].html} />
+    </article>)}</div>
+    <p class="filter-result" aria-live="polite"></p>
+  </div>}
+</div>
