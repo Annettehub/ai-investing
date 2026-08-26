@@ -1,8 +1,8 @@
 2026-08-25 Berman Codex负责人Tibo访谈
-
-部分内容由豆包生成
 来源： Matthew Berman 专访
 被访者： Tibo（OpenAI Codex 负责人）
+
+内容总结： OpenAI Codex负责人Tibo专访，涵盖DeepMind往事与OpenAI文化、下一代模型与harness创新、ChatGPT与Codex合并逻辑、Ultra Fast速度解锁、递归自我改进、暂停frontier RL原因，以及对普通人的AI普及展望，核心是技术将随时间更高效、更广泛可及。
 
 Matthew Berman 专访 OpenAI Codex 负责人 Tibo：下一波 AI 怎么抢先看懂（44 分钟完整转录整理稿）
 一、冷开场（摘自后文）
