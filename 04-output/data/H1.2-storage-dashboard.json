@@ -5,7 +5,7 @@
     "title": "存储成长与周期分层",
     "subtitle": "高端成长与消费周期并存的分层验证",
     "asOf": "2026-07-14",
-    "generatedAt": "2026-10-05T07:01:19+00:00",
+    "generatedAt": "2026-10-12T07:19:37+00:00",
     "certainty": 72,
     "status": "持续观察",
     "decision": "AI正在推动高端存储成长性，但没有消灭存储行业周期。",
@@ -215,8 +215,8 @@
       "id": "twse",
       "label": "TWSE OpenAPI",
       "status": "connected",
-      "updatedAt": "2026-10-05T07:01:19+00:00",
-      "note": "已读取4家公司，资料年月2026-08"
+      "updatedAt": "2026-10-12T07:19:37+00:00",
+      "note": "已读取3家公司，资料年月2026-09"
     },
     {
       "id": "opendart",
@@ -243,41 +243,31 @@
           "code": "2330",
           "name": "台积电",
           "role": "CoWoS与AI芯片需求代理",
-          "dataMonth": "2026-08",
-          "monthlyRevenueTwdThousand": 514805337.0,
-          "monthlyYoYPct": 53.320053714712955,
-          "ytdRevenueTwdThousand": 3386869575.0,
-          "ytdYoYPct": 39.26370665798065
+          "dataMonth": "2026-09",
+          "monthlyRevenueTwdThousand": 511857399.0,
+          "monthlyYoYPct": 54.64861207105231,
+          "ytdRevenueTwdThousand": 3898726974.0,
+          "ytdYoYPct": 41.106694993093484
         },
         {
           "code": "2382",
           "name": "广达",
           "role": "AI服务器需求代理",
-          "dataMonth": "2026-08",
-          "monthlyRevenueTwdThousand": 423970932.0,
-          "monthlyYoYPct": 177.453640698528,
-          "ytdRevenueTwdThousand": 2636058779.0,
-          "ytdYoYPct": 102.62669045483766
-        },
-        {
-          "code": "3711",
-          "name": "日月光投控",
-          "role": "封测需求代理",
-          "dataMonth": "2026-08",
-          "monthlyRevenueTwdThousand": 82247374.0,
-          "monthlyYoYPct": 45.65918579706578,
-          "ytdRevenueTwdThousand": 520756749.0,
-          "ytdYoYPct": 27.977969181023816
+          "dataMonth": "2026-09",
+          "monthlyRevenueTwdThousand": 325299509.0,
+          "monthlyYoYPct": 76.68901002964485,
+          "ytdRevenueTwdThousand": 2961358288.0,
+          "ytdYoYPct": 99.41108069855139
         },
         {
           "code": "6669",
           "name": "纬颖",
           "role": "云服务器需求代理",
-          "dataMonth": "2026-08",
-          "monthlyRevenueTwdThousand": 144311808.0,
-          "monthlyYoYPct": 50.35813251850269,
-          "ytdRevenueTwdThousand": 816657663.0,
-          "ytdYoYPct": 42.79572821857782
+          "dataMonth": "2026-09",
+          "monthlyRevenueTwdThousand": 172620352.0,
+          "monthlyYoYPct": 99.98511294484359,
+          "ytdRevenueTwdThousand": 989278016.0,
+          "ytdYoYPct": 50.29530615079897
         }
       ]
     },
