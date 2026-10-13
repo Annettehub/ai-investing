@@ -2,9 +2,14 @@ name: Sync SEC Earnings Data
 
 on:
   workflow_dispatch:
-  schedule:
-    - cron: '45 11 * * 1-5'
-    - cron: '45 22 * * 1-5'
+  # Scheduled (cron) triggers removed on 2026-10-13.
+  # History: all 127 scheduled runs between 2026-07-16 and 2026-10-13 failed at
+  # the "Sync SEC filings and facts" step, so the schedule only produced
+  # failure-notification emails without ever syncing data.
+  # Re-enable after the sync step passes in a manual run:
+  #   schedule:
+  #     - cron: '45 11 * * 1-5'
+  #     - cron: '45 22 * * 1-5'
 
 permissions:
   contents: write
