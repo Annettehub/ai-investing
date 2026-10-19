@@ -5,7 +5,7 @@
     "title": "存储成长与周期分层",
     "subtitle": "高端成长与消费周期并存的分层验证",
     "asOf": "2026-07-14",
-    "generatedAt": "2026-10-12T07:19:37+00:00",
+    "generatedAt": "2026-10-19T06:09:48+00:00",
     "certainty": 72,
     "status": "持续观察",
     "decision": "AI正在推动高端存储成长性，但没有消灭存储行业周期。",
@@ -215,8 +215,8 @@
       "id": "twse",
       "label": "TWSE OpenAPI",
       "status": "connected",
-      "updatedAt": "2026-10-12T07:19:37+00:00",
-      "note": "已读取3家公司，资料年月2026-09"
+      "updatedAt": "2026-10-19T06:09:48+00:00",
+      "note": "已读取4家公司，资料年月2026-09"
     },
     {
       "id": "opendart",
@@ -258,6 +258,16 @@
           "monthlyYoYPct": 76.68901002964485,
           "ytdRevenueTwdThousand": 2961358288.0,
           "ytdYoYPct": 99.41108069855139
+        },
+        {
+          "code": "3711",
+          "name": "日月光投控",
+          "role": "封测需求代理",
+          "dataMonth": "2026-09",
+          "monthlyRevenueTwdThousand": 88130084.0,
+          "monthlyYoYPct": 45.52228936841058,
+          "ytdRevenueTwdThousand": 608886833.0,
+          "ytdYoYPct": 30.250842170978483
         },
         {
           "code": "6669",
